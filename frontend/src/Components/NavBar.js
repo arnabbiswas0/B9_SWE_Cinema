@@ -22,7 +22,7 @@ function NavBar() {
                 <Navbar.Brand href="/HomePage">Cinema B9</Navbar.Brand>
                 <Nav className="me-auto">
                     <Nav.Link href="/HomePage">Home</Nav.Link>
-                    <Nav.Link href="/MovieCard">MovieCard</Nav.Link>
+                    <Nav.Link href="/MovieCard">All Movies</Nav.Link>
                     <Nav.Link onClick={handleShow}>Promotions</Nav.Link>
                 </Nav>
                 <Nav>
