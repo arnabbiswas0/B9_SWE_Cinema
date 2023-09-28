@@ -22,7 +22,6 @@ function NavBar() {
                 </Nav>
         </Container>
       </Navbar>
-      
       <Routes>
             <Route path="/" element={<HomePage/>} />
             <Route path="/HomePage" element={<HomePage/>} />
