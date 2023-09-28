@@ -22,7 +22,7 @@ function MovieCard() {
       <Card.Body>
         <Card.Title>Star Wars</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>watch trailer</Button>
-        <Button variant="primary" onClick={handleShowTrailer}>Get Tickets</Button>
+        <Button variant="primary" onClick={handleShowTrailer}>Book Movie</Button>
       </Card.Body>
     </Card>
 
