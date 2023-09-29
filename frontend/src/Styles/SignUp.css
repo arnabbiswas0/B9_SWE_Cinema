@@ -1,0 +1,25 @@
+.create-account {
+    background: white;
+}
+
+h2 {
+    text-align: center;
+}
+
+.label {
+    display: block;
+    text-align: center;
+    line-height: 150%;
+    font-size: .85em;
+}
+
+
+input {
+    text-align: center;
+}
+
+.center-block {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+  }

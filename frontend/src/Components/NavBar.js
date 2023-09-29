@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import MovieCard from './MovieCard';
+import SignUp from './SignUp';
 
 function NavBar() {
     const [show, setShow] = useState(false);
@@ -27,6 +28,7 @@ function NavBar() {
                 </Nav>
                 <Nav>
                     <Nav.Link href="#login">Log In</Nav.Link>
+                    <Nav.Link href="/SignUp">Create Account</Nav.Link>
                 </Nav>
         </Container>
       </Navbar>
@@ -34,6 +36,9 @@ function NavBar() {
             <Route path="/" element={<HomePage/>} />
             <Route path="/HomePage" element={<HomePage/>} />
             <Route path="/MovieCard" element={<MovieCard/>} />
+            {/* <Route path="/Login" element={<Login/>} /> */}
+            <Route path="/SignUp" element={<SignUp/>} />
+
         </Routes>
     </BrowserRouter>
     
