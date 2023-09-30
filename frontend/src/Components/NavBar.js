@@ -42,13 +42,12 @@ function NavBar() {
         </Routes>
     </BrowserRouter>
     
-    <Offcanvas show={show} onHide={handleClose}>
+    <Offcanvas show={show} onHide={handleClose} scroll={true} placement={'end'} data-bs-theme="dark">
         <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Promotions</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-             Some text as placeholder. In real life you can have the elements you
-             have chosen. Like, text, images, lists, etc.
+            No Promotions right now, Check again soon!
         </Offcanvas.Body>
     </Offcanvas>
     </>

@@ -1,79 +1,45 @@
 import '../Styles/SignUp.css';
 import React, { useState } from "react"
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
-import Ratio from 'react-bootstrap/Ratio';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
+import { Container, Form,} from 'react-bootstrap';
  
 
 function SignUp() {
     return (
-    <div className="create-account">
-      {/* <div className="acc-img">
-        <img src="./images/logo.png" alt="logo" />
-      </div> */}
-      <form>
-        <br></br>
-        <h2>Create Account</h2>
-        <label className="label" for="name">Name:</label>
-        <br />
-        <input className="center-block" type="text" id="name" name="name" placeholder="Name" />
-        <br />
-        <label className="label" for="E-mail">E-mail:</label>
-        <br />
-        <input
-          type="text"
-          id="E-mail"
-          name="E-mail"
-          placeholder="E-mail"
-          className="center-block"
-          
-        />
-        <br />
-        <label className="label" for="password">Password:</label>
-        <br />
-        <input
-            className="center-block"
-          type="password"
-          id="password-field"
-          class="login-form-field"
-          placeholder="Password"
-        ></input>
-        <br></br>
-        <label className="label" id="password-label" for="password">
-          Confirm Password:
-        </label>
-        <input
-          type="password"
-          id="password-field"
-          class="login-form-field"
-          placeholder="Confirm Password"
-          className="center-block"
-        ></input>
-        <br></br>
-        <br></br>
+      <Container 
+        data-bs-theme='dark' 
+        style={{height:"42rem",
+        width: "25rem", 
+        textAlign: "center"}} 
+      >
+      <Form>
+      <Form.Group >
+        <h2 class="text-light bg-dark">Create Account:</h2>
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Text className="text-muted">
+          We'll never share your email with anyone else.
+        </Form.Text>
+      </Form.Group>
 
-        <input
-          className="button"
-          type="submit"
-          value="Create Account"
-          id="login-form-submit"
-        ></input>
-        <br></br>
-        <br></br>
-
-        <Link to="/login">
-          <input
-            className="button"
-            type="submit"
-            value="Return to login"
-          ></input>
-        </Link>
-      </form>
-    </div>
-
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" placeholder="Password" />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Confirm Password</Form.Label>
+        <Form.Control type="password" placeholder="Confirm Password" />
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Submit
+      </Button>
+    </Form>
+    </Container>
       )
 }
   

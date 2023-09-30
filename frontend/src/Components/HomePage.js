@@ -19,6 +19,15 @@ function HomePage () {
         true
     )
 
+    const star2 = new Movie(
+        "Coming soon test",
+        "PG-13",
+        15,
+        "https://www.movieposters.com/cdn/shop/products/6cd691e19fffbe57b353cb120deaeb8f_8489d7bf-24ba-4848-9d0f-11f20cb35025_480x.progressive.jpg?v=1573613877",
+        "https://www.youtube.com/embed/8Qn_spdM5Zg?si=NfOSKmfV8oY-MzMh",
+        false
+    )
+
     return (
         <Container bg={'dark'}>
             <Form style={{margin: '1rem'}}>
@@ -35,13 +44,19 @@ function HomePage () {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {Array.from({ length: 5 }).map((_, idx) => (
                         <Col key={idx} >
-                            <MovieCard title={star.getTitle()} poster={star.getPoster()} trailer={star.getTrailer()}/>
+                            {star.getPlaying() && <MovieCard title={star.getTitle()} poster={star.getPoster()} trailer={star.getTrailer()}/>}
                         </Col>
                         ))}
                     </Row>
                 </Tab>
                 <Tab eventKey="Coming Soon" title="Coming Soon">
-                    <MovieCard/>
+                    <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
+                        {Array.from({ length: 5 }).map((_, idx) => (
+                        <Col key={idx} >
+                            {!star2.getPlaying() && <MovieCard title={star2.getTitle()} poster={star2.getPoster()} trailer={star2.getTrailer()}/>}
+                        </Col>
+                        ))}
+                    </Row>
                 </Tab>
             </Tabs>
         </Container>
