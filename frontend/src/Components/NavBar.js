@@ -11,9 +11,18 @@ import SignUp from './SignUp';
 
 function NavBar() {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [admin, setAdmin] = useState(false);
+    const handleAdmin = () => {
+        if (localStorage.getItem("Admin")==="Admin") {
+            localStorage.clear();
+            setAdmin(false);
+        } else {
+            localStorage.setItem("Admin", "Admin");
+            setAdmin(true);
+        }
+    };
 
     return (
     <>
@@ -25,6 +34,7 @@ function NavBar() {
                     <Nav.Link href="/HomePage">Home</Nav.Link>
                     <Nav.Link href="/MovieCard">All Movies</Nav.Link>
                     <Nav.Link onClick={handleShow}>Promotions</Nav.Link>
+                    <Nav.Link onClick={handleAdmin}>Admin View</Nav.Link>
                 </Nav>
                 <Nav>
                     <Nav.Link href="#login">Log In</Nav.Link>

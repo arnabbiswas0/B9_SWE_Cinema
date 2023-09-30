@@ -8,7 +8,14 @@ import { Container, Form,} from 'react-bootstrap';
  
 
 function SignUp() {
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  const handleCloseConfirm = () => setShowConfirm(false);
+  const handleShowConfirm = () => setShowConfirm(true);
+
+
     return (
+    <>
       <Container 
         data-bs-theme='dark' 
         style={{height:"42rem",
@@ -35,12 +42,33 @@ function SignUp() {
         <Form.Label>Confirm Password</Form.Label>
         <Form.Control type="password" placeholder="Confirm Password" />
       </Form.Group>
-      <Button variant="primary" type="submit">
+      <Button variant="primary"  onClick={handleShowConfirm}>
         Submit
       </Button>
     </Form>
     </Container>
-      )
+
+    <Modal
+      show={showConfirm} 
+      onHide={handleCloseConfirm}
+      centered
+      size={'lg'}
+      backdrop="static"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Confirmation</Modal.Title>
+      </Modal.Header>
+      <Modal.Body textAlign="center">
+        Thank you for Signing Up! Log in to enjoy your favorite Movies!
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleCloseConfirm}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+</>
+    )
 }
   
 export default SignUp;

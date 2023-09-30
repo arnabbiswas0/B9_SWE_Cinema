@@ -23,6 +23,9 @@ function MovieCard({title, poster, trailer}) {
         <Card.Title>{title}</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>watch trailer</Button>
         <Button variant="primary" onClick={handleShowTrailer}>Book Movie</Button>
+        {(localStorage.getItem("Admin")==="Admin") &&
+            <Button variant="primary" onClick={handleShowTrailer}>Edit Movie</Button>
+        }
       </Card.Body>
     </Card>
 
