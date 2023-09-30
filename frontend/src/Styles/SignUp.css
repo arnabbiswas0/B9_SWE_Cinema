@@ -23,3 +23,7 @@ input {
     margin-right: auto;
     margin-left: auto;
   }
+
+  .light-text {
+    color: white;
+  }

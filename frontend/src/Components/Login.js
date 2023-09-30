@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Container, Form,} from 'react-bootstrap';
  
 
-function SignUp() {
+function Login() {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const handleCloseConfirm = () => setShowConfirm(false);
@@ -24,23 +24,16 @@ function SignUp() {
       >
       <Form>
       <Form.Group >
-        <h2 class="text-light bg-dark">Create Account:</h2>
+        <h2 class="text-light bg-dark">Login:</h2>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className='light-text'>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" />
-        <Form.Text className="text-muted">
-          We'll never share your email with any unauthorized third parties.
-        </Form.Text>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label className='light-text'>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label className='light-text'>Confirm Password</Form.Label>
-        <Form.Control type="password" placeholder="Confirm Password" />
       </Form.Group>
       <Button variant="primary"  onClick={handleShowConfirm}>
         Submit
@@ -59,7 +52,7 @@ function SignUp() {
         <Modal.Title>Confirmation</Modal.Title>
       </Modal.Header>
       <Modal.Body textAlign="center">
-        Thank you for Signing Up! <a href="/Login">Log in to enjoy your favorite Movies!</a>
+        Log in sucessful! <a href="/HomePage">Click here to go to the HomePage...</a>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleCloseConfirm}>
@@ -71,5 +64,4 @@ function SignUp() {
     )
 }
   
-export default SignUp;
- 
+export default Login;
