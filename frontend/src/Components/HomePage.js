@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Movie from './models/Movie';
+import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function HomePage () {
@@ -30,6 +31,18 @@ function HomePage () {
 
     return (
         <Container bg={'dark'}>
+
+            {localStorage.getItem("Admin")==="Admin" &&
+                <Container 
+                style={{ marginTop: "1rem",
+                    textAlign: "center"}} 
+                >
+                <Button variant="primary" >Manage Movies</Button>
+                <Button variant="primary" >Manage Promotions</Button>
+                <Button variant="primary" >Manage Users</Button>
+                </Container>
+            }
+
             <Form style={{margin: '1rem'}}>
             <Form.Control type="search" placeholder="search for a movie" />
             </Form>
