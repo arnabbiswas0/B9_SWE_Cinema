@@ -32,7 +32,6 @@ function NavBar() {
                 <Navbar.Brand href="/HomePage">Cinema B9</Navbar.Brand>
                 <Nav className="me-auto">
                     <Nav.Link href="/HomePage">Home</Nav.Link>
-                    <Nav.Link href="/MovieCard">All Movies</Nav.Link>
                     <Nav.Link onClick={handleShow}>Promotions</Nav.Link>
                     <Nav.Link onClick={handleAdmin}>Admin View</Nav.Link>
                 </Nav>
@@ -45,7 +44,6 @@ function NavBar() {
       <Routes>
             <Route path="/" element={<HomePage/>} />
             <Route path="/HomePage" element={<HomePage/>} />
-            <Route path="/MovieCard" element={<MovieCard/>} />
             {/* <Route path="/Login" element={<Login/>} /> */}
             <Route path="/SignUp" element={<SignUp/>} />
 
