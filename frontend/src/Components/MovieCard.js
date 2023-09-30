@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Ratio from 'react-bootstrap/Ratio';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function MovieCard() {
+function MovieCard({title, poster, trailer}) {
 
   const [showTrailer, setShowTrailer] = useState(false);
   const handleCloseTrailer = () => setShowTrailer(false);
@@ -18,9 +18,9 @@ function MovieCard() {
         text={'light'}
         style={{ width: '18rem', textAlign: 'center', margin: '0.5rem'}} 
     > 
-      <Card.Img variant="top" src="https://www.movieposters.com/cdn/shop/products/6cd691e19fffbe57b353cb120deaeb8f_8489d7bf-24ba-4848-9d0f-11f20cb35025_480x.progressive.jpg?v=1573613877" />
+      <Card.Img variant="top" src={poster} />
       <Card.Body>
-        <Card.Title>Star Wars</Card.Title>
+        <Card.Title>{title}</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>watch trailer</Button>
         <Button variant="primary" onClick={handleShowTrailer}>Book Movie</Button>
       </Card.Body>
@@ -38,7 +38,7 @@ function MovieCard() {
         </Modal.Header>
         <Modal.Body>
             <Ratio aspectRatio="16x9">
-                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/8Qn_spdM5Zg?si=NfOSKmfV8oY-MzMh"></iframe>
+                <iframe class="embed-responsive-item" src={trailer}></iframe>
             </Ratio>
         </Modal.Body>
         <Modal.Footer>

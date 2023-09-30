@@ -5,9 +5,20 @@ import MovieCard from './MovieCard';
 import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Movie from './models/Movie';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function HomePage () {
+
+    const star = new Movie(
+        "Star wars",
+        "PG-13",
+        15,
+        "https://www.movieposters.com/cdn/shop/products/6cd691e19fffbe57b353cb120deaeb8f_8489d7bf-24ba-4848-9d0f-11f20cb35025_480x.progressive.jpg?v=1573613877",
+        "https://www.youtube.com/embed/8Qn_spdM5Zg?si=NfOSKmfV8oY-MzMh",
+        true
+    )
+
     return (
         <Container bg={'dark'}>
             <Form style={{margin: '1rem'}}>
@@ -24,7 +35,7 @@ function HomePage () {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {Array.from({ length: 5 }).map((_, idx) => (
                         <Col key={idx} >
-                            <MovieCard/>
+                            <MovieCard title={star.getTitle()} poster={star.getPoster()} trailer={star.getTrailer()}/>
                         </Col>
                         ))}
                     </Row>
