@@ -7,7 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MovieCard({title, poster, trailer}) {
 
-  const [showTrailer, setShowTrailer, BookMovie, setBookMovie] = useState(false);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [BookMovie, setBookMovie] = useState(false);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -66,7 +67,10 @@ function MovieCard({title, poster, trailer}) {
         </Modal.Header>
         <Modal.Body>
             <Ratio aspectRatio="16x9">
-                <iframe class="embed-responsive-item" src={trailer}></iframe>
+            <div>
+            <label for="bookingtime">Select Date and Time: </label>
+            <input type="datetime-local" id="Time" name="bookingtime"></input>
+            </div>
             </Ratio>
         </Modal.Body>
         <Modal.Footer>
