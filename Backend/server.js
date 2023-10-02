@@ -1,35 +1,31 @@
+
 const express = require('express');
 const app = express();
-const mssql = require("mssql");
- 
-app.get('/', function (req, res) {
- 
-   
-    const config = {
-        user: 'root',
-        password: 'cay80634',
-        server: 'localhost:3306',
-        database: 'movie'
-    };
- 
-    var dbConn = new mssql.ConnectionPool(config);
 
-    dbConn.connect(function (err) {
- 
-        let request = new mssql.Request();
- 
-       
-        request.query('SELECT * FROM movie LIMIT 10',
-            function (err, records) {
- 
-                if (err) console.log(err)
- 
-                res.send(records);
- 
-            });
-    });
+
+const mysql = require('mysql2');
+
+app.get('/', function (req, res) {
+    // create the connection to database
+    const connection = mysql.createConnection({
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
+        database: 'movies',
+        port:3306
+      });
+      
+      // simple query
+      connection.query(
+        'SELECT * FROM movie LIMIT 10',
+        function(err, results, fields) {
+          res.send(results); // results contains rows returned by server
+          console.log(fields);
+        }
+      );
 });
- 
+
 let server = app.listen(5000, function () {
     console.log('Server is listening at port 5000...');
 });
+
