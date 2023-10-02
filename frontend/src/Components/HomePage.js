@@ -24,6 +24,9 @@ function HomePage() {
     const handleCloseUserM = () => setShowUserM(false);
     const handleShowUserM = () => setShowUserM(true);
 
+    const Users = ["Bob", "Rob", "Dob"];
+    const Promos = ["promo1", "Promo2", "Promo3"];
+
 
     return (
         <>
@@ -128,8 +131,9 @@ function HomePage() {
         show={showPromoM} 
         onHide={handleClosePromoM}
         centered
-        size={'lg'}
+        size={'md'}
         backdrop="static"
+        style={{textAlign: "center"}}
         >
         <Modal.Header closeButton>
             <Modal.Title>Manage Promotions:</Modal.Title>
@@ -137,12 +141,22 @@ function HomePage() {
         <Modal.Body>
         <Form>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>add a promotion</Form.Label>
+        <Form.Label >add a promotion</Form.Label>
         <Form.Control type="textarea" placeholder="promo" />
       </Form.Group>
       <Button variant="primary">
-        Submit
+        Add Promo
       </Button>
+      <br></br>
+      <br></br>
+      {Promos.map((promo,index) => 
+            <>
+            Promotion: {promo}
+            <Button  size ={"sm"} variant="primary"> Delete User </Button>
+            <br></br>
+            <br></br>
+            </>
+      )}
     </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -156,22 +170,22 @@ function HomePage() {
         show={showUserM} 
         onHide={handleCloseUserM}
         centered
-        size={'lg'}
+        size={'sm'}
         backdrop="static"
+        style={{textAlign: "center"}}
         >
         <Modal.Header closeButton>
             <Modal.Title>Manage Users:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form>
-      <Form.Group className="mb-3">
-        <Form.Label className='light-text'>add a user</Form.Label>
-        <Form.Control type="textarea" placeholder="user" />
-      </Form.Group>
-      <Button variant="primary">
-        Submit
-      </Button>
-    </Form>
+      {Users.map((user,index) => 
+            <>
+            User: {user}
+            <Button  size ={"sm"} variant="primary"> Delete User </Button>
+            <br></br>
+            <br></br>
+            </>
+      )}
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseUserM}>
