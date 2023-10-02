@@ -17,7 +17,7 @@ function HomePage() {
     const [data, setData] = useState([]);
 
     useEffect(()=> {
-        axios.get('https://jsonplaceholder.typicode.com/todos')
+        axios.get('http://localhost:5000/')
              .then((res) => {
                 setData(res.data);
              })
