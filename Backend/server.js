@@ -1,5 +1,8 @@
 
 const express = require('express');
+const mongoose = require('mongoose');
+const port = process.env.PORT || 6001;
+
 var cors = require('cors')
 
 const app = express();
@@ -8,27 +11,24 @@ app.use(cors())
 
 const mysql = require('mysql2');
 
-app.get('/', function (req, res) {
-    // create the connection to database
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        password: 'cay80634',
-        user: 'root',
-        database: 'movies',
-        port:3306
-      });
-      
-      // simple query
-      connection.query(
-        'SELECT * FROM movie LIMIT 10',
-        function(err, results, fields) {
-          res.send(results); // results contains rows returned by server
-          console.log(fields);
-        }
-      );
-});
+/*Connect to database*/
+const CONNECTION_STRING = `mongodb+srv://arnab:test@swe-project.ulhiyxf.mongodb.net/?retryWrites=true&w=majority`;
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(CONNECTION_STRING, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
+  .then(() => {
+    app.listen(port);
+    console.log('Mongo DB connection successful');
+  })
+  .catch((error) => {
+    console.log(`Error in DB connection:  ${error}`);
+  });
 
-let server = app.listen(5000, function () {
-    console.log('Server is listening at port 5000...');
+
+let server = app.listen(6000, function () {
+    console.log('Server is listening at port 6000...');
 });
 
