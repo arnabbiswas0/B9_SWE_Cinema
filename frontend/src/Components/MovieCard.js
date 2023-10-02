@@ -16,6 +16,9 @@ function MovieCard({title, poster, trailer}) {
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
   const [Checkout, setCheckout] = useState(false);
+  const [Order, setOrder] = useState(false);
+  const handleShowOrder = setOrder(true);
+  const handleCloseOrder = setOrder(false);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -212,6 +215,30 @@ function MovieCard({title, poster, trailer}) {
             </Button>
         </Modal.Footer>
     </Modal>
+
+    <Modal
+        show={Order} 
+        onHide={handleCloseOrder}
+        centered
+        size={'lg'}
+        backdrop="static"
+    >
+        <Modal.Header closeButton>
+            <Modal.Title>Trailer:</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Ratio aspectRatio="16x9">
+                <iframe class="embed-responsive-item" src={trailer}></iframe>
+            </Ratio>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={handleCloseTrailer}>
+                Close
+            </Button>
+        </Modal.Footer>
+    </Modal>
+
+
     </>
 
 
