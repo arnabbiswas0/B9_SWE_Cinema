@@ -3,6 +3,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Ratio from 'react-bootstrap/Ratio';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
   
@@ -11,11 +14,14 @@ function MovieCard({title, poster, trailer}) {
 
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
+  const [ageList, setAgeList] = useState([]);
   const [Checkout, setCheckout] = useState(false);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
   const handleShowBookMovie = () => setBookMovie(true);
+  const handleAgeClick = () => setAgeList(... ageList,{age: ""});
+
   const handleShowCheckout = () => setCheckout(true);
   const handleCloseCheckout = () => setCheckout(false);
 
@@ -63,22 +69,62 @@ function MovieCard({title, poster, trailer}) {
         show={BookMovie} 
         onHide={handleCloseBookMovie}
         centered
-        size={'lg'}
+        size={'md'}
         backdrop="static"
+        style={{ textAlign: "center"}}
     >
         <Modal.Header closeButton>
             <Modal.Title>Booking:</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-            <Ratio aspectRatio="16x9">
-            <div>
-            <label for="bookingtime">Select Date and Time: </label>
-            <input type="datetime-local" id="Time" name="bookingtime"></input>
+        <Modal.Body textAlign={"center"}>
+            <Form>
+            <Form.Group className="mb-3">
+                <Form.Label >Select Date and Time:</Form.Label>
+                <Form.Control type="datetime-local" id="Time" name="bookingtime"/>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label >Select Seats:</Form.Label>
+                <Row className="g-4" bg={"dark"}>
+                    <Col>
+                        <Button variant="primary" onclick={handleAgeClick}> </Button>
+                        <Button variant="primary" onclick={handleAgeClick}> </Button>
+                        <Button variant="primary" onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                    </Col>
+                </Row>
+                <Row className="g-4" bg={"dark"}>
+                    <Col>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                    </Col>
+                </Row>
+                <Row className="g-4" bg={"dark"}>
+                    <Col>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                    </Col>
+                </Row>
+            </Form.Group>
+            {ageList.map((age) => (
+            <Form.Group className="mb-3">
+                <Form.Label>Add age for seat:</Form.Label>
+                <Form.Control type="textarea"/>
+            </Form.Group>
+            ))}
+            </Form>
             <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleShowCheckout}>
                 Checkout
             </Button>
-            </div>
-            </Ratio>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseBookMovie}>
@@ -91,7 +137,7 @@ function MovieCard({title, poster, trailer}) {
         show={Checkout} 
         onHide={handleCloseCheckout}
         centered
-        size={'lg'}
+        size={'md'}
         backdrop="static"
     >
         <Modal.Header closeButton>
