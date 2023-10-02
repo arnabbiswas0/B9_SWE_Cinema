@@ -15,6 +15,17 @@ import axios from "axios";
 function HomePage() {
 
     const [data, setData] = useState([]);
+    const [query, setQuery] = useState("");
+
+    const getSearch = (query, movies) => {
+        if (!query) {
+            return movies
+        }
+            return movies.filter(movie => movie.title.includes(query))
+    
+    }
+
+    const filteredMovies = getSearch(query, movies);
 
     useEffect(()=> {
         axios.get('https://jsonplaceholder.typicode.com/todos')
@@ -56,14 +67,14 @@ function HomePage() {
 
             {/* Search Bar */}
             <Form style={{ margin: '1rem' }}>
-                <Form.Control type="search" placeholder="search for a movie" />
+                <Form.Control type="search" placeholder="search for a movie" onChange={e => setQuery(e.target.value)} />
             </Form>
 
             {/* Tabs */}
             <Tabs defaultActiveKey="Currently Playing" fill justify data-bs-theme="dark">
                 <Tab eventKey="Currently Playing" title="Currently Playing">
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
-                        {movies.map((movie) => (
+                        {filteredMovies.map((movie) => (
                             <>
                             {movie.getPlaying() &&
                             <Col>
@@ -77,7 +88,7 @@ function HomePage() {
                 </Tab>
                 <Tab eventKey="Coming Soon" title="Coming Soon">
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
-                        {movies.map((movie) => (
+                        {filteredMovies.map((movie) => (
                             <>
                             {!movie.getPlaying() &&
                             <Col>
