@@ -27,10 +27,16 @@ function SignUp() {
         <h2 class="text-light bg-dark">Create Account:</h2>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label className='light-text'>Name</Form.Label>
+        <Form.Control type="Name" placeholder="Enter Name" />
+      </Form.Group>
+
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className='light-text'>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" />
         <Form.Text className="text-muted">
-          We'll never share your email with any unauthorized third parties.
+          We will NEVER share your email with any unauthorized third parties.
         </Form.Text>
       </Form.Group>
 
