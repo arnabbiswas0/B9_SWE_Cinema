@@ -55,7 +55,7 @@ function HomePage() {
 
     return (
         <>
-        <Container bg={'dark'}>
+        <Container data-bs-theme="dark">
             {/* Admin Buttons */}
             {localStorage.getItem("Admin") === "Admin" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
