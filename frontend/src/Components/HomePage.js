@@ -28,7 +28,7 @@ function HomePage() {
     const filteredMovies = getSearch(query, data);
 
     useEffect(()=> {
-        axios.get('http://localhost:5000/')
+        axios.get('http://localhost:6000/api/movies')
              .then((res) => {
                 setData(res.data);
              })

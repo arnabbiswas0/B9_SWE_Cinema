@@ -2,11 +2,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const port = process.env.PORT || 6001;
+const { Schema } = mongoose;
+const router = express.Router();
+const { ObjectId } = require('mongodb');
+const routes = require("./routes") // new
+
+
 
 var cors = require('cors')
 
 const app = express();
-app.use(cors())
+//app.use(cors())
 
 
 const mysql = require('mysql2');
@@ -20,7 +26,9 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
+    app.use(express.json())
     app.listen(port);
+    app.use("/api", routes)
     console.log('Mongo DB connection successful');
   })
   .catch((error) => {
@@ -31,4 +39,10 @@ mongoose
 let server = app.listen(6000, function () {
     console.log('Server is listening at port 6000...');
 });
+
+
+
+
+
+
 
