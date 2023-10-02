@@ -27,4 +27,6 @@ export default class Movie {
     getPlaying() {
         return this.playing
     }
+
+
 }

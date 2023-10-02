@@ -1,5 +1,5 @@
 import Movie from './models/Movie';
-
+  
 export const movies = [
     new Movie(
         "Star Wars",

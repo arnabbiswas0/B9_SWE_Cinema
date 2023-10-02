@@ -10,9 +10,23 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { movies } from './movieData'; // Import movies
+import axios from "axios";
 
 function HomePage() {
 
+    const [data, setData] = useState([]);
+    async function getTest() {
+        try {
+          const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
+          setData(response.data)
+          console.log(data)
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      getTest()
+      console.log(data);
+    
     //modal states
     const [showMovieM, setShowMovieM] = useState(false);
     const handleCloseMovieM = () => setShowMovieM(false);
