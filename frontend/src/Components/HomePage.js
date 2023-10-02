@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
@@ -15,16 +15,16 @@ import axios from "axios";
 function HomePage() {
 
     const [data, setData] = useState([]);
-    async function getTest() {
-        try {
-          const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
-          setData(response.data)
-          console.log(data)
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      getTest()
+
+    useEffect(()=> {
+        axios.get('https://jsonplaceholder.typicode.com/todos')
+             .then((res) => {
+                setData(res.data);
+             })
+             .catch((err) =>{
+                console.log("Err");
+             })
+    }, []);
       console.log(data);
     
     //modal states
