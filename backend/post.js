@@ -9,6 +9,6 @@ const movieSchema = mongoose.Schema({
     playing: {type: Boolean},
   });
 
-module.exports = mongoose.model("Post", movieSchema);
+module.exports = mongoose.model("movies", movieSchema);
 
 
