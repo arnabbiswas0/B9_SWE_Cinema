@@ -9,7 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import { movies } from './movieData'; // Import movies
+import { movies } from './movieData'; // Import movies
 import axios from "axios";
 
 function HomePage() {
