@@ -12,7 +12,7 @@ const routes = require("./routes") // new
 var cors = require('cors')
 
 const app = express();
-//app.use(cors())
+app.use(cors())
 
 
 const mysql = require('mysql2');
@@ -36,8 +36,8 @@ mongoose
   });
 
 
-let server = app.listen(6000, function () {
-    console.log('Server is listening at port 6000...');
+let server = app.listen(8000, function () {
+    console.log('Server is listening at port 8000...');
 });
 
 

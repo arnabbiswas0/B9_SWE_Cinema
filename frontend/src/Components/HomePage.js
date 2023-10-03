@@ -9,7 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { movies } from './movieData'; // Import movies
+//import { movies } from './movieData'; // Import movies
 import axios from "axios";
 
 function HomePage() {
@@ -28,7 +28,7 @@ function HomePage() {
     const filteredMovies = getSearch(query, data);
 
     useEffect(()=> {
-        axios.get('http://localhost:6000/api/movies')
+        axios.get('http://localhost:8000/api/movies')
              .then((res) => {
                 setData(res.data);
              })
