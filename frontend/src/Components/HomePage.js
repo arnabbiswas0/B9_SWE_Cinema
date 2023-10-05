@@ -25,10 +25,10 @@ function HomePage() {
     
     }
 
-    const filteredMovies = getSearch(query, movies);
+    const filteredMovies = getSearch(query, data);
 
     useEffect(()=> {
-        axios.get('http://localhost:5000/')
+        axios.get('http://localhost:8000/api/movies')
              .then((res) => {
                 setData(res.data);
              })
@@ -55,7 +55,7 @@ function HomePage() {
 
     return (
         <>
-        <Container bg={'dark'}>
+        <Container data-bs-theme="dark">
             {/* Admin Buttons */}
             {localStorage.getItem("Admin") === "Admin" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
@@ -76,9 +76,9 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {movie.getPlaying() &&
+                            {(movie.isOut === 'true') &&
                             <Col>
-                                <MovieCard title={movie.getTitle()} poster={movie.getPoster()} trailer={movie.getTrailer()} />
+                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
                             }
                             </>
@@ -90,9 +90,9 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {!movie.getPlaying() &&
+                            {(movie['isOut'] === 'false') &&
                             <Col>
-                                <MovieCard title={movie.getTitle()} poster={movie.getPoster()} trailer={movie.getTrailer()} />
+                                <MovieCard title={movie['title']} poster={movie['poster']} trailer={movie['trailer']} />
                             </Col>
                             }
                             </>

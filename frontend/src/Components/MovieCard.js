@@ -141,70 +141,83 @@ function MovieCard({title, poster, trailer}) {
         backdrop="static"
     >
         <Modal.Header closeButton>
-            <Modal.Title>Checkout:</Modal.Title>
+            <Modal.Title>Checkout Summary:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <Ratio aspectRatio="16x9">
+              Ticket Details: <br></br>
+              &emsp; dummy ticket: 18+ $20 &emsp;
+              <Button size='sm'> Delete Ticket</Button> 
+              <br></br>
+              &emsp; dummy ticket: 18+ $20 &emsp;
+              <Button size='sm'> Delete Ticket</Button> 
+              <br></br>
+              &emsp; dummy ticket: 18+ $20 &emsp;
+              <Button size='sm'> Delete Ticket</Button> 
+              <br></br>
+              &emsp; dummy ticket: 18+ $20 &emsp;
+              <Button size='sm'> Delete Ticket</Button> 
+              <br></br>
+              &emsp; total: $80
+
             <div>
             <form className="form-horizontal">
-  <fieldset>
-    {/* Form Name */}
-    <legend>Enter Credit/Debit Details: </legend>
-    {/* Text input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="Name on Card">
-        Name on Card
-      </label>
-      <div className="col-md-4">
-        <input
-          id="Name on Card"
-          name="Name on Card"
-          type="text"
-          placeholder=""
-          className="form-control input-md"
-          required=""
-        />
-      </div>
-    </div>
-    {/* Text input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="textinput">
-        Card Number
-      </label>
-      <div className="col-md-4">
-        <input
-          id="textinput"
-          name="textinput"
-          type="text"
-          placeholder=""
-          className="form-control input-md"
-          required=""
-        />
-      </div>
-    </div>
-    {/* Password input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="CVV">
-        CVV
-      </label>
-      <div className="col-md-4">
-        <input
-          id="CVV"
-          name="CVV"
-          type="password"
-          placeholder=""
-          className="form-control input-md"
-        />
-      </div>
-    </div>
-  </fieldset>
-</form>
-<Button style={{margin: '0.5rem'}} variant="primary" onClick={handleCloseCheckout}>
+            <fieldset>
+            {/* Form Name */}
+            <legend>Enter Credit/Debit Details: </legend>
+            {/* Text input*/}
+            <div className="form-group">
+              <label className="col-md-4 control-label" htmlFor="Name on Card">
+                Name on Card
+              </label>
+            <div className="col-md-4">
+            <input
+              id="Name on Card"
+              name="Name on Card"
+              type="text"
+              placeholder=""
+              className="form-control input-md"
+              required=""
+            />
+            </div>
+            </div>
+            {/* Text input*/}
+            <div className="form-group">
+            <label className="col-md-4 control-label" htmlFor="textinput">
+              Card Number
+            </label>
+            <div className="col-md-4">
+             <input
+              id="textinput"
+              name="textinput"
+              type="text"
+              placeholder=""
+              className="form-control input-md"
+              required=""
+              />
+            </div>
+            </div>
+          {/* Password input*/}
+            <div className="form-group">
+              <label className="col-md-4 control-label" htmlFor="CVV">
+                CVV
+              </label>
+            <div className="col-md-4">
+              <input
+                id="CVV"
+                name="CVV"
+                type="password"
+                placeholder=""
+                className="form-control input-md"
+              />
+            </div>
+            </div>
+            </fieldset>
+            </form>
+            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleCloseCheckout}>
                 Submit
             </Button>
 
             </div>
-            </Ratio>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseCheckout}>
