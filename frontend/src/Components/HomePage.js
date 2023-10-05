@@ -9,7 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { movies } from './movieData'; // Import movies
+//import { movies } from './movieData'; // Import movies
 import axios from "axios";
 
 function HomePage() {
@@ -76,7 +76,7 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie.isOut === 'true') &&
+                            {(movie.playing === true) &&
                             <Col>
                                 <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
@@ -90,9 +90,9 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie['isOut'] === 'false') &&
+                            {(movie.playing === false) &&
                             <Col>
-                                <MovieCard title={movie['title']} poster={movie['poster']} trailer={movie['trailer']} />
+                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.poster} />
                             </Col>
                             }
                             </>
