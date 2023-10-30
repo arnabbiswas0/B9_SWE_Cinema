@@ -10,8 +10,8 @@ const connection = mysql.createConnection({
         port:3306
       });
 
-const bcrypt = require('bcrypt')
-const validator = require('validator')
+//const bcrypt = require('bcrypt')
+//const validator = require('validator')
 //const dbConnection = require("./database").databaseConnection;
 
 
@@ -84,6 +84,7 @@ router.post("/movies", async (req, res) => {
 router.post("/login", async(req, res) => {
         let sql = "SELECT * FROM registereduser WHERE email = " + req.body.email + " AND password = " + req.body.password;
         let email = req.body.email
+        console.log(email);
         connection.query(
                 sql,
                 function(err, results, fields) {
