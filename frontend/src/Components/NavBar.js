@@ -10,6 +10,7 @@ import MovieCard from './MovieCard';
 import SignUp from './SignUp';
 import Login from './Login';
 import ChangePassword from './ChangePassword';
+import EditProfile from './EditProfile';
 
 function NavBar() {
     const [show, setShow] = useState(false);
@@ -49,6 +50,7 @@ function NavBar() {
             <Route path="/Login" element={<Login/>} /> 
             <Route path="/SignUp" element={<SignUp/>} />
             <Route path="/ChangePassword" element={<ChangePassword/>} />
+            <Route path="/EditProfile" element={<EditProfile/>} />
 
         </Routes>
     </BrowserRouter>
