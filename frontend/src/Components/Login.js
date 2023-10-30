@@ -35,6 +35,9 @@ function Login() {
         <Form.Label className='light-text'>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" />
       </Form.Group>
+      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={handleShowConfirm}>
+        Forgot Password
+      </Button>
       <Button variant="primary"  onClick={handleShowConfirm}>
         Submit
       </Button>
