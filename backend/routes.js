@@ -96,7 +96,7 @@ router.post("/login", async(req, res) => {
                         //as respond, we send back the email and token. we can find in postman or local storage
                         res.status(200).json({email, token})
                   } else {
-                        res.status(400).json({error: error.message})
+                        res.status(400).json('error')
     }
                   }
                 
