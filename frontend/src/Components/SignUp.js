@@ -1,4 +1,5 @@
 import '../Styles/SignUp.css';
+import { useSignup } from "./hooks/useSignup";
 import React, { useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -12,18 +13,21 @@ function SignUp() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')  
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const {signup, error, isLoading} = useSignup()  
 
 
   const [showConfirm, setShowConfirm] = useState(false);
   const handleCloseConfirm = () => setShowConfirm(false);
   const handleShowConfirm = () => setShowConfirm(true);
-  const handleSubmit = () => {
+  const handleSubmit = async(e) => {
     // perform all neccassary validations
     if (password !== confirmPassword) {
         alert("Passwords don't match! Try again!");
     } else {
-        handleShowConfirm();
+      e.preventDefault()
+    
+      await signup(email, password)
     }
 }
 
@@ -60,7 +64,7 @@ function SignUp() {
         <Form.Label className='light-text'>Confirm Password</Form.Label>
         <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
       </Form.Group>
-      <Button variant="primary"  onClick={handleSubmit}>
+      <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
         Submit
       </Button>
     </Form>
