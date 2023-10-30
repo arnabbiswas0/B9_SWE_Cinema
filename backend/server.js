@@ -16,8 +16,7 @@ app.use(cors())
 
 
 const mysql = require('mysql2');
-
-/*Connect to database*/
+/*
 const CONNECTION_STRING = `mongodb+srv://arnab:test@swe-project.ulhiyxf.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.set('strictQuery', false);
 mongoose
@@ -34,6 +33,26 @@ mongoose
   .catch((error) => {
     console.log(`Error in DB connection:  ${error}`);
   });
+  */
+
+  const mysqlconnection = mysql.createConnection({
+    host: 'localhost',
+    password: 'cay80634',
+    user: 'root',
+    database: 'movies',
+    port:3306
+  });
+
+  mysqlconnection.connect((err) => {
+    if(err) {
+      console.log('There was an error connecting to db')
+    } else {
+      app.use(express.json())
+      app.listen(port);
+      app.use("/api", routes)
+      console.log('mysql DB connection successful');
+    }
+  })
 
 
 let server = app.listen(8000, function () {

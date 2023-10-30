@@ -4,8 +4,16 @@ const router = express.Router()
 
 // Get all posts
 router.get("/movies", async (req, res) => {
-	const posts = await Post.find()
-	res.send(posts)
+        
+	//const posts = await Post.find()
+	//res.send(posts)
+
+        let sql = 'SELECT * FROM movie LIMIT 10';
+        connection.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send('request received');
+    });
 })
 
 router.post("/movies", async (req, res) => {
