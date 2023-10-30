@@ -1,19 +1,35 @@
 import '../Styles/SignUp.css';
+import { useSignup } from "./hooks/useSignup";
 import React, { useState } from "react"
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
 import { Container, Form,} from 'react-bootstrap';
 
  
 
 function SignUp() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const {signup, error, isLoading} = useSignup()  
+
 
   const [showConfirm, setShowConfirm] = useState(false);
   const handleCloseConfirm = () => setShowConfirm(false);
   const handleShowConfirm = () => setShowConfirm(true);
-
+  const handleSubmit = async(e) => {
+    // perform all neccassary validations
+    if (password !== confirmPassword) {
+        alert("Passwords don't match! Try again!");
+    } else {
+      e.preventDefault()
+    
+      await signup(email, password)
+    }
+}
 
     return (
     <>
@@ -29,13 +45,12 @@ function SignUp() {
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className='light-text'>Name</Form.Label>
-        <Form.Control type="Name" placeholder="Enter Name" />
+        <Form.Control type="Name" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} value={name} />
       </Form.Group>
-
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className='light-text'>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
+        <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email}/>
         <Form.Text className="text-muted">
           We will NEVER share your email with any unauthorized third parties.
         </Form.Text>
@@ -43,13 +58,13 @@ function SignUp() {
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label className='light-text'>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
+        <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password}/>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label className='light-text'>Confirm Password</Form.Label>
-        <Form.Control type="password" placeholder="Confirm Password" />
+        <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
       </Form.Group>
-      <Button variant="primary"  onClick={handleShowConfirm}>
+      <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
         Submit
       </Button>
     </Form>
