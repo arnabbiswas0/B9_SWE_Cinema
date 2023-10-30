@@ -6,9 +6,12 @@ const connection = mysql.createConnection({
         host: 'localhost',
         password: 'cay80634',
         user: 'root',
-        database: 'movies',
+        database: 'cinemasystem',
         port:3306
       });
+
+const bcrypt = require('bcrypt')
+const validator = require('validator')
 //const dbConnection = require("./database").databaseConnection;
 
 
@@ -50,6 +53,7 @@ router.get("/movies", async (req, res) => {
 
 //adding a movie to the db
 router.post("/movies", async (req, res) => {
+        /*
 	const post = new Post({
         title: req.body.title, // String is shorthand for {type: String}
         rating: req.body.rating,
@@ -60,7 +64,7 @@ router.post("/movies", async (req, res) => {
 	})
 	await post.save()
 	res.send(post)
-
+        */
         let sql = "INSERT INTO movie (title, rating, trailer, poster, isOut) VALUES ("
                 + req.body.title
                 +req.body.rating
@@ -72,8 +76,29 @@ router.post("/movies", async (req, res) => {
                 sql,
                 function(err, results, fields) {
                   res.send(results); // results contains rows returned by server
-                  console.log(fields);
+                  console.log("Added a movie");
                 }
+              );
+})
+
+router.post("/login", async(req, res) => {
+        let sql = "SELECT * FROM registereduser WHERE email = " + req.body.email + " AND password = " + req.body.password;
+        let email = req.body.email
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //res.send(results); // results contains rows returned by server
+                  //console.log("Added a movie");
+                  if(results) {
+                        //create a token
+                        const token = createToken(results.registeredUserID)
+                        //as respond, we send back the email and token. we can find in postman or local storage
+                        res.status(200).json({email, token})
+                  } else {
+                        res.status(400).json({error: error.message})
+    }
+                  }
+                
               );
 })
 
