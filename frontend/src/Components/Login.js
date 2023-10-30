@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form,} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
  
 
 function Login() {
@@ -25,6 +26,7 @@ function Login() {
     handleShowConfirm();
 
   }
+  const navigate = useNavigate();
 
     return (
     <>
@@ -47,7 +49,7 @@ function Login() {
         <Form.Label className='light-text'>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
       </Form.Group>
-      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={handleShowConfirm}>
+      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={() => navigate("/ChangePassword")}>
         Forgot Password
       </Button>
       <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>

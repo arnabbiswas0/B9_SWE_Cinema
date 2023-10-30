@@ -64,6 +64,9 @@ function SignUp() {
         <Form.Label className='light-text'>Confirm Password</Form.Label>
         <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
       </Form.Group>
+      <Form.Group>
+        <Form.Label className='light-text'>Already Signed up? <a href="/Login">Log in here!</a></Form.Label>
+      </Form.Group>
       <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
         Submit
       </Button>

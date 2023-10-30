@@ -11,8 +11,11 @@ import SignUp from './SignUp';
 import Login from './Login';
 import ChangePassword from './ChangePassword';
 import EditProfile from './EditProfile';
+import { useAuthContext } from './hooks/useAuthContext';
+
 
 function NavBar() {
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -27,6 +30,8 @@ function NavBar() {
         }
     };
 
+    const { user } = useAuthContext();
+
     return (
     <>
     <BrowserRouter>
@@ -39,8 +44,8 @@ function NavBar() {
                     <Nav.Link onClick={handleAdmin}>Admin View</Nav.Link>
                 </Nav>
                 <Nav>
-                    <Nav.Link href="/Login">Log In</Nav.Link>
-                    <Nav.Link href="/SignUp">Create Account</Nav.Link>
+                    {user && <Nav.Link href="/Login">Log In</Nav.Link> }
+                    {!user && <Nav.Link href="/SignUp">Sign Up</Nav.Link> }
                 </Nav>
         </Container>
       </Navbar>
