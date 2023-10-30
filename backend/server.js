@@ -43,16 +43,12 @@ mongoose
     port:3306
   });
 
-  mysqlconnection.connect((err) => {
-    if(err) {
-      console.log('There was an error connecting to db')
-    } else {
-      app.use(express.json())
+  
+
+  app.use(express.json())
       app.listen(port);
       app.use("/api", routes)
       console.log('mysql DB connection successful');
-    }
-  })
 
 
 let server = app.listen(8000, function () {

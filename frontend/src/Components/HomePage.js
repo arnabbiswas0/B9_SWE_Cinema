@@ -31,6 +31,7 @@ function HomePage() {
         axios.get('http://localhost:8000/api/movies')
              .then((res) => {
                 setData(res.data);
+                console.log(res.data);
              })
              .catch((err) =>{
                 console.log("Err");
@@ -76,7 +77,7 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie.playing === true) &&
+                            {(movie.isOut === 'true') &&
                             <Col>
                                 <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
@@ -90,7 +91,7 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie.playing === false) &&
+                            {(movie.isOut === 'false') &&
                             <Col>
                                 <MovieCard title={movie.title} poster={movie.poster} trailer={movie.poster} />
                             </Col>
