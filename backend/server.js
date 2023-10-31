@@ -1,7 +1,8 @@
+require("dotenv").config()
 
 const express = require('express');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 6001;
+const port = process.env.PORT //|| 6001;
 const { Schema } = mongoose;
 const router = express.Router();
 const { ObjectId } = require('mongodb');
@@ -50,7 +51,7 @@ mongoose
       app.use("/api", routes)
       console.log('mysql DB connection successful');
 
-
+console.log(process.env.PORT);
 let server = app.listen(8000, function () {
     console.log('Server is listening at port 8000...');
 });
