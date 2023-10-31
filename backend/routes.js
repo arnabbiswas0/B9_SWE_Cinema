@@ -1,3 +1,4 @@
+
 const express = require("express")
 const Post = require("./post") // new
 const router = express.Router()
@@ -5,6 +6,7 @@ const mysql = require('mysql2');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
+const nodemailer = require('nodemailer');
 const connection = mysql.createConnection({
         host: 'localhost',
         password: 'cay80634',
@@ -39,6 +41,38 @@ const getUserId = (email) => {
                 }
               );
 
+}
+
+/**
+ * 
+ * @param {string} message
+ * @param {string} email
+ * @returns {Promise<string>}
+ */
+const sendEmail = (email, message) => {
+        var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'softwareengineeruga@gmail.com',
+                  pass: ''
+                }
+              });
+              
+              var mailOptions = {
+                from: 'softwareengineeruga@gmail.com',
+                to: email,
+                subject: 'Cinema Account',
+                text: message
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
+              
 }
 
 
@@ -78,7 +112,7 @@ router.get("/movies", async (req, res) => {
       );
 })
 //fetches the user profile
-router.get("/getProfile", async(req, res) => {
+router.post("/getProfile", async(req, res) => {
         const id = await getUserId(req.body.email);
         //const id = 11;
         sql = "SELECT * FROM registereduser JOIN paymentcard ON registereduser.registeredUserID = paymentcard.userId WHERE paymentcard.userId = " + id + ""
@@ -176,9 +210,10 @@ router.post("/signup", async(req, res) => {
                                         sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
                                         connection.query(
                                                 sql,
-                                                function(err, results, fields) {
-                                                  console.log("payment profile made for user (id is->): " + results.insertId)
-                                                  console.log
+                                                async function(err, results, fields) {
+                                                        console.log("payment profile made for user (id is->): " + results.insertId)
+                                                        let message = "Your account has been successfully created";
+                                                        const success = await sendEmail(req.body.email, message);
                                                 }
                                         );
 

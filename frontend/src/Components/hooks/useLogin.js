@@ -16,6 +16,7 @@ export const useLogin = () =>{
             body: JSON.stringify({email, password})
         })
         const json = await response.json() 
+        console.log(response);
         if(!response.ok){
             setIsLoading(false)
             setError(json.error)
