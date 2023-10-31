@@ -33,12 +33,12 @@ function EditProfile() {
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label className='light-text'>Change Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
+        <Form.Control type="password" placeholder="**********" />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label className='light-text'>Confirm Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
+        <Form.Control type="password" placeholder="**********" />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicEmail">
