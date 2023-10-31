@@ -46,6 +46,7 @@ function NavBar() {
                 <Nav>
                     {user && <Nav.Link href="/Login">Log In</Nav.Link> }
                     {!user && <Nav.Link href="/SignUp">Sign Up</Nav.Link> }
+                    {user && <Nav.Link href="/HomePage">Logout</Nav.Link> }
                 </Nav>
         </Container>
       </Navbar>
