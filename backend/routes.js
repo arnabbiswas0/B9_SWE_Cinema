@@ -3,6 +3,8 @@ const Post = require("./post") // new
 const router = express.Router()
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+const validator = require('validator')
 const connection = mysql.createConnection({
         host: 'localhost',
         password: 'cay80634',
@@ -11,8 +13,7 @@ const connection = mysql.createConnection({
         port:3306
       });
 
-//const bcrypt = require('bcrypt')
-//const validator = require('validator')
+
 //const dbConnection = require("./database").databaseConnection;
 
 const createToken = (_id) =>{
@@ -23,6 +24,22 @@ const createToken = (_id) =>{
         //then the token will be expired
        return jwt.sign({_id}, process.env.SECRET, {expiresIn: '3d'} )
     }
+
+/**
+ * 
+ * @param {string} email 
+ * @returns {Promise<int>}
+ */
+const getUserId = (email) => {
+        let sql = "SELECT * FROM registereduser WHERE email = '" + email + "'";
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  return results.registeredUserID;
+                }
+              );
+
+}
 
 
 
@@ -59,6 +76,20 @@ router.get("/movies", async (req, res) => {
           console.log(fields);
         }
       );
+})
+//fetches the user profile
+router.get("/getProfile", async(req, res) => {
+        const id = await getUserId(req.body.email);
+        //const id = 11;
+        sql = "SELECT * FROM registereduser JOIN paymentcard ON registereduser.registeredUserID = paymentcard.userId WHERE paymentcard.userId = " + id + ""
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  console.log(results);
+                  res.send(results);
+                }
+        );
+        
 })
 
 //adding a movie to the db
@@ -100,18 +131,105 @@ router.post("/login", async(req, res) => {
                 function(err, results, fields) {
                   //res.send(results); // results contains rows returned by server
                   //console.log("Added a movie");
-                  if(true) {
+                  if(results.length != 0) {
                         console.log(results);
                         //create a token
                         const token = createToken(results.registeredUserID)
                         //as respond, we send back the email and token. we can find in postman or local storage
                         res.status(200).json({email, token})
                   } else {
+                        console.log({error: err});
                         res.status(400).json('error')
     }
                   }
                 
               );
 })
+
+router.post("/signup", async(req, res) => {
+        //INSERT INTO user (name, phone, email, password, isSubscribed, statusId) VALUES ([givenName],[givenPhone],[givenEmail],[givenPassword],[false],[1])
+        //console.log(req.body);
+        let sql = "SELECT * FROM registereduser WHERE email = '" + req.body.email + "'";
+
+        const salt = await bcrypt.genSalt(10) //the longer the number, the longer it take for hacker to crack pw, but also take longer for user to signup
+        const hash = await bcrypt.hash(req.body.password, salt)
+
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  if(results.length == 0) { //email does not exist in db\
+                        sql = "INSERT INTO registereduser(phone, email, password, isSubscribed, statusID, name) VALUES ("
+                                + "'999-999-9999'"
+                                +  ", '" + req.body.email + "', "
+                                + "'" + hash + "', "
+                                + "'false', "
+                                + "1, "
+                                + "'" + req.body.name + "'"
+                                + ")";
+                        
+                        connection.query(
+                                sql,
+                                function(err, results) {
+                                        if(err) throw err;
+                                        console.log("user successfully added");
+                                        console.log("new user id: " + results.insertId);
+                                        sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
+                                        connection.query(
+                                                sql,
+                                                function(err, results, fields) {
+                                                  console.log("payment profile made for user (id is->): " + results.insertId)
+                                                  console.log
+                                                }
+                                        );
+
+                                }
+                                );
+                        
+                  } else { //email already exist in db
+                        console.log("email is already associated with account")
+                  }
+                }
+              );
+        
+        
+        
+})
+
+//verify given password with one stored in db
+router.post("/verifyPassword", async(req, res) => {
+        let sql = "SELECT * FROM registereduser WHERE email = '" + req.body.email + "'";
+        connection.query(
+                sql,
+                async function(err, results, fields) { //this is questionable because i made into async
+                        const match = await bcrypt.compare(req.body.password, results.password);
+                        if(match) {
+                                res.status(200).json(true);
+                        } else {
+                                res.status(400).json(false);
+                        }
+                }
+              );
+
+})
+
+//verify if given email is an admin
+router.post("/verifyAdmin", async(req, res) => {
+        const id = await getUserId(req.body.email);
+        let sql = "SELECT * FROM admin WHERE userId = " + id;
+        connection.query(
+                sql,
+                async function(err, results, fields) { //this is questionable because i made into async
+                        if(results.length != 0) {
+                                res.status(200).json(true);
+                        } else {
+                                res.status(400).json(false);
+                        }
+                }
+        );
+
+
+})
+
+
 
 module.exports = router
