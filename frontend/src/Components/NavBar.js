@@ -12,6 +12,7 @@ import Login from './Login';
 import ChangePassword from './ChangePassword';
 import EditProfile from './EditProfile';
 import { useAuthContext } from './hooks/useAuthContext';
+import ChangePasswordConfirmationPage from './ChangePasswordConfirmationPage';
 
 
 function NavBar() {
@@ -56,6 +57,8 @@ function NavBar() {
             <Route path="/SignUp" element={<SignUp/>} />
             <Route path="/ChangePassword" element={<ChangePassword/>} />
             <Route path="/EditProfile" element={<EditProfile/>} />
+            <Route path="/ChangePasswordPage" element={<ChangePasswordConfirmationPage/>} />
+
 
         </Routes>
     </BrowserRouter>
