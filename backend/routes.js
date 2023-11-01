@@ -264,6 +264,7 @@ router.post("/signup", async(req, res) => {
                                                         console.log("payment profile made for user (id is->): " + results.insertId)
                                                         let message = "Your account has been successfully created";
                                                         const success = await sendEmail(req.body.email, message);
+                                                        res.status(200).json(email);
                                                 }
                                         );
 
@@ -272,6 +273,7 @@ router.post("/signup", async(req, res) => {
                         
                   } else { //email already exist in db
                         console.log("email is already associated with account")
+                        res.status(400).json('error');
                   }
                 }
               );
