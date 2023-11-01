@@ -27,6 +27,11 @@ function ChangePasswordConfirmationPage() {
         <h2 class="text-light bg-dark">Reset Password:</h2>
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label className='light-text'>Email</Form.Label>
+        <Form.Control type="email" placeholder="your@email.com" />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label className='light-text'>New Password</Form.Label>
         <Form.Control type="password" placeholder="New Password" />
       </Form.Group>

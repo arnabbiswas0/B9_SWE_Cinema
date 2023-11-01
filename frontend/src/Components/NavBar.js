@@ -11,6 +11,7 @@ import MovieCard from './MovieCard';
 import SignUp from './SignUp';
 import Login from './Login';
 import ChangePassword from './ChangePassword';
+import ChangePasswordConfirmationPage from './ChangePasswordConfirmationPage';
 import EditProfile from './EditProfile';
 import { useAuthContext } from './hooks/useAuthContext';
 import { useLogout } from './hooks/useLogout';

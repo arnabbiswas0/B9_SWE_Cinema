@@ -394,6 +394,28 @@ router.post("/updateProfile", async (req, res) => {
 
 })
 
+router.post('/changePassword', async (req, res) => {
+        console.log(req.body);
+        let sql = "UPDATE registereduser SET password = '" + req.body.password + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        
+        console.log(sql);
+
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
+})
+
 
 
 module.exports = router
