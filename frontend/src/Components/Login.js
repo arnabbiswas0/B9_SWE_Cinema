@@ -58,7 +58,7 @@ function Login() {
         <Form.Label className='light-text'>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
       </Form.Group>
-      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={() => navigate("/ChangePassword")}>
+      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={() => navigate("/ForgetPassword")}>
         Forgot Password
       </Button>
       <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>

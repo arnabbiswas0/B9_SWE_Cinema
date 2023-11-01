@@ -396,7 +396,11 @@ router.post("/updateProfile", async (req, res) => {
 
 router.post('/changePassword', async (req, res) => {
         console.log(req.body);
-        let sql = "UPDATE registereduser SET password = '" + req.body.password + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+
+        const salt = await bcrypt.genSalt(10) //the longer the number, the longer it take for hacker to crack pw, but also take longer for user to signup
+        const hash = await bcrypt.hash(req.body.password, salt)
+
+        let sql = "UPDATE registereduser SET password = '" + hash + "' WHERE email = '" + req.body.email + "'"; //add where clause 
 
         let id = '';
         await getId(req.body.email).then((data) => {
@@ -404,7 +408,7 @@ router.post('/changePassword', async (req, res) => {
                         id = data[0].registeredUserID
                 }
         });
-        
+
         console.log(sql);
 
         connection.query(
