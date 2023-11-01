@@ -347,7 +347,7 @@ router.post("/verifyAdmin", async(req, res) => {
 
 //updates user profile and payment info
 router.post("/updateProfile", async (req, res) => {
-        
+        console.log(req.body);
         let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
 
         let id = '';

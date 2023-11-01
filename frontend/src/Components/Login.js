@@ -13,6 +13,11 @@ function Login() {
   const [showConfirm, setShowConfirm] = useState(false);
   const handleCloseConfirm = () => setShowConfirm(false);
   const handleShowConfirm = () => setShowConfirm(true);
+
+  const [showError, setShowError] = useState(false);
+  const handleCloseError = () => setShowError(false);
+  const handleShowError = () => setShowError(true);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,8 +27,12 @@ function Login() {
     e.preventDefault();
 
     await login(email, password);
-    
-    handleShowConfirm();
+    if (error === null) {
+      handleShowConfirm();
+    }
+    else if (error !== null){
+      handleShowError();
+    }
 
   }
   const navigate = useNavigate();
@@ -55,7 +64,7 @@ function Login() {
       <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
         Submit
       </Button>
-      {error && <div className="error">{error}</div>}
+      
     </Form>
     </Container>
 
@@ -74,6 +83,27 @@ function Login() {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleCloseConfirm}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
+    <Modal
+      show={showError} 
+      onHide={handleCloseError}
+      centered
+      size={'lg'}
+      backdrop="static"
+      style={{color: "red"}}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>ERROR</Modal.Title>
+      </Modal.Header>
+      <Modal.Body textAlign="center">
+        INCORECT EMAIL OR PASSWORD! TRY AGAIN!
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={handleCloseError}>
           Close
         </Button>
       </Modal.Footer>
