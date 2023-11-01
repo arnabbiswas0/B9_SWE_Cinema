@@ -3,11 +3,20 @@ const express = require("express")
 const Post = require("./post") // new
 const router = express.Router()
 const mysql = require('mysql2');
+const promisesql = require('mysql2/promise');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const connection = mysql.createConnection({
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
+        database: 'cinemasystem',
+        port:3306
+      });
+
+const promisequery = promisesql.createConnection({
         host: 'localhost',
         password: 'cay80634',
         user: 'root',
@@ -30,18 +39,36 @@ const createToken = (_id) =>{
 /**
  * 
  * @param {string} email 
- * @returns {Promise<int>}
+ * 
  */
-const getUserId = (email) => {
+const getUserId = async (email) => {
         let sql = "SELECT * FROM registereduser WHERE email = '" + email + "'";
+        console.log(sql);
         connection.query(
                 sql,
                 function(err, results, fields) {
-                  return results.registeredUserID;
+                        console.log({results})
+                        return results;
                 }
-              );
+        );
+        
 
 }
+
+function getId(email) {
+        return new Promise((resolve, reject) => {
+                let sql = "SELECT * FROM registereduser WHERE email = '" + email + "'";
+                console.log(sql);
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                console.log(results.registeredUserID);
+                                return resolve(results);
+                        }
+                );
+        })
+}
+
 
 /**
  * 
@@ -54,7 +81,7 @@ const sendEmail = (email, message) => {
                 service: 'gmail',
                 auth: {
                   user: 'softwareengineeruga@gmail.com',
-                  pass: ''
+                  pass: 'piambnyooengfjqy'
                 }
               });
               
@@ -157,6 +184,7 @@ router.post("/movies", async (req, res) => {
 })
 
 router.post("/login", async(req, res) => {
+        /*
         let sql = "SELECT * FROM registereduser WHERE email = '" + req.body.email + "' AND password = '" + req.body.password + "'";
         let email = req.body.email
         console.log(sql);
@@ -178,6 +206,28 @@ router.post("/login", async(req, res) => {
                   }
                 
               );
+        */
+              let password = '';
+              let id = '';
+              let email = req.body.email
+              await getId(req.body.email).then((data) => { //it says getting id but its actually pulling the entire tuple so we grab password
+                      if(data.length > 0) {
+                              password = data[0].password;
+                              id = data[0].registeredUserID;
+                      }
+              });
+              const match = await bcrypt.compare(req.body.password, password);
+              console.log(match);
+              if(match) {
+                //console.log(results);
+                //create a token
+                const token = createToken(id)
+                //as respond, we send back the email and token. we can find in postman or local storage
+                res.status(200).json({email, token})
+              } else {
+                //console.log({error: err});
+                res.status(400).json('error')
+              }
 })
 
 router.post("/signup", async(req, res) => {
@@ -232,29 +282,57 @@ router.post("/signup", async(req, res) => {
 
 //verify given password with one stored in db
 router.post("/verifyPassword", async(req, res) => {
+        /*
         let sql = "SELECT * FROM registereduser WHERE email = '" + req.body.email + "'";
         connection.query(
                 sql,
                 async function(err, results, fields) { //this is questionable because i made into async
                         const match = await bcrypt.compare(req.body.password, results.password);
+                        console.log(match);
                         if(match) {
+                                console.log(match);
                                 res.status(200).json(true);
                         } else {
                                 res.status(400).json(false);
                         }
                 }
               );
+        */
+        let password = '';
+        await getId(req.body.email).then((data) => { //it says getting id but its actually pulling the entire tuple so we grab password
+                if(data.length > 0) {
+                        password = data[0].password
+                }
+        });
+        const match = await bcrypt.compare(req.body.password, password);
+        console.log(match);
+        if(match) {
+                console.log(match);
+                res.status(200).json(true);
+        } else {
+                res.status(400).json(false);
+        }
 
 })
 
 //verify if given email is an admin
 router.post("/verifyAdmin", async(req, res) => {
-        const id = await getUserId(req.body.email);
+        //const id = await getUserId(req.body.email).then((data) => {console.log({data})});
+        //await new Promise(resolve => setTimeout(resolve, 5000));
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        console.log(id)
+        //const id = await promisequery.query("SELECT * FROM registereduser WHERE email = '" + req.body.email + "'")
+        console.log(req.body.email);
         let sql = "SELECT * FROM admin WHERE userId = " + id;
         connection.query(
                 sql,
-                async function(err, results, fields) { //this is questionable because i made into async
-                        if(results.length != 0) {
+                function(err, results, fields) { //this is questionable because i made into async
+                        if(results.length > 0) {
                                 res.status(200).json(true);
                         } else {
                                 res.status(400).json(false);
@@ -262,6 +340,45 @@ router.post("/verifyAdmin", async(req, res) => {
                 }
         );
 
+
+})
+
+//updates user profile and payment info
+router.post("/updateProfile", async (req, res) => {
+        
+        let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  //res.send(results);
+                }
+        );
+        
+
+        console.log(id);
+
+
+        sql = "UPDATE paymentcard SET streetName = '" + req.body.streetname + "', city = '" + req.body.city + "', zip = '" + req.body.zip + "', state = '" + req.body.state + "', "
+                + "cardNumber = '" + req.body.cardNumber + "', expDate = '" + req.body.expirationDate + "', cvv = '" + req.body.cvv + "' WHERE userId = " + id; //add where clause 
+
+        console.log(sql);
+
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
 
 })
 
