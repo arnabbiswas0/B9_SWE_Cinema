@@ -11,9 +11,11 @@ import MovieCard from './MovieCard';
 import SignUp from './SignUp';
 import Login from './Login';
 import ChangePassword from './ChangePassword';
+import ChangePasswordConfirmationPage from './ChangePasswordConfirmationPage';
 import EditProfile from './EditProfile';
 import { useAuthContext } from './hooks/useAuthContext';
 import { useLogout } from './hooks/useLogout';
+import { useNavigate } from "react-router-dom";
 
 
 function NavBar() {
@@ -36,8 +38,10 @@ function NavBar() {
 
     const { user } = useAuthContext();
     const { logout } = useLogout();
+    //const navigate = useNavigate();
     const handleClick = () =>{
-        logout()
+        logout();
+        //navigate('/ChangePassword', {replace: true});
       }
 
     return (
@@ -67,6 +71,7 @@ function NavBar() {
             <Route path="/EditProfile" element={<EditProfile/>} />
             <Route path="/ForgetPassword" element={<ChangePasswordConfirmationPage/>} />
 
+            <Route path="/NavBar" element={<NavBar/>} />
 
         </Routes>
     </BrowserRouter>
