@@ -140,14 +140,19 @@ router.get("/movies", async (req, res) => {
 })
 //fetches the user profile
 router.post("/getProfile", async(req, res) => {
-        const id = await getUserId(req.body.email);
-        //const id = 11;
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
         sql = "SELECT * FROM registereduser JOIN paymentcard ON registereduser.registeredUserID = paymentcard.userId WHERE paymentcard.userId = " + id + ""
         connection.query(
                 sql,
                 function(err, results, fields) {
                   console.log(results);
-                  res.send(results);
+                  res.status(200).json(results);
                 }
         );
         
@@ -367,10 +372,15 @@ router.post("/updateProfile", async (req, res) => {
         
 
         console.log(id);
-
+        let cardNumber = req.body.cardNumber;
+        if(cardNumber.length > 0) {
+                const salt = await bcrypt.genSalt(10) //the longer the number, the longer it take for hacker to crack pw, but also take longer for user to signup
+                const hash = await bcrypt.hash(req.body.password, salt)
+                cardNumber = hash;
+        }
 
         sql = "UPDATE paymentcard SET streetName = '" + req.body.streetname + "', city = '" + req.body.city + "', zip = '" + req.body.zip + "', state = '" + req.body.state + "', "
-                + "cardNumber = '" + req.body.cardNumber + "', expDate = '" + req.body.expirationDate + "', cvv = '" + req.body.cvv + "' WHERE userId = " + id; //add where clause 
+                + "cardNumber = '" + cardNumber + "', expDate = '" + req.body.expirationDate + "', cvv = '" + req.body.cvv + "' WHERE userId = " + id; //add where clause 
 
         console.log(sql);
 
