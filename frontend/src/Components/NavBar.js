@@ -65,6 +65,8 @@ function NavBar() {
             <Route path="/SignUp" element={<SignUp/>} />
             <Route path="/ChangePassword" element={<ChangePassword/>} />
             <Route path="/EditProfile" element={<EditProfile/>} />
+            <Route path="/ForgetPassword" element={<ChangePasswordConfirmationPage/>} />
+
 
         </Routes>
     </BrowserRouter>
