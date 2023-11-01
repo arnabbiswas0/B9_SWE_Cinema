@@ -264,7 +264,7 @@ router.post("/signup", async(req, res) => {
                                                         console.log("payment profile made for user (id is->): " + results.insertId)
                                                         let message = "Your account has been successfully created";
                                                         const success = await sendEmail(req.body.email, message);
-                                                        res.status(200).json(email);
+                                                        res.status(200).json(req.body.email);
                                                 }
                                         );
 

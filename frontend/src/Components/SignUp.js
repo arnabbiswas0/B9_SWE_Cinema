@@ -70,6 +70,7 @@ function SignUp() {
       <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
         Submit
       </Button>
+      {error && <div className="error">{error}</div>}
     </Form>
     </Container>
 

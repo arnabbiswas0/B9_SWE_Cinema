@@ -18,7 +18,7 @@ function EditProfile() {
     <>
       <Container 
         data-bs-theme='dark' 
-        style={{height:"42rem",
+        style={{height:"100%",
         width: "25rem", 
         textAlign: "center"}} 
       >
@@ -61,7 +61,7 @@ function EditProfile() {
 
       <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-        <label class="form-check-label" for="defaultCheck1">
+        <label class="form-check-label" for="defaultCheck1" className='light-text'>
              I want to receive promotions. 
         </label>
             </div>

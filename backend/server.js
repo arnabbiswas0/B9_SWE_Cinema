@@ -51,10 +51,7 @@ mongoose
       app.use("/api", routes)
       console.log('mysql DB connection successful');
 
-console.log(process.env.PORT);
-let server = app.listen(8000, function () {
-    console.log('Server is listening at port 8000...');
-});
+
 
 
 
