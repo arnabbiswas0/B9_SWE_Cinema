@@ -9,17 +9,17 @@ const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const connection = mysql.createConnection({
-        host: 'localhost',
-        password: 'cay80634',
-        user: 'root',
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',
         database: 'cinemasystem',
         port:3306
       });
 
 const promisequery = promisesql.createConnection({
-        host: 'localhost',
-        password: 'cay80634',
-        user: 'root',
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',
         database: 'cinemasystem',
         port:3306
       });
