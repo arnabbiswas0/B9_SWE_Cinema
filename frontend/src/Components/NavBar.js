@@ -59,6 +59,7 @@ function NavBar() {
                     {user && <Nav.Link href="/EditProfile">Edit Profile</Nav.Link>}
                     {!user && <Nav.Link href="/SignUp">Sign Up</Nav.Link> }
                     {user &&  <Button onClick={handleClick}>Log out</Button> }
+                    {!user && <Nav.Link href="/Login">Log In</Nav.Link> }
                 </Nav>
         </Container>
       </Navbar>
