@@ -35,7 +35,7 @@ function SignUp() {
     <>
       <Container 
         data-bs-theme='dark' 
-        style={{height:"42rem",
+        style={{height:"77.05rem",
         width: "25rem", 
         textAlign: "center"}} 
       >
