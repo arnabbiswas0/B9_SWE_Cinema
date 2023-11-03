@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 import { useAuthContext } from "./useAuthContext";
 
 export const useLogout = () => {

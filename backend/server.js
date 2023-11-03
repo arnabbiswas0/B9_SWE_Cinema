@@ -37,9 +37,9 @@ mongoose
   */
 
   const mysqlconnection = mysql.createConnection({
-    host: 'arnabbiswas1.ddns.net',
-    password: 'Remote-password',
-    user: 'remote_user',
+    host: process.env.HOST,
+    password: process.env.PASSWORD,
+    user: process.env.USER,  
     database: 'movies',
     port:3306
   });
