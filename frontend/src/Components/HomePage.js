@@ -9,6 +9,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Carousel from 'react-bootstrap/Carousel';
 //import { movies } from './movieData'; // Import movies
 import axios from "axios";
 
@@ -28,9 +29,10 @@ function HomePage() {
     const filteredMovies = getSearch(query, data);
 
     useEffect(()=> {
-        axios.get('http://localhost:8000/api/movies')
+        axios.get('http://arnabbiswas1.ddns.net:8000/api/movies')
              .then((res) => {
                 setData(res.data);
+                console.log(res.data);
              })
              .catch((err) =>{
                 console.log("Err");
@@ -55,7 +57,7 @@ function HomePage() {
 
     return (
         <>
-        <Container data-bs-theme="dark">
+        <Container data-bs-theme="dark" style={{hight: "100%",textAlign: "center"}} >
             {/* Admin Buttons */}
             {localStorage.getItem("Admin") === "Admin" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
@@ -64,6 +66,24 @@ function HomePage() {
                     <Button variant="primary" onClick={handleShowUserM}>Manage Users</Button>
                 </Container>
             }
+            <Carousel data-bs-theme="dark" >
+                {filteredMovies.map((movie) => (
+                <Carousel.Item 
+                style = {{marginTop: "3rem", 
+                borderRadius:"1rem",
+                borderColor:"black",
+                height:"35rem",
+                backgroundColor: "gray"
+            }}
+                >
+                    <img
+                    width = "30%"
+                    src={movie.poster}
+                    alt="First slide"
+                    />
+                </Carousel.Item>
+                ))}
+            </Carousel>
 
             {/* Search Bar */}
             <Form style={{ margin: '1rem' }}>
@@ -71,12 +91,13 @@ function HomePage() {
             </Form>
 
             {/* Tabs */}
+            <div style={{height: "100%"}}>
             <Tabs defaultActiveKey="Currently Playing" fill justify data-bs-theme="dark">
                 <Tab eventKey="Currently Playing" title="Currently Playing">
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie.playing === true) &&
+                            {(movie.isOut === 'true') &&
                             <Col>
                                 <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
@@ -90,7 +111,7 @@ function HomePage() {
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
-                            {(movie.playing === false) &&
+                            {(movie.isOut === 'false') &&
                             <Col>
                                 <MovieCard title={movie.title} poster={movie.poster} trailer={movie.poster} />
                             </Col>
@@ -100,6 +121,7 @@ function HomePage() {
                     </Row>
                 </Tab>
             </Tabs>
+            </div>
         </Container>
 
         //modals for admin use 

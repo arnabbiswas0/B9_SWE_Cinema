@@ -3,14 +3,25 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import MovieCard from './MovieCard';
 import SignUp from './SignUp';
 import Login from './Login';
+import ChangePassword from './ChangePassword';
+import ChangePasswordConfirmationPage from './ChangePasswordConfirmationPage';
+import EditProfile from './EditProfile';
+import { useAuthContext } from './hooks/useAuthContext';
+import { useLogout } from './hooks/useLogout';
+import { useNavigate } from "react-router-dom";
+
 
 function NavBar() {
+
+   
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -25,6 +36,14 @@ function NavBar() {
         }
     };
 
+    const { user } = useAuthContext();
+    const { logout } = useLogout();
+    //const navigate = useNavigate();
+    const handleClick = () =>{
+        logout();
+        //navigate('/ChangePassword', {replace: true});
+      }
+
     return (
     <>
     <BrowserRouter>
@@ -37,8 +56,10 @@ function NavBar() {
                     <Nav.Link onClick={handleAdmin}>Admin View</Nav.Link>
                 </Nav>
                 <Nav>
-                    <Nav.Link href="/Login">Log In</Nav.Link>
-                    <Nav.Link href="/SignUp">Create Account</Nav.Link>
+                    {user && <Nav.Link href="/EditProfile">Edit Profile</Nav.Link>}
+                    {!user && <Nav.Link href="/SignUp">Sign Up</Nav.Link> }
+                    {user &&  <Button onClick={handleClick}>Log out</Button> }
+                    {!user && <Nav.Link href="/Login">Log In</Nav.Link> }
                 </Nav>
         </Container>
       </Navbar>
@@ -47,6 +68,11 @@ function NavBar() {
             <Route path="/HomePage" element={<HomePage/>} />
             <Route path="/Login" element={<Login/>} /> 
             <Route path="/SignUp" element={<SignUp/>} />
+            <Route path="/ChangePassword" element={<ChangePassword/>} />
+            <Route path="/EditProfile" element={<EditProfile/>} />
+            <Route path="/ForgetPassword" element={<ChangePasswordConfirmationPage/>} />
+
+            <Route path="/NavBar" element={<NavBar/>} />
 
         </Routes>
     </BrowserRouter>

@@ -1,7 +1,8 @@
+require("dotenv").config()
 
 const express = require('express');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 6001;
+const port = process.env.PORT //|| 6001;
 const { Schema } = mongoose;
 const router = express.Router();
 const { ObjectId } = require('mongodb');
@@ -16,8 +17,7 @@ app.use(cors())
 
 
 const mysql = require('mysql2');
-
-/*Connect to database*/
+/*
 const CONNECTION_STRING = `mongodb+srv://arnab:test@swe-project.ulhiyxf.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.set('strictQuery', false);
 mongoose
@@ -34,11 +34,24 @@ mongoose
   .catch((error) => {
     console.log(`Error in DB connection:  ${error}`);
   });
+  */
+
+  const mysqlconnection = mysql.createConnection({
+    host: 'arnabbiswas1.ddns.net',
+    password: 'Remote-password',
+    user: 'remote_user',
+    database: 'movies',
+    port:3306
+  });
+
+  
+
+  app.use(express.json())
+      app.listen(port);
+      app.use("/api", routes)
+      console.log('mysql DB connection successful');
 
 
-let server = app.listen(8000, function () {
-    console.log('Server is listening at port 8000...');
-});
 
 
 
