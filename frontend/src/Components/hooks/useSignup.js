@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 import { useState } from "react";
 import {useAuthContext} from './useAuthContext'
 
@@ -9,7 +11,7 @@ export const useSignup = () =>{
     const signup = async (name, email, password) => {
         setIsLoading(true) 
         setError(null)
-        const response = await fetch('http://arnabbiswas1.ddns.net:8000/api/signup', {
+        const response = await fetch(APISignup, {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({name, email, password}) 
