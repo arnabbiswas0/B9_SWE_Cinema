@@ -9,17 +9,17 @@ const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const connection = mysql.createConnection({
-        host: process.env.HOST,
-        password: process.env.PASSWORD,
-        user: process.env.USER,  
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',  
         database: 'cinemasystem',
         port:3306
       });
 
 const promisequery = promisesql.createConnection({
-        host: process.env.HOST,
-        password: process.env.PASSWORD,
-        user: process.env.USER,  
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',  
         database: 'cinemasystem',
         port:3306
       });
@@ -122,9 +122,9 @@ router.get("/movies", async (req, res) => {
     */
    // create the connection to database
    const connection = mysql.createConnection({
-        host: process.env.HOST,
-        password: process.env.PASSWORD,
-        user: process.env.USER,  
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',  
         database: 'movies',
         port:3306
       });
