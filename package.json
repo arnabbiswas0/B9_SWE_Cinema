@@ -9,7 +9,7 @@
     "mongoose": "^7.6.4",
     "mssql": "^10.0.1",
     "mysql": "^2.18.1",
-    "mysql2": "^3.6.1",
+    "mysql2": "^3.6.3",
     "nodemailer": "^6.9.7",
     "react-bootstrap": "^2.9.0",
     "validator": "^13.11.0"
