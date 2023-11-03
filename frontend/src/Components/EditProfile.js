@@ -43,7 +43,7 @@ function EditProfile() {
   const userData = JSON.parse(user);
 
   useEffect(()=> {
-    axios.get('http://localhost:8080/api/movies')
+    axios.get('http://arnabbiswas1.ddns.net:8000/api/movies')
          .then((res) => {
             setData(res.data);
             console.log(res.data);

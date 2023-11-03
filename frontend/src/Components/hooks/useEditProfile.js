@@ -8,7 +8,7 @@ export const useEditProfile = () =>{
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8080/api/updateProfile', {
+        const response = await fetch('http://arnabbiswas1.ddns.net:8000/api/updateProfile', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({email, name, streetname, city, zip, state, expirationDate, cvv})

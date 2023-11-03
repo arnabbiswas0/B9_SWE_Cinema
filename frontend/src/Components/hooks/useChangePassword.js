@@ -8,7 +8,7 @@ export const useChangePassword = () =>{
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8080/api/changePassword', {
+        const response = await fetch('http://arnabbiswas1.ddns.net:8000/api/changePassword', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({email, password})
