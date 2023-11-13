@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Form,} from 'react-bootstrap';
+import { Container, Form, Card} from 'react-bootstrap';
 
  
 
@@ -33,45 +33,45 @@ function SignUp() {
 
     return (
     <>
-      <Container 
-        data-bs-theme='dark' 
-        style={{height:"77.05rem",
-        width: "25rem", 
-        textAlign: "center"}} 
+      <Container className='my-5 justify-content-center align-items-center'
+      data-bs-theme='dark' 
+      style={{height:"77.05rem",
+      width: "100rem", 
+      textAlign: "center"}}
       >
-      <Form>
-      <Form.Group >
-        <h2 class="text-light bg-dark">Create Account:</h2>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label className='light-text'>Name</Form.Label>
-        <Form.Control type="Name" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} value={name} />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label className='light-text'>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email}/>
-        <Form.Text className="text-muted">
-          We will NEVER share your email with any unauthorized third parties.
-        </Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label className='light-text'>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password}/>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label className='light-text'>Confirm Password</Form.Label>
-        <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label className='light-text'>Already Signed up? <a href="/Login">Log in here!</a></Form.Label>
-      </Form.Group>
-      <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
-        Submit
-      </Button>
-      {error && <div className="error">{error}</div>}
-    </Form>
+      <Card className='bg-secondary justify-content-center align-items-center w-50 mx-auto'>
+          <Card.Header className='bg-secondary w-100'>
+            <h2 class="text-light">Create Account:</h2>
+          </Card.Header>
+            <Card.Body className='justify-content-center mx-auto w-100'>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label className='light-text'>Name</Form.Label>
+                <Form.Control type="Name" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} value={name} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label className='light-text'>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email}/>
+                <Form.Text className="text-muted">
+                  We will NEVER share your email with any unauthorized third parties.
+                </Form.Text>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label className='light-text'>Password</Form.Label>
+                <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password}/>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label className='light-text'>Confirm Password</Form.Label>
+                <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label className='light-text'>Already Signed up? <a href="/Login">Log in here!</a></Form.Label>
+              </Form.Group>
+              <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
+                Submit
+              </Button>
+              {error && <div className="error">{error}</div>}
+            </Card.Body>
+      </Card>
     </Container>
 
     <Modal

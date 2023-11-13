@@ -4,7 +4,7 @@ import { useLogin } from "./hooks/useLogin";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Form,} from 'react-bootstrap';
+import { Container, Form, Card, Row, Col} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
  
 
@@ -38,36 +38,36 @@ function Login() {
   const navigate = useNavigate();
 
     return (
-    <>
-      <Container 
-        data-bs-theme='dark' 
-        style={{height:"42rem",
-        width: "25rem", 
-        textAlign: "center"}} 
+      <>
+      <Container className='my-5 justify-content-center align-items-center'
+      data-bs-theme='dark' 
+      style={{height:"77.05rem",
+      width: "100rem", 
+      textAlign: "center"}}
       >
-      <Form>
-      <Form.Group >
-        <h2 class="text-light bg-dark">Login:</h2>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label className='light-text'>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email} />
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label className='light-text'>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
-      </Form.Group>
-      <Button style={{margin: '0.5rem'}} variant="primary"  onClick={() => navigate("/ForgetPassword")}>
-        Forgot Password
-      </Button>
-      <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
-        Submit
-      </Button>
-      
-    </Form>
+      <Card className='bg-secondary justify-content-center align-items-center w-50 mx-auto'>
+          <Card.Header className='bg-secondary w-100'>
+            <h2 class="text-light">Login:</h2>
+          </Card.Header>
+            <Card.Body className='justify-content-center mx-auto w-100'>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label className='light-text'>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email} />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Label className='light-text'>Password</Form.Label>
+                <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
+              </Form.Group>
+              <div className="d-flex justify-content-center mx-4 mb-4">
+                <a href="!#">Forgot password?</a>
+              </div>
+              <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
+                Submit
+              </Button>
+            </Card.Body>
+      </Card>
     </Container>
-
+      
     <Modal
       show={showConfirm} 
       onHide={handleCloseConfirm}
