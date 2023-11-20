@@ -54,6 +54,29 @@ function HomePage() {
     const Users = ["Bob", "Rob", "Dob"];
     const Promos = ["promo1", "Promo2", "Promo3"];
 
+    const handleNewMovie = (event) => {
+        event.preventDefault();
+
+        // debugging code:  
+        console.log("new movie submission working");
+        console.log("\n" + event.target.elements[0].value);
+        console.log("\n" + event.target.elements[9].value);
+
+        // create new movie object
+        const newMovieData = {
+            title: event.target.elements[0].value,
+            category: event.target.elements[1].value,
+            rating: event.target.elements[2].value,
+            director: event.target.elements[3].value,
+            producer: event.target.elements[4].value,
+            cast: event.target.elements[5].value,
+            synopsis: event.target.elements[6].value,
+            reviews: event.target.elements[7].value,
+            poster: event.target.elements[8].value,
+            trailer: event.target.elements[9].value
+        } 
+        console.log(newMovieData);
+    };
 
     return (
         <>
@@ -124,7 +147,7 @@ function HomePage() {
             </div>
         </Container>
 
-        //modals for admin use 
+        {/* Model used for Admin */}
         <Modal
         show={showMovieM} 
         onHide={handleCloseMovieM}
@@ -136,32 +159,48 @@ function HomePage() {
             <Modal.Title>Add Movies:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <Form>
+    <Form onSubmit={handleNewMovie}>
       <Form.Group className="mb-3">
         <Form.Label className='light-text'>Title</Form.Label>
         <Form.Control type="textarea" placeholder="Title" />
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label className='light-text'>Category</Form.Label>
+        <Form.Control type="textarea" placeholder="Category" />
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='light-text'>Rating</Form.Label>
         <Form.Control type="textarea" placeholder="Rating" />
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>Poster Link</Form.Label>
-        <Form.Control type="textarea" placeholder="Poster Link" />
+        <Form.Label className='light-text'>Director</Form.Label>
+        <Form.Control type="textarea" placeholder="Director" />
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>Price</Form.Label>
-        <Form.Control type="textarea" placeholder="Price" />
+        <Form.Label className='light-text'>Producer</Form.Label>
+        <Form.Control type="textarea" placeholder="Producer" />
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>Trailer</Form.Label>
-        <Form.Control type="textarea" placeholder="Trailer" />
+        <Form.Label className='light-text'>Cast</Form.Label>
+        <Form.Control type="textarea" placeholder="Cast" />
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>is it playing?</Form.Label>
-        <Form.Control type="textarea" placeholder="is it playing?" />
+        <Form.Label classname='light-text'>Synopsis</Form.Label>
+        <Form.Control type="textarea" placeholder="Synopsis" />
       </Form.Group>
-      <Button variant="primary">
+      <Form.Group className="mb-3">
+        <Form.Label classname='light-text'>Reviews</Form.Label>
+        <Form.Control type="textarea" placeholder="Reviews" /> 
+      </Form.Group>
+      <Form.Group className='mb-3'>
+        <Form.Label classname='light-text'>Poster</Form.Label>
+        <Form.Control type="textarea" placeHolder="Poster link" />
+      </Form.Group>
+      <Form.Group className='mb-3'>
+        <Form.Label classname='light-text'>Trailer</Form.Label>
+        <Form.Control type="textarea" placeHolder="Trailer link" />
+      </Form.Group>
+      <Button variant="primary" type="submit">
         Submit
       </Button>
     </Form>
