@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Carousel from 'react-bootstrap/Carousel';
+import MovieHandler from './controllers/MovieHandler';
 //import { movies } from './movieData'; // Import movies
 import axios from "axios";
 
@@ -58,9 +59,9 @@ function HomePage() {
         event.preventDefault();
 
         // debugging code:  
-        console.log("new movie submission working");
-        console.log("\n" + event.target.elements[0].value);
-        console.log("\n" + event.target.elements[9].value);
+        //console.log("new movie submission working");
+        //console.log("\n" + event.target.elements[0].value);
+        //console.log("\n" + event.target.elements[9].value);
 
         // create new movie object
         const newMovieData = {
@@ -74,8 +75,13 @@ function HomePage() {
             reviews: event.target.elements[7].value,
             poster: event.target.elements[8].value,
             trailer: event.target.elements[9].value
-        } 
+        };
         console.log(newMovieData);
+        const movieHandler = new MovieHandler();
+        const handled = movieHandler.createMovie(newMovieData);
+        if (handled === 'unavailable') {
+            console.log("did")
+        }
     };
 
     return (
