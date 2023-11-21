@@ -33,10 +33,10 @@ export default class MovieProxy {
     // attempt to create Movie instance by validating URL
     async createNewMovie(movieData) {
         // check if YouTube URL format itself is valid:
-        //if (!this.validateYouTubeVideoUrl(movieData.trailer)) {
-        //    console.log('Error: Invalid YouTube URL')
-        //    return 'unavailable'; 
-        //}
+        if (!this.validateYouTubeVideoUrl(movieData.trailer)) {
+            console.log('Error: Invalid YouTube URL')
+            return 'unavailable'; 
+        }
         const video_id = await this.extractVideoId(movieData.trailer);  // extract the YouTube video ID
         const valid_video = await this.validYouTubeVideo(video_id);     // validate existence of YouTube video
         if(!valid_video) {
