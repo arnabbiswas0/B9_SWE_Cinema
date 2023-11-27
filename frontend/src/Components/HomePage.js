@@ -55,7 +55,7 @@ function HomePage() {
     const Users = ["Bob", "Rob", "Dob"];
     const Promos = ["promo1", "Promo2", "Promo3"];
 
-    const handleNewMovie = (event) => {
+    const handleNewMovie = async (event) => {
         event.preventDefault();
 
         // debugging code:  
@@ -74,13 +74,19 @@ function HomePage() {
             synopsis: event.target.elements[6].value,
             reviews: event.target.elements[7].value,
             poster: event.target.elements[8].value,
-            trailer: event.target.elements[9].value
+            trailer: event.target.elements[9].value,
+            date_time: event.target.elements[10].value,
+            room: event.target.elements[11].value
         };
         console.log(newMovieData);
+        //console.log(event.target.elements[10].value); 
+        //console.log(event.target.elements[11].value); 
         const movieHandler = new MovieHandler();
-        const handled = movieHandler.createMovie(newMovieData);
+        const handled = await movieHandler.createMovie(newMovieData);
         if (handled === 'unavailable') {
-            console.log("did")
+            alert("YouTube link INVALID");
+        } else {
+            console.log("movie added successfully");
         }
     };
 
@@ -172,11 +178,42 @@ function HomePage() {
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='light-text'>Category</Form.Label>
-        <Form.Control type="textarea" placeholder="Category" />
+        <Form.Select>
+            <option value='Action'>Action</option>
+            <option value='Adventure'>Adventure</option>
+            <option value='Animation'>Animation</option>
+            <option value='Biography'>Biography</option>
+            <option value='Comedy'>Comedy</option>
+            <option value='Crime'>Crime</option>
+            <option value='Documentary'>Documentary</option>
+            <option value='Drama'>Drama</option>
+            <option value='Family'>Family</option>
+            <option value='Fantasy'>Fantasy</option>
+            <option value='History'>History</option>
+            <option value='Horror'>Horror</option>
+            <option value='Music'>Music</option>
+            <option value='Musical'>Musical</option>
+            <option value='Mystery'>Mystery</option>
+            <option value='News'>News</option>
+            <option value='Reality-TV'>Reality-TV</option>
+            <option value='Romance'>Romance</option>
+            <option value='Sci-Fi'>Sci-Fi</option>
+            <option value='Sport'>Sport</option>
+            <option value='Talk-Show'>Talk-Show</option>
+            <option value='Thriller'>Thriller</option>
+            <option value='War'>War</option>
+            <option value='Western'>Western</option>
+        </Form.Select>
       </Form.Group>
       <Form.Group className="mb-3">
-        <Form.Label className='light-text'>Rating</Form.Label>
-        <Form.Control type="textarea" placeholder="Rating" />
+        <Form.Label classname='light-text'>Rating</Form.Label>
+        <Form.Select >
+            <option value="R">R</option>
+            <option value="NC-17">NC-17</option>
+            <option value="PG-13">PG-13</option>
+            <option value="PG">PG</option>
+            <option value="G">G</option>
+        </Form.Select>
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label className='light-text'>Director</Form.Label>
@@ -205,6 +242,18 @@ function HomePage() {
       <Form.Group className='mb-3'>
         <Form.Label classname='light-text'>Trailer</Form.Label>
         <Form.Control type="textarea" placeHolder="Trailer link" />
+      </Form.Group>
+      <Form.Group classname='mb-3'>
+        <Form.Label classname='light-text'>Select Data & Time</Form.Label>
+        <Form.Control type="datetime-local" />
+      </Form.Group>
+      <Form.Group classname='mb-3'>
+        <Form.Label classname='light-text'>Select Room</Form.Label>
+        <Form.Select>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+        </Form.Select>
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit

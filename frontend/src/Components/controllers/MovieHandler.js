@@ -6,7 +6,7 @@ export default class MovieHandler {
         const movieProxy = new MovieProxy()
         const availability = await movieProxy.createNewMovie(movieData); 
         if (availability === "unavailable") {
-            console.log("unavailable")
+            console.log("unavailable from hanlder class!")
         }
         return availability;
     }
