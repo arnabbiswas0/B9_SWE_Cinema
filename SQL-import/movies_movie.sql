@@ -36,7 +36,8 @@ CREATE TABLE `movie` (
   `reviews` TEXT DEFAULT NULL, 
   `poster` varchar(500) DEFAULT NULL,
   `trailer` varchar(500) DEFAULT NULL,
-  `isOut` varchar(10) DEFAULT NULL,
+  `date_time` varchar(20) DEFAULT NULL,
+  `room` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`idmovie`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,7 +49,7 @@ CREATE TABLE `movie` (
 LOCK TABLES `movie` WRITE;
 /*!40000 ALTER TABLE `movie` DISABLE KEYS */;
 INSERT INTO `movie` VALUES (1,'SAW X','Horror','R','Kevin Greutert','Mark Burg','Tobin Bell, Shawnee Smith, Synnøve Macody Lund','A sick and desperate John travels to Mexico for a risky and experimental medical procedure in hopes of a miracle cure for his cancer only to discover the entire operation is a scam to defraud the most vulnerable.
-','it was well done','https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/masterrepository/Fandango/232577/Saw-X_2023.jpg','https://www.youtube.com/embed/t3PzUo4P21c','true');
+','it was well done','https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/masterrepository/Fandango/232577/Saw-X_2023.jpg','https://www.youtube.com/embed/t3PzUo4P21c', '2023-11-17T20:42', '2');
 /*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
