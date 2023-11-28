@@ -170,6 +170,26 @@ router.post("/movies", async (req, res) => {
         res.send("Movie created successfully");
 });
 
+// checking movie schedules 
+router.get("/movies/:date_time", async (req, res) => {
+        const movieDA = new MovieDA();
+        const schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
+        //console.log(json(schedule));
+        //res.send(schedule);
+        //console.log("server endpoint reached!")
+        res.json(schedule);
+});
+/*
+* {
+        const movieDA = new MovieDA():
+        movieDA.validateMovieSchedule(req.body);
+        if (schedule === "Invalid") {
+                res.send("movie schdule Invalid!")
+        }
+        else {res.send("movie schedule Valid!")}
+}
+*/
+
 router.post("/login", async(req, res) => {
         /*
         let sql = "SELECT * FROM registereduser WHERE email = '" + req.body.email + "' AND password = '" + req.body.password + "'";

@@ -36,6 +36,17 @@ export default class MovieProxy {
             return false;                                 // YOUTUBE API returns EMPTY LIST
         }
     }
+    // validate scheduled movie (date_time): 2 movies cannot have same schedule!
+    async validateSchedule(date_time) {
+        console.log("(schedule) date_time: " + date_time);
+        const response = await axios.get(`http://localhost:8080/api/movies/${date_time}`);
+        // return size of response ?
+        console.log("retrieved data: " + "\ndata size: " + response.data.length);
+        console.log(response);
+        return response.data
+        //return 1;
+    }
+
     // attempt to create Movie instance by validating URL
     async createNewMovie(movieData) {
         // check if YouTube URL format itself is valid:
@@ -49,8 +60,21 @@ export default class MovieProxy {
             console.log('Error: Invalid YouTube Video!')
             return 'unavailable';
         } 
+        // before sending movie data to backend for db -> check if date and time is valid! 
+        /*
+        * 1. extract date_time 
+        * 2. compare this to any record with same date_time
+        * 3. if another record not found -> createMovie Else -> output alert
+        */
+       const schedule = await this.validateSchedule(movieData.date_time);
+       if (schedule === 'invalidSchedule') { // if schedule > 0? 
+            console.log('Error: Invalid Movie Schedule (date&time)!');
+            // alert("Error: Invalid Movie Schedule!");
+            return 'scheduleInvalid';
+       }
+
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
-         const response = await axios.post('http://localhost:8080/api/movies', movieData);
+        const response = await axios.post('http://localhost:8080/api/movies', movieData);
         console.log(response.data);
         return response.data;
     }
