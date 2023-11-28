@@ -1,6 +1,6 @@
 require("dotenv").config()
 const express = require("express")
-const Post = require("./post") // new
+//const Post = require("./post") // new
 const router = express.Router()
 const mysql = require('mysql2');
 const promisesql = require('mysql2/promise');
