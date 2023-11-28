@@ -1,17 +1,17 @@
 import { useState } from "react";
 
-export const useChangePassword = () =>{
+export const useGetProfile = () =>{
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
 
-    const changePassword = async (email,password) => {
+    const getProfile = async (email) => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8000/api/changePassword', {
+        const response = await fetch('http://arnabbiswas1.ddns.net:8000/api/getProfile', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({email})
         })
         const json = await response.json() 
         console.log(response);
@@ -24,6 +24,6 @@ export const useChangePassword = () =>{
         }
     }
 
-    return {changePassword, isLoading, error}
+    return {getProfile, isLoading, error}
 
 }

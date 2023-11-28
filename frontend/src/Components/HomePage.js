@@ -29,7 +29,7 @@ function HomePage() {
     const filteredMovies = getSearch(query, data);
 
     useEffect(()=> {
-        axios.get('http://arnabbiswas1.ddns.net:8000/api/movies')
+        axios.get('http://localhost:8000/api/movies')
              .then((res) => {
                 setData(res.data);
                 console.log(res.data);
@@ -54,12 +54,16 @@ function HomePage() {
     const Users = ["Bob", "Rob", "Dob"];
     const Promos = ["promo1", "Promo2", "Promo3"];
 
-
+    const userData = JSON.parse(localStorage.getItem('user'));
+    let AdminCheck;
+    if(userData != null) {
+        AdminCheck = userData.email;
+    }
     return (
         <>
         <Container data-bs-theme="dark" style={{hight: "100%",textAlign: "center"}} >
             {/* Admin Buttons */}
-            {localStorage.getItem("Admin") === "Admin" &&
+            {AdminCheck === "cremley29@gmail.com" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
                     <Button variant="primary" onClick={handleShowMovieM}>Manage Movies</Button>
                     <Button variant="primary" onClick={handleShowPromoM}>Manage Promotions</Button>
@@ -67,7 +71,7 @@ function HomePage() {
                 </Container>
             }
             <Carousel data-bs-theme="dark" >
-                {filteredMovies.map((movie) => (
+                {data.map((movie) => (
                 <Carousel.Item 
                 style = {{marginTop: "3rem", 
                 borderRadius:"1rem",
@@ -87,7 +91,7 @@ function HomePage() {
 
             {/* Search Bar */}
             <Form style={{ margin: '1rem' }}>
-                <Form.Control type="search" placeholder="search for a movie" onChange={e => setQuery(e.target.value)} />
+                <Form.Control type="search" placeholder="search for a movie, please type in all caps" onChange={e => setQuery(e.target.value)} />
             </Form>
 
             {/* Tabs */}
@@ -95,7 +99,8 @@ function HomePage() {
             <Tabs defaultActiveKey="Currently Playing" fill justify data-bs-theme="dark">
                 <Tab eventKey="Currently Playing" title="Currently Playing">
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
-                        {filteredMovies.map((movie) => (
+                        {filteredMovies.length !== 0 ?
+                        filteredMovies.map((movie) => (
                             <>
                             {(movie.isOut === 'true') &&
                             <Col>
@@ -104,20 +109,28 @@ function HomePage() {
                             }
                             </>
                             
-                        ))}
+                        ))
+                        :<div style={{width: "100%", height: "35rem", paddingTop: "5rem"}}>
+                           <h1 className="text-light bg-secondary rounded-3 p-3 mb-4">Sorry Looks like that movie isnt playing right now!</h1> 
+                        </div>}
                     </Row>
                 </Tab>
                 <Tab eventKey="Coming Soon" title="Coming Soon">
                     <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
-                        {filteredMovies.map((movie) => (
+                    {filteredMovies.length !== 0 ?
+                        filteredMovies.map((movie) => (
                             <>
                             {(movie.isOut === 'false') &&
                             <Col>
-                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.poster} />
+                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
                             }
                             </>
-                        ))}
+                            
+                        ))
+                        :<div style={{width: "100%", height: "35rem", paddingTop: "5rem"}}>
+                           <h1 className="text-light bg-secondary rounded-3 p-3 mb-4">Sorry Looks like that movie isnt coming soon!</h1> 
+                        </div>}
                     </Row>
                 </Tab>
             </Tabs>

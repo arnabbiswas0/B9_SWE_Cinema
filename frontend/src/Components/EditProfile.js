@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { Container, Form,} from 'react-bootstrap';
 import { useEditProfile } from './hooks/useEditProfile';
+import { useGetProfile } from './hooks/useGetProfile';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
@@ -18,6 +19,7 @@ import Carousel from 'react-bootstrap/Carousel';
 
 function EditProfile() {
 
+  const [account, setAccount] = useState([]);
   const [data, setData] = useState([]);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -43,7 +45,7 @@ function EditProfile() {
   const userData = JSON.parse(user);
 
   useEffect(()=> {
-    axios.get('http://arnabbiswas1.ddns.net:8000/api/movies')
+    axios.get('http://localhost:8000/api/movies')
          .then((res) => {
             setData(res.data);
             console.log(res.data);
@@ -65,10 +67,23 @@ function EditProfile() {
   const handleSubmit = async(e) =>{
     e.preventDefault();
 
-    await editProfile(userData.email, name, street, city, zip, state, exp, cvv);
-
+    await editProfile(userData.email, name,phone, street, city, zip, state);
+    setEdit(false);
+    window.location.reload();
     }
-
+  useEffect(()=> {
+      axios.post('http://localhost:8000/api/getProfile', {
+        email: userData.email
+        })
+          .then((res) => {
+              setAccount(res.data[0]);
+              console.log(res.data[0]);
+              console.log(userData.email);
+           })
+           .catch((err) =>{
+              console.log("Err");
+           })
+    }, [userData.email]);
 
 
     return (
@@ -93,10 +108,14 @@ function EditProfile() {
                   className="rounded-circle"
                   style={{ width: '150px' }}
                   fluid />
-                <h3>CJ Remley</h3>
-                <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                <h3>{account.name}</h3>
+                <p className="text-muted mb-4">{account.streetName}, {account.city}, {account.state}, {account.zip}</p>
                 <div className="d-flex justify-content-center mb-2">
-                <Button size="lg" onClick={handleEdit}>{edit ? 'Submit':'Edit Profile'}</Button>
+                  {edit ? 
+                    <Button size="lg" onClick={handleSubmit}>Submit</Button>
+                  :
+                    <Button size="lg" onClick={handleEdit}>Edit Profile</Button> 
+                  }
                 </div>
               </Card.Body>
             </Card>
@@ -109,11 +128,11 @@ function EditProfile() {
                   </ListGroup.Item>
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>CJ Remley &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
+                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
                   </ListGroup.Item>
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>CJ Remley &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
+                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
                   </ListGroup.Item>
                   {edit &&
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
@@ -137,12 +156,12 @@ function EditProfile() {
                     {edit ? 
                     <Form.Control 
                     type="textarea" 
-                    placeholder="name" 
+                    placeholder={account.name} 
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setName(e.target.value)} 
                     value={name}/>
                     :
-                    <Card.Text className="text-muted">CJ Remley</Card.Text>
+                    <Card.Text className="text-muted">{account.name}</Card.Text>
                     }
                   </Col>
                 </Row>
@@ -152,7 +171,7 @@ function EditProfile() {
                     <Card.Text>Email</Card.Text>
                   </Col>
                   <Col sm="9">
-                    <Card.Text className="text-muted">example@example.com</Card.Text>
+                    <Card.Text className="text-muted">{account.email}</Card.Text>
                   </Col>
                 </Row>
                 <hr />
@@ -164,12 +183,12 @@ function EditProfile() {
                     {edit ? 
                     <Form.Control 
                     type="textarea" 
-                    placeholder="000-000-0000" 
+                    placeholder={account.phone} 
                     style={{textAlign:'left',width:"15rem"}}
-                    onChange={(e) => setName(e.target.value)} 
-                    value={name}/>
+                    onChange={(e) => setPhone(e.target.value)} 
+                    value={phone}/>
                     :
-                    <Card.Text className="text-muted">(097) 234-5678</Card.Text>
+                    <Card.Text className="text-muted">{account.phone}</Card.Text>
                     }
                   </Col>
                 </Row>
@@ -182,16 +201,16 @@ function EditProfile() {
                     {edit ? 
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                       <Form.Label className='light-text'>Street</Form.Label>
-                      <Form.Control type="light-text" placeholder="Street Name" style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
+                      <Form.Control type="light-text" placeholder={account.streetName} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
                       <Form.Label className='light-text'>City</Form.Label>
-                      <Form.Control type="light-text" placeholder="City" style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
+                      <Form.Control type="light-text" placeholder={account.city} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
                       <Form.Label className='light-text'>Zip</Form.Label>
-                      <Form.Control type="light-text" placeholder="ZIP" style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
+                      <Form.Control type="light-text" placeholder={account.zip} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
                       <Form.Label className='light-text'>State</Form.Label>
-                      <Form.Control type="light-text" placeholder="State" style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
+                      <Form.Control type="light-text" placeholder={account.state} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
                   </Form.Group>
                     :
-                    <Card.Text className="text-muted">Bay Area, San Francisco, CA</Card.Text>
+                    <Card.Text className="text-muted">{account.streetName}, {account.city}, {account.state}, {account.zip} </Card.Text>
                     }
                   </Col>
                 </Row>
