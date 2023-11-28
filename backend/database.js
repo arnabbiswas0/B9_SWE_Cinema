@@ -2,9 +2,9 @@ require("dotenv").config()
 
 const mysql = require('mysql2');
 const mysqlconnection = mysql.createConnection({
-    host: 'arnabbiswas1.ddns.net',
-    password: 'Remote-password',
-    user: 'remote_user',  
+    host: 'localhost',
+    password: 'cay80634',
+    user: 'root',   
     database: 'movies',
     port:3306
   });

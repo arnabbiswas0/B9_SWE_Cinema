@@ -9,17 +9,17 @@ const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const connection = mysql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',  
         database: 'cinemasystem',
         port:3306
       });
 
 const promisequery = promisesql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',  
         database: 'cinemasystem',
         port:3306
       });
@@ -353,7 +353,7 @@ router.post("/verifyAdmin", async(req, res) => {
 //updates user profile and payment info
 router.post("/updateProfile", async (req, res) => {
         console.log(req.body);
-        let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+        let sql = "UPDATE registereduser SET name = '" + req.body.name + "', phone = '" + req.body.phone + "', streetName = '" + req.body.streetname + "', city = '" + req.body.city + "', zip = '" + req.body.zip + "', state = '" + req.body.state +  "' WHERE email = '" + req.body.email + "'"; //add where clause 
 
         let id = '';
         await getId(req.body.email).then((data) => {
@@ -365,12 +365,12 @@ router.post("/updateProfile", async (req, res) => {
         connection.query(
                 sql,
                 function(err, results, fields) {
-                  //console.log(results);
-                  //res.send(results);
+                  console.log(results);
+                  res.send(results);
                 }
         );
         
-
+        /*        
         console.log(id);
         let cardNumber = req.body.cardNumber;
         if(cardNumber.length > 0) {
@@ -391,7 +391,7 @@ router.post("/updateProfile", async (req, res) => {
                   res.send(results);
                 }
         );
-
+        */
 })
 
 router.post('/changePassword', async (req, res) => {
