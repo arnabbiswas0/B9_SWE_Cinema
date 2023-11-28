@@ -34,7 +34,7 @@ function MovieCard({ title, poster, trailer }) {
   const handleSubmitBooking = () => {
     console.log("Selected Seats:", selectedSeats);
     const bookingDetails = {
-      movieTitle: title,
+      movieTitle: title,    
       bookingDate: selectedDateTime,
       selectedSeats
     };
@@ -104,146 +104,6 @@ function MovieCard({ title, poster, trailer }) {
       backdrop="static"
       style={{ textAlign: "center"}}
     >
-<<<<<<< Updated upstream
-        <Modal.Header closeButton>
-            <Modal.Title>Booking:</Modal.Title>
-        </Modal.Header>
-        <Modal.Body textAlign={"center"}>
-            <Form>
-            <Form.Group className="mb-3">
-                <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="datetime-local" id="Time" name="bookingtime"/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label >Select Seats:</Form.Label>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-            </Form.Group>
-            {ageList.map((age) => (
-            <Form.Group className="mb-3">
-                <Form.Label>Add age for seat:</Form.Label>
-                <Form.Control type="textarea"/>
-            </Form.Group>
-            ))}
-            </Form>
-            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleShowCheckout}>
-                Checkout
-            </Button>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="primary" onClick={handleCloseBookMovie}>
-                Close
-            </Button>
-        </Modal.Footer>
-    </Modal>
-
-    <Modal
-        show={Checkout} 
-        onHide={handleCloseCheckout}
-        centered
-        size={'md'}
-        backdrop="static"
-    >
-        <Modal.Header closeButton>
-            <Modal.Title>Checkout:</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Ratio aspectRatio="16x9">
-            <div>
-            <form className="form-horizontal">
-  <fieldset>
-    {/* Form Name */}
-    <legend>Enter Credit/Debit Details: </legend>
-    {/* Text input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="Name on Card">
-        Name on Card
-      </label>
-      <div className="col-md-4">
-        <input
-          id="Name on Card"
-          name="Name on Card"
-          type="text"
-          placeholder=""
-          className="form-control input-md"
-          required=""
-        />
-      </div>
-    </div>
-    {/* Text input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="textinput">
-        Card Number
-      </label>
-      <div className="col-md-4">
-        <input
-          id="textinput"
-          name="textinput"
-          type="text"
-          placeholder=""
-          className="form-control input-md"
-          required=""
-        />
-      </div>
-    </div>
-    {/* Password input*/}
-    <div className="form-group">
-      <label className="col-md-4 control-label" htmlFor="CVV">
-        CVV
-      </label>
-      <div className="col-md-4">
-        <input
-          id="CVV"
-          name="CVV"
-          type="password"
-          placeholder=""
-          className="form-control input-md"
-        />
-      </div>
-    </div>
-  </fieldset>
-</form>
-<Button style={{margin: '0.5rem'}} variant="primary" onClick={handleCloseCheckout}>
-                Submit
-            </Button>
-
-            </div>
-            </Ratio>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="primary" onClick={handleCloseCheckout}>
-                Close
-            </Button>
-        </Modal.Footer>
-=======
       <Modal.Header closeButton>
         <Modal.Title>Booking:</Modal.Title>
       </Modal.Header>
@@ -347,7 +207,6 @@ function MovieCard({ title, poster, trailer }) {
           Close
         </Button>
       </Modal.Footer>
->>>>>>> Stashed changes
     </Modal>
     </>
   );
