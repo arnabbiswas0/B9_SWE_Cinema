@@ -13,6 +13,8 @@ function Login() {
   const [showConfirm, setShowConfirm] = useState(false);
   const handleCloseConfirm = () => setShowConfirm(false);
   const handleShowConfirm = () => setShowConfirm(true);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+
 
   const [showError, setShowError] = useState(false);
   const handleCloseError = () => setShowError(false);
@@ -22,6 +24,11 @@ function Login() {
   const [password, setPassword] = useState('');
 
   const {login, error, isLoading} = useLogin();
+
+  const handleForgotPassword = () => {
+    setShowForgotPasswordModal(true);
+  };
+  
 
   const handleSubmit = async(e) =>{
     e.preventDefault();
@@ -59,7 +66,8 @@ function Login() {
                 <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
               </Form.Group>
               <div className="d-flex justify-content-center mx-4 mb-4">
-                <a href="!#">Forgot password?</a>
+                <Button variant="link" onClick={handleForgotPassword} className="text-light">Forgot password?</Button>
+
               </div>
               <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
                 Submit
@@ -87,6 +95,38 @@ function Login() {
         </Button>
       </Modal.Footer>
     </Modal>
+    <Modal
+  show={showForgotPasswordModal}
+  onHide={() => setShowForgotPasswordModal(false)}
+  centered
+  backdrop="static"
+>
+  <Modal.Header closeButton>
+    <Modal.Title>Reset Password</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form.Group className="mb-3">
+      <Form.Label>Email address</Form.Label>
+      <Form.Control
+        type="email"
+        placeholder="Enter your email"
+        // You can add a state to manage this value
+      />
+      <Form.Text className="text-muted">
+        We'll send you a link to reset your password.
+      </Form.Text>
+    </Form.Group>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowForgotPasswordModal(false)}>
+      Close
+    </Button>
+    <Button variant="primary" onClick={}>
+      Send Reset Link
+    </Button>
+  </Modal.Footer>
+</Modal>
+
 
     <Modal
       show={showError} 
