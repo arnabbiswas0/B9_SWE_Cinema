@@ -422,7 +422,7 @@ router.post('/changePassword', async (req, res) => {
 
 router.post('/addShowtime', async(req, res) => {
         console.log(req.body);
-        
+        /*
         let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
         + "'" +req.body.date + "'"
         + ", '" + req.body.time + "', "
@@ -430,6 +430,26 @@ router.post('/addShowtime', async(req, res) => {
         + "'1'"
         + ")";
         console.log(sql);
+        */
+        let time = ["3:00", "4:00", "5:00"];
+        let date = ["11/30/2023", "12/01/2023", "12/02/2023", "12/03/2023", "12/04/2023"];
+        let movieName = "Saw X";
+        let room = "1"
+        let response = [];
+
+        for (let day of date) {
+                for(let t of time) {
+                       let sql =  "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+                        + "'" +day + "'"
+                        + ", '" + t + "', "
+                        + "'" + movieName + "', "
+                        + "'1'"
+                        + ")";
+                         console.log(sql);
+                         response.push(sql);
+                }
+        }
+        res.send(response);
 
 })
 
