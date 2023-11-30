@@ -13,17 +13,17 @@ const Movie = require('./models/Movie');
 const MovieDA = require('./dataAccess/movieDA');
 
 const connection = mysql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
         database: 'cinemasystem',
         port:3306
       });
 
 const promisequery = promisesql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
         database: 'cinemasystem',
         port:3306
       });
@@ -126,9 +126,9 @@ router.get("/movies", async (req, res) => {
     */
    // create the connection to database
    const connection = mysql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
         database: 'movies',
         port:3306
       });

@@ -48,6 +48,7 @@ class MovieDA {
             } console.log("successful database connection");
         });
         // create the sql query & make a request to the database & wait for response
+        // requesting all movies with same date_time
         console.log("from (MovieDA): " + schedule);
         const sql = 'SELECT * FROM movie WHERE date_time = ?';
         return new Promise((resolve, reject) => {
