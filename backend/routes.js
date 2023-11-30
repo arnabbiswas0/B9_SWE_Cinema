@@ -108,7 +108,40 @@ const sendEmail = (email, message) => {
 
 
 
+// Get all posts
+router.get("/movies", async (req, res) => {
+        
+	//const posts = await Post.find()
+	//res.send(posts)
 
+        /*
+        let sql = 'SELECT * FROM movie LIMIT 10';
+        dbconnection.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        res.send('request received');
+        
+       
+    });
+    */
+   // create the connection to database
+   const connection = mysql.createConnection({
+        host: 'arnabbiswas1.ddns.net',
+        password: 'Remote-password',
+        user: 'remote_user',  
+        database: 'movies',
+        port:3306
+      });
+      
+      // simple query
+      connection.query(
+        'SELECT * FROM movie LIMIT 10',
+        function(err, results, fields) {
+          res.send(results); // results contains rows returned by server
+          console.log(fields);
+        }
+      );
+})
 //fetches the user profile
 router.post("/getProfile", async(req, res) => {
         let id = '';
@@ -139,12 +172,11 @@ router.post("/movies", async (req, res) => {
 
 // checking movie schedules 
 router.get("/movies/:date_time", async (req, res) => {
-        console.log("inside movie schedule");
         const movieDA = new MovieDA();
         const movies_with_same_schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
         //console.log(json(schedule));
         //res.send(schedule);
-        console.log("server endpoint reached!");
+        //console.log("server endpoint reached!")
         res.json(movies_with_same_schedule);
 });
 /*
