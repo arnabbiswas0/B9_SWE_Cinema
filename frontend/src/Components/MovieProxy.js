@@ -17,6 +17,7 @@ export default class MovieProxy {
         // extract end_of_token: IF (ends with "&") -> additional info provided ELSE -> ID is at end of link
         const index_end = trailer.indexOf("&") > -1 ? trailer.indexOf("&") : trailer.length;
         //console.log(trailer);
+        console.log(index_start+1, index_end);
         return trailer.substring(index_start+1, index_end);
     }
     // call YouTube API to valid YouTube video via it's ID
