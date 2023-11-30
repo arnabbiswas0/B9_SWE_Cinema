@@ -40,14 +40,15 @@ class MovieDA {
             database: 'movies',
             port:3306
         });
-        // attempt to connect to database: if no error -> log success to console. 
+        // attempt to connect to database: if no error -> log 'success' to console. 
         connection.connect(function(err) {
             if (err) {
                 console.error('Error connecting: ' + err.stack);
                 return;
             } console.log("successful database connection");
         });
-        
+        // create the sql query & make a request to the database & wait for response
+        console.log("from (MovieDA): " + schedule);
         const sql = 'SELECT * FROM movie WHERE date_time = ?';
         return new Promise((resolve, reject) => {
             connection.query(sql, [schedule], function(error, results, fields) {

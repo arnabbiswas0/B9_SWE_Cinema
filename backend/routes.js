@@ -173,11 +173,11 @@ router.post("/movies", async (req, res) => {
 // checking movie schedules 
 router.get("/movies/:date_time", async (req, res) => {
         const movieDA = new MovieDA();
-        const schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
+        const movies_with_same_schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
         //console.log(json(schedule));
         //res.send(schedule);
         //console.log("server endpoint reached!")
-        res.json(schedule);
+        res.json(movies_with_same_schedule);
 });
 /*
 * {

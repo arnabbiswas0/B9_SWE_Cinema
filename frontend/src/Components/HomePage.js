@@ -84,7 +84,7 @@ function HomePage() {
         const movieHandler = new MovieHandler();
         const handled = await movieHandler.createMovie(newMovieData);
         if (handled === 'unavailable') {
-            alert("YouTube link INVALID");
+            alert("YouTube link INVALID...try again");
         } else {
             console.log("movie added successfully");
         }
