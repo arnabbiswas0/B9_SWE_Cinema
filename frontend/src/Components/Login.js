@@ -121,9 +121,6 @@ function Login() {
     <Button variant="secondary" onClick={() => setShowForgotPasswordModal(false)}>
       Close
     </Button>
-    <Button variant="primary" onClick={}>
-      Send Reset Link
-    </Button>
   </Modal.Footer>
 </Modal>
 
