@@ -420,6 +420,19 @@ router.post('/changePassword', async (req, res) => {
         );
 })
 
+router.post('/addShowtime', async(req, res) => {
+        console.log(req.body);
+        
+        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+        + "'" +req.body.date + "'"
+        + ", '" + req.body.time + "', "
+        + "'" + req.body.movieName + "', "
+        + "'1'"
+        + ")";
+        console.log(sql);
+
+})
+
 
 
 module.exports = router
