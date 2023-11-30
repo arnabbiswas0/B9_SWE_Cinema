@@ -8,7 +8,7 @@ export default class MovieProxy {
         var match = url.match(regExp);
         //console.log(match);
         //console.log(match && match[3].length === 11);     // also was [1].length
-        //console.log((url !== "") && match && match[3].length === 11)
+        console.log((url !== "") && match && match[3].length === 11)
         return ((url !== "") && match && match[3].length === 11); 
     }
     // extract the ID from the YouTube URL
@@ -17,7 +17,7 @@ export default class MovieProxy {
         // extract end_of_token: IF (ends with "&") -> additional info provided ELSE -> ID is at end of link
         const index_end = trailer.indexOf("&") > -1 ? trailer.indexOf("&") : trailer.length;
         //console.log(trailer);
-        console.log(index_start+1, index_end);
+        console.log(trailer.substring(index_start+1, index_end));
         return trailer.substring(index_start+1, index_end);
     }
     // call YouTube API to valid YouTube video via it's ID
@@ -39,8 +39,9 @@ export default class MovieProxy {
     }
     // validate scheduled movie (date_time): 2 movies cannot have same schedule!------------------------------------------------------------
     async validateSchedule(date_time) {
-       // console.log("(schedule) date_time: " + date_time);
-        const response = await axios.get(`http://localhost:8080/api/movies/${date_time}`);
+        console.log("(schedule) date_time: " + date_time);
+        // 'http://localhost:8080/api/movies'
+        const response = await axios.get(`http://localhost:8000/api/movies/${date_time}`);
         // return size of response ?
         console.log("retrieved data: " + "\ndata size: " + response.data.length);
         console.log(response);
@@ -80,7 +81,7 @@ export default class MovieProxy {
 
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
         console.log("after invalid schedule");
-        const response = await axios.post('http://localhost:8080/api/movies', movieData);
+        const response = await axios.post('http://localhost:8000/api/movies', movieData);
         console.log(response.data);
         return response.data;
     }
