@@ -8,6 +8,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
+
+const Movie = require('./models/Movie');
+const MovieDA = require('./dataAccess/movieDA');
+
 const connection = mysql.createConnection({
         host: 'localhost',
         password: 'cay80634',
@@ -160,33 +164,31 @@ router.post("/getProfile", async(req, res) => {
 
 //adding a movie to the db
 router.post("/movies", async (req, res) => {
-        /*
-	const post = new Post({
-        title: req.body.title, // String is shorthand for {type: String}
-        rating: req.body.rating,
-        price: req.body.price,
-        poster: req.body.poster,
-        trailer: req.body.trailer,
-        playing: req.body.playing
-	})
-	await post.save()
-	res.send(post)
-        */
-        let sql = "INSERT INTO movie (title, rating, trailer, poster, isOut) VALUES ("
-                + req.body.title
-                +req.body.rating
-                +req.body.trailer
-                +req.body.poster
-                +req.body.playing
-        +")";
-        connection.query(
-                sql,
-                function(err, results, fields) {
-                  res.send(results); // results contains rows returned by server
-                  console.log("Added a movie");
-                }
-              );
-})
+        const movie = new Movie(req.body);              // create movie instance
+        const movieDA = new MovieDA();
+        await movieDA.writeNewMovie(movie);             // write to database
+        res.send("Movie created successfully");
+});
+
+// checking movie schedules 
+router.get("/movies/:date_time", async (req, res) => {
+        const movieDA = new MovieDA();
+        const movies_with_same_schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
+        //console.log(json(schedule));
+        //res.send(schedule);
+        //console.log("server endpoint reached!")
+        res.json(movies_with_same_schedule);
+});
+/*
+* {
+        const movieDA = new MovieDA():
+        movieDA.validateMovieSchedule(req.body);
+        if (schedule === "Invalid") {
+                res.send("movie schdule Invalid!")
+        }
+        else {res.send("movie schedule Valid!")}
+}
+*/
 
 router.post("/login", async(req, res) => {
         /*
