@@ -25,11 +25,12 @@ DROP TABLE IF EXISTS `showtime`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `showtime` (
-  `showTimeId` int NOT NULL AUTO_INCREMENT,
-  `movieId` int NOT NULL,
-  `roomId` int NOT NULL,
-  `dateTime` varchar(100) NOT NULL,
-  PRIMARY KEY (`showTimeId`)
+  `showtimeID` int NOT NULL AUTO_INCREMENT,
+  `date` varchar(45) NOT NULL,
+  `time` varchar(45) NOT NULL,
+  `movieName` varchar(100) NOT NULL,
+  `roomID` varchar(45) NOT NULL,
+  PRIMARY KEY (`showtimeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 12:17:59
+-- Dump completed on 2023-11-30 17:18:56
