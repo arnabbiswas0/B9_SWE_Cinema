@@ -41,7 +41,7 @@ export default class MovieProxy {
     // validate scheduled movie (date_time): 2 movies cannot have same schedule!------------------------------------------------------------
     async validateSchedule(date_time) {
        // console.log("(schedule) date_time: " + date_time);
-        const response = await axios.get(`http://localhost:8080/api/movies/${date_time}`);
+        const response = await axios.get(`http://localhost:8000/api/movies/${date_time}`);
         // return size of response ?
         console.log("retrieved data: " + "\ndata size: " + response.data.length);
         console.log(response);
@@ -81,7 +81,7 @@ export default class MovieProxy {
 
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
         console.log("after invalid schedule");
-        const response = await axios.post('http://localhost:8080/api/movies', movieData);
+        const response = await axios.post('http://localhost:8000/api/movies', movieData);
         console.log(response.data);
         return response.data;
     }

@@ -1,6 +1,6 @@
-require("dotenv").config()
+
 const express = require("express")
-//const Post = require("./post") // new
+const Post = require("./post") // new
 const router = express.Router()
 const mysql = require('mysql2');
 const promisesql = require('mysql2/promise');
@@ -8,10 +8,14 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
+
+const Movie = require('./models/Movie');
+const MovieDA = require('./dataAccess/movieDA');
+
 const connection = mysql.createConnection({
         host: 'localhost',
         password: 'cay80634',
-        user: 'root',  
+        user: 'root',
         database: 'cinemasystem',
         port:3306
       });
@@ -19,7 +23,7 @@ const connection = mysql.createConnection({
 const promisequery = promisesql.createConnection({
         host: 'localhost',
         password: 'cay80634',
-        user: 'root',  
+        user: 'root',
         database: 'cinemasystem',
         port:3306
       });
@@ -122,9 +126,9 @@ router.get("/movies", async (req, res) => {
     */
    // create the connection to database
    const connection = mysql.createConnection({
-        host: 'arnabbiswas1.ddns.net',
-        password: 'Remote-password',
-        user: 'remote_user',  
+        host: 'localhost',
+        password: 'cay80634',
+        user: 'root',
         database: 'movies',
         port:3306
       });
@@ -160,33 +164,31 @@ router.post("/getProfile", async(req, res) => {
 
 //adding a movie to the db
 router.post("/movies", async (req, res) => {
-        /*
-	const post = new Post({
-        title: req.body.title, // String is shorthand for {type: String}
-        rating: req.body.rating,
-        price: req.body.price,
-        poster: req.body.poster,
-        trailer: req.body.trailer,
-        playing: req.body.playing
-	})
-	await post.save()
-	res.send(post)
-        */
-        let sql = "INSERT INTO movie (title, rating, trailer, poster, isOut) VALUES ("
-                + req.body.title
-                +req.body.rating
-                +req.body.trailer
-                +req.body.poster
-                +req.body.playing
-        +")";
-        connection.query(
-                sql,
-                function(err, results, fields) {
-                  res.send(results); // results contains rows returned by server
-                  console.log("Added a movie");
-                }
-              );
-})
+        const movie = new Movie(req.body);              // create movie instance
+        const movieDA = new MovieDA();
+        await movieDA.writeNewMovie(movie);             // write to database
+        res.send("Movie created successfully");
+});
+
+// checking movie schedules 
+router.get("/movies/:date_time", async (req, res) => {
+        const movieDA = new MovieDA();
+        const movies_with_same_schedule = await movieDA.validateMovieSchedule(req.params.date_time); // req.body == schedule (date_time)
+        //console.log(json(schedule));
+        //res.send(schedule);
+        //console.log("server endpoint reached!")
+        res.json(movies_with_same_schedule);
+});
+/*
+* {
+        const movieDA = new MovieDA():
+        movieDA.validateMovieSchedule(req.body);
+        if (schedule === "Invalid") {
+                res.send("movie schdule Invalid!")
+        }
+        else {res.send("movie schedule Valid!")}
+}
+*/
 
 router.post("/login", async(req, res) => {
         /*
@@ -353,7 +355,7 @@ router.post("/verifyAdmin", async(req, res) => {
 //updates user profile and payment info
 router.post("/updateProfile", async (req, res) => {
         console.log(req.body);
-        let sql = "UPDATE registereduser SET name = '" + req.body.name + "', phone = '" + req.body.phone + "', streetName = '" + req.body.streetname + "', city = '" + req.body.city + "', zip = '" + req.body.zip + "', state = '" + req.body.state +  "' WHERE email = '" + req.body.email + "'"; //add where clause 
+        let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
 
         let id = '';
         await getId(req.body.email).then((data) => {
@@ -365,12 +367,12 @@ router.post("/updateProfile", async (req, res) => {
         connection.query(
                 sql,
                 function(err, results, fields) {
-                  console.log(results);
-                  res.send(results);
+                  //console.log(results);
+                  //res.send(results);
                 }
         );
         
-        /*        
+
         console.log(id);
         let cardNumber = req.body.cardNumber;
         if(cardNumber.length > 0) {
@@ -391,7 +393,7 @@ router.post("/updateProfile", async (req, res) => {
                   res.send(results);
                 }
         );
-        */
+
 })
 
 router.post('/changePassword', async (req, res) => {
@@ -418,39 +420,6 @@ router.post('/changePassword', async (req, res) => {
                   res.send(results);
                 }
         );
-})
-
-router.post('/addShowtime', async(req, res) => {
-        console.log(req.body);
-        /*
-        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-        + "'" +req.body.date + "'"
-        + ", '" + req.body.time + "', "
-        + "'" + req.body.movieName + "', "
-        + "'1'"
-        + ")";
-        console.log(sql);
-        */
-        let time = ["3:00", "4:00", "5:00"];
-        let date = ["11/30/2023", "12/01/2023", "12/02/2023", "12/03/2023", "12/04/2023"];
-        let movieName = "Saw X";
-        let room = "1"
-        let response = [];
-
-        for (let day of date) {
-                for(let t of time) {
-                       let sql =  "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-                        + "'" +day + "'"
-                        + ", '" + t + "', "
-                        + "'" + movieName + "', "
-                        + "'1'"
-                        + ")";
-                         console.log(sql);
-                         response.push(sql);
-                }
-        }
-        res.send(response);
-
 })
 
 
