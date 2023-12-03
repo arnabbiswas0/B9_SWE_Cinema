@@ -73,6 +73,51 @@ function getId(email) {
         })
 }
 
+function getShowtime(showtimeID) {
+        return new Promise((resolve, reject) => {
+                let sql = 'SELECT * FROM showtime WHERE showtimeID = \'' + showtimeID + '\'';
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                console.log(results.roomID);
+                                return resolve(results);
+                        }
+                );
+        })
+}
+function checkShowtimeCollisionHelper(showtime) {
+        return new Promise((resolve, reject) => {
+                connection.query(
+                        showtime,
+                        function(err, results, fields) {
+                                console.log(results.roomID);
+                                return resolve(results);
+                        }
+                );
+        })
+}
+function checkShowtimeCollision(showtimes) {
+        //build sql Stirng using loops then pass to checkShowtimeColissionHelper method
+        //if returned result.length > 0 return true (there is a collision)
+        //else return false 
+
+        //use loop in the addshowTime route (test before using) 
+}
+
+function getCustomerCreditCard(userId) {
+        return new Promise((resolve, reject) => {
+                let sql = 'SELECT * FROM paymentcard WHERE userId = \'' + userId + '\''
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                console.log(results.roomID);
+                                return resolve(results);
+                        }
+                );
+
+        })
+}
+
 
 /**
  * 
@@ -420,6 +465,80 @@ router.post('/changePassword', async (req, res) => {
                   res.send(results);
                 }
         );
+})
+
+router.get('/getShowtimes', async (req,res) => {
+        let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + req.body.date + '\''
+        console.log(sql);
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
+})
+
+router.get('/getUnreservedSeats', async (req, res) => {
+        let roomID = '';
+        await getShowtime(req.body.showtimeID).then((data) => {
+                if(data.length > 0) {
+                        roomID = data[0].roomID;
+                }
+        });
+        let sql = 'SELECT * FROM seat WHERE roomID = \'' + roomID + '\' AND seatId NOT IN '
+        + '(SELECT * FROM showtime WHERE showtimeID = \'' + req.body.showtimeID + '\')';
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
+})
+
+router.post('/addShowtimes', async (req, res) => {
+        let dates = req.body.dates;
+        let times = req.body.times;
+        let room = req.body.room;
+
+        //checking for collisions
+        for(let day of dates) {
+                for(let time of times) {
+                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+                        + "\'" + day + "\', "
+                        + "\'" + time + "\', "
+                        + "\'" + room + "\'"
+                        +")"
+                        if (checkShowtimeCollision(sql)) {
+                                res.status(400).json(false);
+                        }
+                }
+        }
+
+        //acutally adding to DB
+        for(let day of dates) {
+                for(let time of times) {
+                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+                        + "\'" + day + "\', "
+                        + "\'" + time + "\', "
+                        + "\'" + room + "\'"
+                        +")"
+
+                        connection.query(
+                                sql,
+                                function(err, results, fields) {
+                                  //console.log(results);
+                                  console.log(results);
+                                }
+                        );
+                        
+                }
+        }
+})
+
+router.post('/bookTickets', async (req, res) => {
+        //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
 })
 
 
