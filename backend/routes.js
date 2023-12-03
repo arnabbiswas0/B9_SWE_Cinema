@@ -180,7 +180,7 @@ router.get("/movies", async (req, res) => {
       
       // simple query
       connection.query(
-        'SELECT * FROM movie LIMIT 10',
+        'SELECT * FROM movie',
         function(err, results, fields) {
           res.send(results); // results contains rows returned by server
           console.log(fields);
