@@ -104,6 +104,20 @@ function checkShowtimeCollision(showtimes) {
         //use loop in the addshowTime route (test before using) 
 }
 
+function getCustomerCreditCard(userId) {
+        return new Promise((resolve, reject) => {
+                let sql = 'SELECT * FROM paymentcard WHERE userId = \'' + userId + '\''
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                console.log(results.roomID);
+                                return resolve(results);
+                        }
+                );
+
+        })
+}
+
 
 /**
  * 
@@ -521,6 +535,10 @@ router.post('/addShowtimes', async (req, res) => {
                         
                 }
         }
+})
+
+router.post('/bookTickets', async (req, res) => {
+        //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
 })
 
 
