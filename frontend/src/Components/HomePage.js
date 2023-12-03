@@ -42,6 +42,7 @@ function HomePage() {
       console.log(data);
     
     //modal states
+    const [userData, setUserData] = useState("");
     const [showMovieM, setShowMovieM] = useState(false);
     const handleCloseMovieM = () => setShowMovieM(false);
     const handleShowMovieM = () => setShowMovieM(true);
@@ -89,12 +90,19 @@ function HomePage() {
             console.log("movie added successfully");
         }
     };
-
+    let Admin;
+    useEffect(() => {
+        Admin = JSON.parse(localStorage.getItem('user'));
+        if (Admin != null) {
+            setUserData(Admin.email);
+            console.log(Admin.email);
+        }
+    })
     return (
         <>
         <Container data-bs-theme="dark" style={{hight: "100%",textAlign: "center"}} >
             {/* Admin Buttons */}
-            {localStorage.getItem("Admin") === "Admin" &&
+            {userData === "cremley29@gmail.com" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
                     <Button variant="primary" onClick={handleShowMovieM}>Manage Movies</Button>
                     <Button variant="primary" onClick={handleShowPromoM}>Manage Promotions</Button>

@@ -239,45 +239,6 @@ function EditProfile() {
             </Col>
           </Row>
           
-      <Row>
-        <Form style={{width:"33rem"}}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label className='light-text'>Change Name</Form.Label>
-          <Form.Control type="email" placeholder="name" onChange={(e) => setName(e.target.value)} value={name}/>
-          </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label className='light-text'>Change Password</Form.Label>
-          <Form.Control type="password" placeholder="**********" onChange={(e) => setPassword(e.target.value)} value={password}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label className='light-text'>Confirm Password</Form.Label>
-          <Form.Control type="password" placeholder="**********" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label className='light-text'>Change Billing Address</Form.Label>
-          <Form.Control type="light-text" placeholder="Street Name" onChange={(e) => setStreet(e.target.value)} value={street}/>
-          <Form.Control type="light-text" placeholder="City" onChange={(e) => setCity(e.target.value)} value={city}/>
-          <Form.Control type="light-text" placeholder="ZIP" onChange={(e) => setZip(e.target.value)} value={zip}/>
-          <Form.Control type="light-text" placeholder="State" onChange={(e) => setState(e.target.value)} value={state}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label className='light-text'>Change Payment Info</Form.Label>
-          <Form.Control type="light-text" placeholder="Card Number" onChange={(e) => setCard(e.target.value)} value={card}/>
-          <Form.Control type="light-text" placeholder="Expiration Date" onChange={(e) => setExp(e.target.value)} value={exp}/>
-          <Form.Control type="light-text" placeholder="CVV/Security Code" onChange={(e) => setCVV(e.target.value)} value={cvv}/> 
-        </Form.Group>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-          <label class="form-check-label" for="defaultCheck1" className='light-text'>
-            I want to receive promotions. 
-          </label>
-        </div>
-        <Button variant="primary" onClick ={handleSubmit} disabled={isLoading}>
-        Submit
-        </Button>
-      </Form>
-    </Row>
-
     </Container>
 
   
