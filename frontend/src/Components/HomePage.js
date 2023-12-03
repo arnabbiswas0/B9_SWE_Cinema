@@ -100,7 +100,7 @@ function HomePage() {
     })
     return (
         <>
-        <Container data-bs-theme="dark" style={{hight: "100%",textAlign: "center"}} >
+        <Container data-bs-theme="dark" style={{hight: "100%",minHeight:"100vh",textAlign: "center"}} >
             {/* Admin Buttons */}
             {userData === "cremley29@gmail.com" &&
                 <Container style={{ marginTop: "1rem", textAlign: "center" }}>
@@ -137,7 +137,11 @@ function HomePage() {
             <div style={{height: "100%"}}>
             <Tabs defaultActiveKey="Currently Playing" fill justify data-bs-theme="dark">
                 <Tab eventKey="Currently Playing" title="Currently Playing">
-                    <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
+                        {filteredMovies.length === 0 ? <div class="text-light" style={{justifyContent:"center", alignItems:"center"}}>
+                            <h1>Sorry this movie is not available. Try seaching with all caps</h1>
+                        </div>
+                        :
+                        <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
                             {(movie.isOut === 'true') &&
@@ -147,21 +151,28 @@ function HomePage() {
                             }
                             </>
                             
-                        ))}
-                    </Row>
+                        ))} 
+                        </Row>
+                        }
                 </Tab>
                 <Tab eventKey="Coming Soon" title="Coming Soon">
-                    <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
+                {filteredMovies.length === 0 ? <div class="text-light" style={{justifyContent:"center", alignItems:"center"}}>
+                            <h1>Sorry this movie is not available. Try seaching with all caps</h1>
+                        </div>
+                        :
+                        <Row sm={1} md={2} lg={3} xl={4} className="g-4" bg={"dark"}>
                         {filteredMovies.map((movie) => (
                             <>
                             {(movie.isOut === 'false') &&
                             <Col>
-                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.poster} />
+                                <MovieCard title={movie.title} poster={movie.poster} trailer={movie.trailer} />
                             </Col>
                             }
                             </>
-                        ))}
-                    </Row>
+                            
+                        ))} 
+                        </Row>
+                        }
                 </Tab>
             </Tabs>
             </div>
