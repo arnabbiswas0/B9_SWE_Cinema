@@ -53,7 +53,7 @@ function NavBar() {
                 <Nav className="me-auto">
                     <Nav.Link href="/HomePage">Home</Nav.Link>
                     <Nav.Link onClick={handleShow}>Promotions</Nav.Link>
-                    <Nav.Link onClick={handleAdmin}>Admin View</Nav.Link>
+
                 </Nav>
                 <Nav>
                     {user && <Nav.Link href="/EditProfile">Edit Profile</Nav.Link>}

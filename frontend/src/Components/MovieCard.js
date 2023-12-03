@@ -16,6 +16,7 @@ function MovieCard({title, poster, trailer}) {
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
   const [Checkout, setCheckout] = useState(false);
+  const [date, setDate] = useState("");
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -80,7 +81,8 @@ function MovieCard({title, poster, trailer}) {
             <Form>
             <Form.Group className="mb-3">
                 <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="datetime-local" id="Time" name="bookingtime"/>
+                <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value.toString())} value={date}/>
+                <p>{date}</p>
             </Form.Group>
             <Form.Group>
                 <Form.Label >Select Seats:</Form.Label>
