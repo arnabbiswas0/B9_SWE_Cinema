@@ -539,6 +539,11 @@ router.post('/addShowtimes', async (req, res) => {
 
 router.post('/bookTickets', async (req, res) => {
         //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
+        //needs: user email, seat Id, showtime id
+})
+
+router.get('/fillSeatsAndRooms', async (req, res) => {
+        
 })
 
 
