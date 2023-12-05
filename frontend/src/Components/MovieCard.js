@@ -18,6 +18,11 @@ function MovieCard({title, poster, trailer}) {
   const [Checkout, setCheckout] = useState(false);
   const [date, setDate] = useState("");
   const [addShowTime, setAddShowTime] = useState(false);
+  const [times, setTimes] = useState([]);
+  const [startDate, setStartDate] = useState(Date);
+  const [endDate, setEndDate] = useState(Date);
+  const [room, setRoom] = useState(0);
+  const [validated, setValidated] = useState(false);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -28,6 +33,51 @@ function MovieCard({title, poster, trailer}) {
   const handleCloseCheckout = () => setCheckout(false);
   const handleAddShowTime = () => setAddShowTime(true);
   const handleCloseAddShowTime = () => setAddShowTime(false);
+  const handleTimes1 = () => {
+    if (times.includes("9:00 AM")){
+        setTimes( times.filter(item => item !== "9:00 AM"));
+    } else {
+        setTimes([ ...times,"9:00 AM" ])
+    }
+  }
+  const handleTimes2 = () => {
+    if (times.includes("12:00 PM")){
+        setTimes( times.filter(item => item !== "12:00 PM"));
+    } else {
+        setTimes([ ...times,"12:00 PM" ])
+    }
+  }
+  const handleTimes3 = () => {
+    if (times.includes("3:00 PM")){
+        setTimes( times.filter(item => item !== "3:00 PM"));
+    } else {
+        setTimes([ ...times,"3:00 PM" ])
+    }
+  }
+  const handleTimes4 = () => {
+    if (times.includes("6:00 PM")){
+        setTimes( times.filter(item => item !== "6:00 PM"));
+    } else {
+        setTimes([ ...times,"6:00 PM" ])
+    }
+  }
+  const handleTimes5 = () => {
+    if (times.includes("9:00 PM")){
+        setTimes( times.filter(item => item !== "9:00 PM"));
+    } else {
+        setTimes([ ...times,"9:00 PM" ])
+    }
+  }
+
+  const handleSubmitShowtime = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
 
   return (
     <> 
@@ -241,8 +291,62 @@ function MovieCard({title, poster, trailer}) {
         <Modal.Header closeButton>
             <Modal.Title>Add Showtime:</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-            
+        <Modal.Body style={{textAlign: "center"}}>
+            <Form noValidate validated={validated} onSubmit={handleSubmitShowtime}>
+                <Form.Group >
+                    <h5>Choose the range for the movie:</h5>
+                    <Row>
+                        <Col style={{width:"50%"}}>
+                            <Form.Label>Starting Day:</Form.Label> 
+                            <Form.Control type="date" name="startDate"onChange={(e) => setStartDate(e.target.value)} required/>
+                            <Form.Control.Feedback type="invalid">
+                                You must provide a start date.
+                            </Form.Control.Feedback>
+                        </Col>
+                        <Col style={{width:"50%"}}>
+                            <Form.Label>Ending Day:</Form.Label> 
+                            <Form.Control type="date" name="endDate"onChange={(e) => setEndDate(e.target.value)} required/>
+                            <Form.Control.Feedback type="invalid">
+                                You must provide an end date.
+                            </Form.Control.Feedback>
+                        </Col>
+                    </Row>
+                </Form.Group>
+                <Form.Group>
+                    <h5>Choose the time(s) for the movie:</h5>
+                    <Form.Check inline label="9:00 AM" name="9am" onClick={handleTimes1}/>
+                    <Form.Check inline label="12:00 PM" name="12pm" onClick={handleTimes2}/>
+                    <Form.Check inline label="3:00 PM" name="3pm" onClick={handleTimes3}/>
+                    <Form.Check inline label="6:00 PM" name="6pm" onClick={handleTimes4}/>
+                    <Form.Check inline label="9:00 PM" name="9pm" onClick={handleTimes5}/>
+                </Form.Group>
+                <Form.Control.Feedback type="invalid">
+                    You must choose a time.
+                </Form.Control.Feedback>
+                {console.log(times)}
+                <Form.Group>
+                    <Form.Control as="select" onChange={(e) => setRoom(e.target.value)} required>
+                        <option value="">Which room do you want this movie to play in?</option>
+                        <option value="1">Room 1</option>
+                        <option value="2">Room 2</option>
+                        <option value="3">Room 3</option>
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        You must provide a room.
+                    </Form.Control.Feedback>
+                </Form.Group>
+                {console.log(room)}
+                { room ?
+                    <> 
+                        <h5>Showtime Summary:</h5>
+                        <h4> This movie will play in room #{room} during the times {times.map(time => <> {time},</>)} start on {startDate}, and end on {endDate}.</h4>
+                    </>
+                    : null
+                }
+                <Form.Group>
+                    <Button type="submit">Submit Showtime</Button>
+                </Form.Group>
+            </Form>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseAddShowTime}>
