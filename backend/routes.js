@@ -544,3 +544,21 @@ router.post('/bookTickets', async (req, res) => {
 
 
 module.exports = router
+
+
+
+
+/* 
+booking in whole:
+User selects a date on a movie.
+The frontend sends the date and movieName to the backend.
+The backend then sends the frontend the the showtime(s) tuple.
+The User is presented the times. 
+The user selects the time.
+The frontend sends the backend the showtimeID.
+The backend sends the frontend the seats.
+The user selects the seats they want.
+The frontend handles a faux checkout.
+The frontend sends these seatIDs to the backend.
+THe backend reserves these seats. 
+*/
