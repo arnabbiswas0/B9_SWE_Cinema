@@ -17,6 +17,7 @@ function MovieCard({title, poster, trailer}) {
   const [ageList, setAgeList] = useState([]);
   const [Checkout, setCheckout] = useState(false);
   const [date, setDate] = useState("");
+  const [addShowTime, setAddShowTime] = useState(false);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -25,6 +26,8 @@ function MovieCard({title, poster, trailer}) {
 
   const handleShowCheckout = () => setCheckout(true);
   const handleCloseCheckout = () => setCheckout(false);
+  const handleAddShowTime = () => setAddShowTime(true);
+  const handleCloseAddShowTime = () => setAddShowTime(false);
 
   return (
     <> 
@@ -38,8 +41,8 @@ function MovieCard({title, poster, trailer}) {
         <Card.Title>{title}</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>View trailer</Button>
         <Button variant="primary" onClick={handleShowBookMovie}>Book Movie</Button>
-        {(localStorage.getItem("Admin")==="Admin") &&
-            <Button variant="primary" onClick={handleShowTrailer}>Edit Movie</Button>
+        {(localStorage.getItem('user'))!= null && (JSON.parse(localStorage.getItem('user')).email === "cremley29@gmail.com") &&
+            <Button variant="primary" onClick={handleAddShowTime}>Add ShowTime</Button>
         }
       </Card.Body>
     </Card>
@@ -227,6 +230,29 @@ function MovieCard({title, poster, trailer}) {
             </Button>
         </Modal.Footer>
     </Modal>
+
+    <Modal
+        show={addShowTime} 
+        onHide={handleCloseAddShowTime}
+        centered
+        size={'lg'}
+        backdrop="static"
+    >
+        <Modal.Header closeButton>
+            <Modal.Title>Add Showtime:</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={handleCloseAddShowTime}>
+                Close
+            </Button>
+        </Modal.Footer>
+    </Modal>
+    
+    
+    
     </>
 
 
