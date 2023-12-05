@@ -203,19 +203,10 @@ function MovieCard({title, poster, trailer}) {
         </Modal.Header>
         <Modal.Body>
               Ticket Details: <br></br>
-              &emsp; dummy ticket: 18+ $20 &emsp;
+              &emsp; {title}: $10
               <Button size='sm'> Delete Ticket</Button> 
               <br></br>
-              &emsp; dummy ticket: 18+ $20 &emsp;
-              <Button size='sm'> Delete Ticket</Button> 
-              <br></br>
-              &emsp; dummy ticket: 18+ $20 &emsp;
-              <Button size='sm'> Delete Ticket</Button> 
-              <br></br>
-              &emsp; dummy ticket: 18+ $20 &emsp;
-              <Button size='sm'> Delete Ticket</Button> 
-              <br></br>
-              &emsp; total: $80
+              &emsp; total: $10
 
             <div>
             <form className="form-horizontal">
