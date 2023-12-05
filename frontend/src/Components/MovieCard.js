@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useAddShowtime } from './hooks/useAddShowtime';
 
   
 
@@ -69,14 +70,16 @@ function MovieCard({title, poster, trailer}) {
     }
   }
 
-  const handleSubmitShowtime = (event) => {
+  const {addShowtime, error, isLoading} = useAddShowtime();
+  const handleSubmitShowtime = async(event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    
     setValidated(true);
+    await addShowTime(startDate, endDate, times, room);
   };
 
   return (
