@@ -180,7 +180,7 @@ router.get("/movies", async (req, res) => {
       
       // simple query
       connection.query(
-        'SELECT * FROM movie LIMIT 10',
+        'SELECT * FROM movie',
         function(err, results, fields) {
           res.send(results); // results contains rows returned by server
           console.log(fields);
@@ -275,7 +275,7 @@ router.post("/login", async(req, res) => {
                 //create a token
                 const token = createToken(id)
                 //as respond, we send back the email and token. we can find in postman or local storage
-                res.status(200).json({email, token})
+                res.status(200).json({email, token});
               } else {
                 //console.log({error: err});
                 res.status(400).json('error')
@@ -468,7 +468,7 @@ router.post('/changePassword', async (req, res) => {
 })
 
 router.get('/getShowtimes', async (req,res) => {
-        let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + req.body.date + '\''
+                let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + req.body.date + '\''
         console.log(sql);
         connection.query(
                 sql,
@@ -539,8 +539,31 @@ router.post('/addShowtimes', async (req, res) => {
 
 router.post('/bookTickets', async (req, res) => {
         //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
+        //needs: user email, seat Id, showtime id
+})
+
+router.get('/fillSeatsAndRooms', async (req, res) => {
+        
 })
 
 
 
 module.exports = router
+
+
+
+
+/* 
+booking in whole:
+User selects a date on a movie.
+The frontend sends the date and movieName to the backend.
+The backend then sends the frontend the the showtime(s) tuple.
+The User is presented the times. 
+The user selects the time.
+The frontend sends the backend the showtimeID.
+The backend sends the frontend the seats.
+The user selects the seats they want.
+The frontend handles a faux checkout.
+The frontend sends these seatIDs to the backend.
+THe backend reserves these seats. 
+*/
