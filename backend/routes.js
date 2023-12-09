@@ -569,9 +569,10 @@ router.post('/addShowtimes', async (req, res) => {
                         let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
                         + "\'" + day + "\', "
                         + "\'" + time + "\', "
+                        + "\'" + req.body.movie + "\', "
                         + "\'" + room + "\'"
                         +")"
-                        /*
+                        
                         connection.query(
                                 sql,
                                 function(err, results, fields) {
@@ -579,7 +580,7 @@ router.post('/addShowtimes', async (req, res) => {
                                   console.log(results);
                                 }
                         );
-                        */
+                        
                        console.log(sql);
                         
                 }
