@@ -104,6 +104,14 @@ function checkShowtimeCollision(showtimes) {
         //use loop in the addshowTime route (test before using) 
 }
 
+function buildDateArray(startDate, endDate) {
+        let arr = [];
+        for(let day = startDate; startDate <= endDate; day.setDate(day.getDate() + 1)) {
+                arr.push(day.toDateString());
+        }
+        return arr;
+}
+
 function getCustomerCreditCard(userId) {
         return new Promise((resolve, reject) => {
                 let sql = 'SELECT * FROM paymentcard WHERE userId = \'' + userId + '\''
@@ -490,6 +498,7 @@ router.get('/getShowtimes', async (req,res) => {
         );
 })
 
+//booking table needs userId, seatId, showtimeid
 router.get('/getUnreservedSeats', async (req, res) => {
         let roomID = '';
         await getShowtime(req.body.showtimeID).then((data) => {
@@ -498,7 +507,7 @@ router.get('/getUnreservedSeats', async (req, res) => {
                 }
         });
         let sql = 'SELECT * FROM seat WHERE roomID = \'' + roomID + '\' AND seatId NOT IN '
-        + '(SELECT * FROM showtime WHERE showtimeID = \'' + req.body.showtimeID + '\')';
+        + '(SELECT * FROM booking WHERE showtimeID = ' + req.body.showtimeID + ')';
         connection.query(
                 sql,
                 function(err, results, fields) {
@@ -554,7 +563,20 @@ router.post('/bookTickets', async (req, res) => {
 })
 
 router.get('/fillSeatsAndRooms', async (req, res) => {
-        
+        let rows = "ABCDF"
+        for(let room = 1; room < 5; room++){
+                for(let i = 0; i < rows.length; i++) {
+                    for(let j = 1; j < 6; j++) {
+                        //console.log(rows.charAt(i) + j + " room: " +room);
+                        let seatName = rows.charAt(i) + j;
+                        let sql = "INSERT INTO seat(roomID, seatName) VALUES("
+                        + "\'" + room + "\'"
+                        +", \'" + seatName + "\')";
+                        console.log(sql); 
+                    }
+                
+                }
+        }
 })
 
 
