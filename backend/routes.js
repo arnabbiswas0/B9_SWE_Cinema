@@ -104,12 +104,19 @@ function checkShowtimeCollision(showtimes) {
         //use loop in the addshowTime route (test before using) 
 }
 
-function buildDateArray(startDate, endDate) {
-        let arr = [];
-        for(let day = startDate; startDate <= endDate; day.setDate(day.getDate() + 1)) {
-                arr.push(day.toDateString());
-        }
-        return arr;
+function buildDateArray(startDates, endDates) {
+        //console.log('start date: ' + startDate.toDateString());
+        //console.log('endDate: ' + endDate.toDateString())
+        let startDate = new Date(startDates);
+        let endDate = new Date(endDates)
+        return new Promise((resolve, reject) => {
+                let arr = [];
+                for(let day = startDate; startDate <= endDate; day.setDate(day.getDate() + 1)) {
+                        arr.push(day.toDateString());
+                        console.log('current day: ' + day.toDateString())
+                }
+                return resolve(arr);
+        })
 }
 
 function getCustomerCreditCard(userId) {
@@ -507,10 +514,22 @@ router.get('/getUnreservedSeats', async (req, res) => {
 })
 
 router.post('/addShowtimes', async (req, res) => {
-        let dates = req.body.dates;
+        //let dates = req.body.dates;
+        let startDate = req.body.startDate;
+        let endDate = req.body.endDate;
+        console.log("Begginning date: " + startDate.toString());
+        console.log('times: ' + req.body.times)
+        console.log(typeof(startDate))
+        console.log(req.body.times)
+        let dates = [];
+        await buildDateArray(startDate, endDate).then((data) => {
+                if(data.length > 0) {
+                        dates = data;
+                }
+        });
         let times = req.body.times;
         let room = req.body.room;
-
+        console.log(dates);
         //checking for collisions
         for(let day of dates) {
                 for(let time of times) {
@@ -533,7 +552,7 @@ router.post('/addShowtimes', async (req, res) => {
                         + "\'" + time + "\', "
                         + "\'" + room + "\'"
                         +")"
-
+                        /*
                         connection.query(
                                 sql,
                                 function(err, results, fields) {
@@ -541,6 +560,8 @@ router.post('/addShowtimes', async (req, res) => {
                                   console.log(results);
                                 }
                         );
+                        */
+                       console.log(sql);
                         
                 }
         }

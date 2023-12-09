@@ -11,8 +11,9 @@ export const useAddShowtime = () =>{
         const response = await fetch('http://localhost:8000/api/addShowtimes', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({})
+            body: JSON.stringify({startDate : startDate, endDate : endDate, times : times, room : roomNum})
         })
+        console.log("startdate: " + times)
         const json = await response.json(startDate, endDate, times, roomNum) 
         console.log(response);
         if(!(response.status == 200)){
