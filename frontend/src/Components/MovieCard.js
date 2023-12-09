@@ -79,7 +79,7 @@ function MovieCard({title, poster, trailer}) {
     }
     
     setValidated(true);
-    await addShowTime(startDate, endDate, times, room);
+    await addShowtime(startDate, endDate, times, room);
   };
 
   return (

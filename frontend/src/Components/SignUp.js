@@ -14,6 +14,7 @@ function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [validated, setValidated] = useState(false);
   const {signup, error, isLoading} = useSignup()  
 
 
@@ -26,6 +27,13 @@ function SignUp() {
         alert("Passwords don't match! Try again!");
     } else {
       e.preventDefault()
+      const form = e.currentTarget;
+      if (form.checkValidity() === false) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      setValidated(true);
     
       await signup(name,email, password)
     }
@@ -44,13 +52,20 @@ function SignUp() {
             <h2 class="text-light">Create Account:</h2>
           </Card.Header>
             <Card.Body className='justify-content-center mx-auto w-100'>
+              <Form noValidate validated={validated}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className='light-text'>Name</Form.Label>
                 <Form.Control type="Name" placeholder="Enter Name" onChange={(e) => setName(e.target.value)} value={name} />
+                <Form.Control.Feedback type="invalid">
+                  You must provide a name.
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className='light-text'>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email}/>
+                <Form.Control.Feedback type="invalid">
+                  You must provide a email.
+                </Form.Control.Feedback>
                 <Form.Text className="text-muted">
                   We will NEVER share your email with any unauthorized third parties.
                 </Form.Text>
@@ -58,10 +73,16 @@ function SignUp() {
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label className='light-text'>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password}/>
+                <Form.Control.Feedback type="invalid">
+                  You must provide a password.
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label className='light-text'>Confirm Password</Form.Label>
                 <Form.Control type="password" placeholder="Confirm Password"onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
+                <Form.Control.Feedback type="invalid">
+                  You must confirm password.
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group>
                 <Form.Label className='light-text'>Already Signed up? <a href="/Login">Log in here!</a></Form.Label>
@@ -70,6 +91,7 @@ function SignUp() {
                 Submit
               </Button>
               {error && <div className="error">{error}</div>}
+              </Form>
             </Card.Body>
       </Card>
     </Container>

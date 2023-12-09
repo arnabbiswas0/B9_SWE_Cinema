@@ -22,6 +22,7 @@ function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [validated, setValidated] = useState(false);
 
   const {login, error, isLoading} = useLogin();
 
@@ -32,6 +33,13 @@ function Login() {
 
   const handleSubmit = async(e) =>{
     e.preventDefault();
+    const form = e.currentTarget;
+      if (form.checkValidity() === false) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      setValidated(true);
 
     await login(email, password);
     if (error === null) {
@@ -57,13 +65,20 @@ function Login() {
             <h2 class="text-light">Login:</h2>
           </Card.Header>
             <Card.Body className='justify-content-center mx-auto w-100'>
+              <Form noValidate validated={validated}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label className='light-text'>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} value={email} />
+                <Form.Control.Feedback type="invalid">
+                  You must provide your email.
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label className='light-text'>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
+                <Form.Control.Feedback type="invalid">
+                  You must provide your password.
+                </Form.Control.Feedback>
               </Form.Group>
               <div className="d-flex justify-content-center mx-4 mb-4">
                 <Button variant="link" onClick={handleForgotPassword} className="text-light">Forgot password?</Button>
@@ -72,6 +87,7 @@ function Login() {
               <Button variant="primary"  onClick={handleSubmit} disabled={isLoading}>
                 Submit
               </Button>
+              </Form>
             </Card.Body>
       </Card>
     </Container>
