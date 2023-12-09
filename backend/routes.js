@@ -414,9 +414,25 @@ router.post("/verifyAdmin", async(req, res) => {
 
 //updates user profile and payment info
 router.post("/updateProfile", async (req, res) => {
-        console.log(req.body);
-        let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
-
+        //console.log(req.body);
+        let sql = "UPDATE registereduser SET name = '" + req.body.name 
+        + "', phone = '" + req.body.phone 
+        + "', streetName = '" + req.body.street
+        + "', city = '" + req.body.city 
+        + "', state = '" + req.body.state
+        + "', zip = '" + req.body.zip
+        + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+        /*
+        let sql = "UPDATE showtime(name, phone, streetName, city, state, zip) VALUES ("
+        + "\'" + req.body.name + "\', "
+        + "\'" + req.body.phone + "\', "
+        + "\'" + req.body.streetName + "\'"
+        + "\'" + req.body.city + "\'"
+        + "\'" + req.body.state + "\'"
+        + "\'" + req.body.zip + "\'"
+        +")"
+        +"' WHERE email = '" + req.body.email + "'";
+        */
         let id = '';
         await getId(req.body.email).then((data) => {
                 if(data.length > 0) {
@@ -427,12 +443,12 @@ router.post("/updateProfile", async (req, res) => {
         connection.query(
                 sql,
                 function(err, results, fields) {
-                  //console.log(results);
-                  //res.send(results);
+                  console.log(results);
+                  res.send(results);
                 }
         );
         
-
+        /*        
         console.log(id);
         let cardNumber = req.body.cardNumber;
         if(cardNumber.length > 0) {
@@ -453,6 +469,7 @@ router.post("/updateProfile", async (req, res) => {
                   res.send(results);
                 }
         );
+        */
 
 })
 

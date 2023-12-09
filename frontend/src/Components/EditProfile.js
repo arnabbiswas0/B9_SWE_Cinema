@@ -67,7 +67,7 @@ function EditProfile() {
   const handleSubmit = async(e) =>{
     e.preventDefault();
 
-    await editProfile(userData.email, name,phone, street, city, zip, state);
+    await editProfile(userData.email, name, phone, street, city, zip, state);
     setEdit(false);
     window.location.reload();
     }
@@ -114,7 +114,7 @@ function EditProfile() {
                   {edit ? 
                     <Button size="lg" onClick={handleSubmit}>Submit</Button>
                   :
-                    <Button size="lg" onClick={handleEdit}>Edit Profile</Button> 
+                    <Button type="submit" size="lg" onClick={handleEdit}>Edit Profile</Button> 
                   }
                 </div>
               </Card.Body>
@@ -156,7 +156,8 @@ function EditProfile() {
                     {edit ? 
                     <Form.Control 
                     type="textarea" 
-                    placeholder={account.name} 
+                    placeholder={account.name}
+                    defaultValue={name}
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setName(e.target.value)} 
                     value={name}/>
@@ -184,6 +185,7 @@ function EditProfile() {
                     <Form.Control 
                     type="textarea" 
                     placeholder={account.phone} 
+                    defaultValue={account.phone}
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setPhone(e.target.value)} 
                     value={phone}/>
@@ -201,13 +203,13 @@ function EditProfile() {
                     {edit ? 
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                       <Form.Label className='light-text'>Street</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.streetName} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
+                      <Form.Control type="light-text" placeholder={account.streetName} defaultValue={account.streetName} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
                       <Form.Label className='light-text'>City</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.city} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
+                      <Form.Control type="light-text" placeholder={account.city} defaultValue={account.city} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
                       <Form.Label className='light-text'>Zip</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.zip} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
+                      <Form.Control type="light-text" placeholder={account.zip} defaultValue={account.zip} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
                       <Form.Label className='light-text'>State</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.state} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
+                      <Form.Control type="light-text" placeholder={account.state} defaultValue={account.state} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
                   </Form.Group>
                     :
                     <Card.Text className="text-muted">{account.streetName}, {account.city}, {account.state}, {account.zip} </Card.Text>
