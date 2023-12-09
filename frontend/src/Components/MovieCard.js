@@ -12,7 +12,7 @@ import { useAddShowtime } from './hooks/useAddShowtime';
   
 
 function MovieCard({title, poster, trailer}) {
-
+const [total, setTotal] = useState(0);
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
@@ -203,10 +203,27 @@ function MovieCard({title, poster, trailer}) {
         </Modal.Header>
         <Modal.Body>
               Ticket Details: <br></br>
+              <Form.Group>
+                    <Form.Control as="select" onChange={(e) => setTotal(e.target.value * 10)} required>
+                        <option value="">Select Quantity</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        You must select the quantity of tickets.
+                    </Form.Control.Feedback>
+                </Form.Group>
               &emsp; {title}: $10
-              <Button size='sm'> Delete Ticket</Button> 
               <br></br>
-              &emsp; total: $10
+              &emsp; total: $ {total}
 
             <div>
             <form className="form-horizontal">
