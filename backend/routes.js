@@ -538,6 +538,7 @@ router.post('/addShowtimes', async (req, res) => {
         console.log('times: ' + req.body.times)
         console.log(typeof(startDate))
         console.log(req.body.times)
+        console.log('movieNAme: ' + req.body.movie)
         let dates = [];
         await buildDateArray(startDate, endDate).then((data) => {
                 if(data.length > 0) {
@@ -553,6 +554,7 @@ router.post('/addShowtimes', async (req, res) => {
                         let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
                         + "\'" + day + "\', "
                         + "\'" + time + "\', "
+                        + "\'" + req.body.movie + "\', "
                         + "\'" + room + "\'"
                         +")"
                         if (checkShowtimeCollision(sql)) {

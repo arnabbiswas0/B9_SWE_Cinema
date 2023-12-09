@@ -80,7 +80,7 @@ const [total, setTotal] = useState(0);
     
     setValidated(true);
     //console.log("startdate: " + startDate)
-    await addShowtime(startDate, endDate, times, room);
+    await addShowtime(startDate, endDate, times, room, title);
   };
 
   return (
