@@ -58,12 +58,6 @@ function HomePage() {
 
     const handleNewMovie = async (event) => {
         event.preventDefault();
-
-        // debugging code:  
-        //console.log("new movie submission working");
-        //console.log("\n" + event.target.elements[0].value);
-        //console.log("\n" + event.target.elements[9].value);
-
         // create new movie object
         const newMovieData = {
             title: event.target.elements[0].value,
@@ -78,15 +72,28 @@ function HomePage() {
             trailer: event.target.elements[9].value,
         };
         console.log(newMovieData);
-        //console.log(event.target.elements[10].value); 
-        //console.log(event.target.elements[11].value); 
-        const movieHandler = new MovieHandler();
-        const handled = await movieHandler.createMovie(newMovieData);
-        if (handled === 'unavailable') {
-            alert("YouTube link INVALID...try again");
-        } else {
-            console.log("movie added successfully");
+        // validate for non-empty attibutes
+        let allFilled = true;
+        for (let i = 0; i < event.target.elements.length-1; i++) {
+            if (!event.target.elements[i].value) {
+                allFilled = false;
+                // console.log(`Element at index ${i} is empty`);
+            }
         }
+        // if all attributes have values continue to add movie
+        if (allFilled) {
+            console.log("All elements are filled")
+            const movieHandler = new MovieHandler();
+            const handled = await movieHandler.createMovie(newMovieData);
+            if (handled === 'unavailable') {
+                alert("YouTube link INVALID...try again");
+            } else {
+                console.log("movie added successfully");
+            }
+        } else {
+            //console.log("One or more missing values!")
+            alert("One or more missing values!")
+        } 
     };
     let Admin;
     useEffect(() => {
