@@ -38,7 +38,7 @@ export default class MovieProxy {
             return false;                                 // YOUTUBE API returns EMPTY LIST
         }
     }
-    // validate scheduled movie (date_time): 2 movies cannot have same schedule!------------------------------------------------------------
+    // 2 movies cannot have same schedule!------------------------------------------------------------
     async validateSchedule(date_time) {
        // console.log("(schedule) date_time: " + date_time);
         const response = await axios.get(`http://localhost:8000/api/movies/${date_time}`);
@@ -72,15 +72,16 @@ export default class MovieProxy {
         * 3. if another record not found -> createMovie Else -> output alert
         */
        //console.log("------------------" + movieData.date_time);
+       /*
        const schedule = await this.validateSchedule(movieData.date_time);
        if (schedule === 'invalidSchedule') { // if schedule > 0? 
             console.log('Error: Invalid Movie Schedule (date&time)!');//------------------debugging purposes
             // alert("Error: Invalid Movie Schedule!");
             return schedule;//------------------------------------------------------------
        }
-
+       */
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
-        console.log("after invalid schedule");
+        console.log("after validating youtube video");
         const response = await axios.post('http://localhost:8000/api/movies', movieData);
         console.log(response.data);
         return response.data;
