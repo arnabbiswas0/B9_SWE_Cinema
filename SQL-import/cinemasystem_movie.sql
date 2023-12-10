@@ -18,30 +18,30 @@ USE `cinemasystem`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `showtime`
+-- Table structure for table `movie`
 --
 
-DROP TABLE IF EXISTS `showtime`;
+DROP TABLE IF EXISTS `movie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `showtime` (
-  `showtimeID` int NOT NULL AUTO_INCREMENT,
-  `date` varchar(45) NOT NULL,
-  `time` varchar(45) NOT NULL,
-  `movieName` varchar(100) NOT NULL,
-  `roomID` varchar(45) NOT NULL,
-  PRIMARY KEY (`showtimeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `movie` (
+  `movieId` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) NOT NULL,
+  `category` varchar(150) NOT NULL,
+  `trailerPicture` varchar(150) NOT NULL,
+  `trailerVideo` varchar(150) NOT NULL,
+  `rating` varchar(10) NOT NULL,
+  PRIMARY KEY (`movieId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `showtime`
+-- Dumping data for table `movie`
 --
 
-LOCK TABLES `showtime` WRITE;
-/*!40000 ALTER TABLE `showtime` DISABLE KEYS */;
-INSERT INTO `showtime` VALUES (1,'11/30/2023','3:00','SAW X','1');
-/*!40000 ALTER TABLE `showtime` ENABLE KEYS */;
+LOCK TABLES `movie` WRITE;
+/*!40000 ALTER TABLE `movie` DISABLE KEYS */;
+/*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-09 19:42:45
+-- Dump completed on 2023-12-09 19:42:44

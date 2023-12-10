@@ -601,9 +601,9 @@ router.post('/bookTickets', async (req, res) => {
         //needs: user email, seat Id, showtime id
 })
 
-router.get('/fillSeatsAndRooms', async (req, res) => {
+router.post('/fillSeatsAndRooms', async (req, res) => {
         let rows = "ABCDF"
-        for(let room = 1; room < 5; room++){
+        for(let room = 1; room < 4; room++){
                 for(let i = 0; i < rows.length; i++) {
                     for(let j = 1; j < 6; j++) {
                         //console.log(rows.charAt(i) + j + " room: " +room);
@@ -612,10 +612,18 @@ router.get('/fillSeatsAndRooms', async (req, res) => {
                         + "\'" + room + "\'"
                         +", \'" + seatName + "\')";
                         console.log(sql); 
+                        connection.query(
+                                sql,
+                                function(err, results, fields) {
+                                  //console.log(results);
+                                  console.log(results);
+                                }
+                        );
                     }
                 
                 }
         }
+        res.sendStatus(200);
 })
 
 
