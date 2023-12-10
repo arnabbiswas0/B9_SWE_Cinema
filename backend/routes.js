@@ -634,6 +634,35 @@ router.post('/fillSeatsAndRooms', async (req, res) => {
         res.sendStatus(200);
 })
 
+router.post('/addPromotion', async (req, res) => {
+        let promotionMessage = req.body.promotion;
+        let sql = 'SELECT * FROM registereduser WHERE isSubscribed = \'true\''
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                  for(let result of results) {
+                        sendEmail(result.email, promotionMessage)
+                  }
+                }
+        );
+}) 
+
+router.post('/subscribeToPromotion', async(req, res) => {
+
+})
+
+router.post('/activateUser', async (req, res) => {
+        let emai
+})
+
+router.post('/sendActivationLink', async(req, res) => {
+        let email = 'softwareengineeruga@gmail.com';
+        let actvationLink = 'Click <a href="https://www.google.com/">here</a> to activate account'
+        sendEmail(email, actvationLink);
+})
+
 
 
 module.exports = router
