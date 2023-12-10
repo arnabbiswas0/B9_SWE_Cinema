@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAddShowtime } from './hooks/useAddShowtime';
+import { useGetShowtime } from './hooks/useGetShowtime';
 
   
 
@@ -24,6 +25,7 @@ const [total, setTotal] = useState(0);
   const [endDate, setEndDate] = useState(Date);
   const [room, setRoom] = useState(0);
   const [validated, setValidated] = useState(false);
+  const [showtimes, setShowtimes] = useState([]);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => setBookMovie(false);
@@ -83,6 +85,12 @@ const [total, setTotal] = useState(0);
     await addShowtime(startDate, endDate, times, room, title);
   };
 
+  const {getShowtime} = useGetShowtime();
+  const handleSelectDate = async(e) => {
+    setDate(e.target.value)
+    await getShowtime(title, date);
+  }
+
   return (
     <> 
     <Card 
@@ -138,42 +146,13 @@ const [total, setTotal] = useState(0);
             <Form>
             <Form.Group className="mb-3">
                 <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value.toString())} value={date}/>
-                <p>{date}</p>
+                <Form.Control type="date" id="Time" name="bookingtime" onChange={handleSelectDate} value={date}/>
             </Form.Group>
-            <Form.Group>
-                <Form.Label >Select Seats:</Form.Label>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-            </Form.Group>
+            {date ?
+            <></>
+            :
+            null
+            }
             {ageList.map((age) => (
             <Form.Group className="mb-3">
                 <Form.Label>Add age for seat:</Form.Label>

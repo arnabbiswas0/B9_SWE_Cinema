@@ -157,7 +157,7 @@ function EditProfile() {
                     <Form.Control 
                     type="textarea" 
                     placeholder={account.name}
-                    defaultValue={name}
+                    defaultValue={account.name}
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setName(e.target.value)} 
                     value={name}/>
