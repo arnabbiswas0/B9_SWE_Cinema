@@ -87,8 +87,8 @@ const [total, setTotal] = useState(0);
 
   const {getShowtime} = useGetShowtime();
   const handleSelectDate = async(e) => {
-    setDate(e.target.value)
-    await getShowtime(title, date);
+    const shows = await getShowtime(title, date);
+    console.log(shows);
   }
 
   return (
@@ -146,10 +146,13 @@ const [total, setTotal] = useState(0);
             <Form>
             <Form.Group className="mb-3">
                 <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="date" id="Time" name="bookingtime" onChange={handleSelectDate} value={date}/>
+                <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value)} value={date}/>
             </Form.Group>
             {date ?
-            <></>
+            <>
+            <Button onClick={handleSelectDate}>Confirm Day</Button>
+            
+            </>
             :
             null
             }
@@ -203,7 +206,7 @@ const [total, setTotal] = useState(0);
                 </Form.Group>
               &emsp; {title}: $10
               <br></br>
-              &emsp; total: $ {total}
+              &emsp; total: ${total}
 
             <div>
             <form className="form-horizontal">
