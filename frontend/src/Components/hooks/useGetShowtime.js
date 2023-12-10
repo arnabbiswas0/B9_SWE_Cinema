@@ -14,7 +14,7 @@ export const useGetShowtime = () =>{
             body: JSON.stringify({title, date})
         })
         const json = await response.json(title, date) 
-        console.log(response);
+        //console.log(json);
         if(!(response.status == 200)){
             setIsLoading(false)
             setError(json.error)
@@ -22,6 +22,7 @@ export const useGetShowtime = () =>{
         else if(response.ok){
             setIsLoading(false)
         }
+        return json;
     }
 
     return {getShowtime, isLoading, error}
