@@ -500,7 +500,9 @@ router.post('/changePassword', async (req, res) => {
 })
 
 router.get('/getShowtimes', async (req,res) => {
-                let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + req.body.date + '\''
+        let date = new Date(req.body.date);
+        date = date.toDateString();
+                let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + date + '\''
         console.log(sql);
         connection.query(
                 sql,
