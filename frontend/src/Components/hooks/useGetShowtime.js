@@ -13,7 +13,7 @@ export const useGetShowtime = () =>{
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({title, date})
         })
-        const json = await response.json(title, date) 
+        const json = await response.json() 
         //console.log(json);
         if(!(response.status == 200)){
             setIsLoading(false)

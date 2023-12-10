@@ -524,10 +524,12 @@ router.post('/getUnreservedSeats', async (req, res) => {
         await getShowtime(req.body.showtimeID).then((data) => {
                 if(data.length > 0) {
                         roomID = data[0].roomID;
+                        console.log(roomID);
                 }
         });
+        console.log("starting query for seats");
         let sql = 'SELECT * FROM seat WHERE roomID = \'' + roomID + '\' AND seatId NOT IN '
-        + '(SELECT * FROM booking WHERE showtimeID = ' + req.body.showtimeID + ')';
+        + '(SELECT seatID FROM booking WHERE showtimeID = ' + req.body.showtimeID + ')';
         connection.query(
                 sql,
                 function(err, results, fields) {
@@ -604,6 +606,7 @@ router.post('/addShowtimes', async (req, res) => {
 router.post('/bookTickets', async (req, res) => {
         //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
         //needs: user email, seat Id, showtime id
+
 })
 
 router.post('/fillSeatsAndRooms', async (req, res) => {
