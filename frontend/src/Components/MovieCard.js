@@ -203,7 +203,7 @@ const [total, setTotal] = useState(0);
                 </Form.Group>
               &emsp; {title}: $10
               <br></br>
-              &emsp; total: $ {total}
+              &emsp; total: ${total}
 
             <div>
             <form className="form-horizontal">
