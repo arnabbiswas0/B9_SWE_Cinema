@@ -108,7 +108,9 @@ function buildDateArray(startDates, endDates) {
         //console.log('start date: ' + startDate.toDateString());
         //console.log('endDate: ' + endDate.toDateString())
         let startDate = new Date(startDates);
+        startDate.setDate(startDate.getDate()+1)
         let endDate = new Date(endDates)
+        endDate.setDate(endDate.getDate()+1)
         return new Promise((resolve, reject) => {
                 let arr = [];
                 for(let day = startDate; startDate <= endDate; day.setDate(day.getDate() + 1)) {
@@ -593,8 +595,9 @@ router.post('/addShowtimes', async (req, res) => {
                                 
                         }
                 }
+                res.status(200).json('Showtime have been successfully added');
         } else {
-                res.status(400).json(false)
+                res.status(400).json('error: Showtime collision present');
         }
 })
 
