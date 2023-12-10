@@ -22,7 +22,7 @@ export const useGetShowtime = () =>{
         else if(response.ok){
             setIsLoading(false)
         }
-        return json;
+        return json.data;
     }
 
     return {getShowtime, isLoading, error}

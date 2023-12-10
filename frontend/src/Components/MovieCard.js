@@ -13,7 +13,9 @@ import { useGetShowtime } from './hooks/useGetShowtime';
   
 
 function MovieCard({title, poster, trailer}) {
-const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [selecter, setSelecter] = useState();
+  const [shows, setShows] = useState();
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
@@ -87,8 +89,10 @@ const [total, setTotal] = useState(0);
 
   const {getShowtime} = useGetShowtime();
   const handleSelectDate = async(e) => {
-    const shows = await getShowtime(title, date);
+    //const s = await getShowtime(title, date);
+    setShows(await getShowtime(title, date));
     console.log(shows);
+    setSelecter(1);
   }
 
   return (
@@ -144,13 +148,24 @@ const [total, setTotal] = useState(0);
         </Modal.Header>
         <Modal.Body textAlign={"center"}>
             <Form>
-            <Form.Group className="mb-3">
-                <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value)} value={date}/>
-            </Form.Group>
-            {date ?
+                <Row>
+                    <Col xs={8}>
+                        <Form.Group className="mb-3">
+                            <Form.Label >Select Date:</Form.Label>
+                            <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value)} value={date}/>
+                        </Form.Group>
+                    </Col>
+                    <Col style={{textAlign:'center'}}>
+                        <Button style={{marginTop:'2rem'}} onClick={handleSelectDate}>Confirm Date</Button>
+                    </Col>
+                </Row>
+            
+            {selecter ?
             <>
-            <Button onClick={handleSelectDate}>Confirm Day</Button>
+            {console.log(shows)}
+            {shows?.map((s) => (
+                <p>{s}</p>            
+            ))} 
             
             </>
             :
