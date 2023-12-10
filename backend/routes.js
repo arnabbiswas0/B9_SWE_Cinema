@@ -100,7 +100,7 @@ function checkShowtimeCollision(showtimes) {
         //build sql Stirng using loops then pass to checkShowtimeColissionHelper method
         //if returned result.length > 0 return true (there is a collision)
         //else return false 
-
+        
         //use loop in the addshowTime route (test before using) 
 }
 
@@ -557,9 +557,13 @@ router.post('/addShowtimes', async (req, res) => {
                         + "\'" + req.body.movie + "\', "
                         + "\'" + room + "\'"
                         +")"
-                        if (checkShowtimeCollision(sql)) {
-                                res.status(400).json(false);
-                        }
+                        
+                        await checkShowtimeCollisionHelper(sql).then((data) => {
+                                if(data.length > 0) {
+                                        res.status(400).json(false);
+                                }
+                        });
+                        
                 }
         }
 
