@@ -163,8 +163,8 @@ function MovieCard({title, poster, trailer}) {
             {selecter ?
             <>
             {console.log(shows)}
-            {shows?.map((s) => (
-                <p>{s}</p>            
+            {shows.map((s) => (
+                <Button style={{margin:'.25rem'}}>{s.time}</Button>            
             ))} 
             
             </>
