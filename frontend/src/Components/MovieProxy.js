@@ -3,7 +3,7 @@ import axios from 'axios';
 export default class MovieProxy {
     // validate YouTube URL format before extracting ID
     validateYouTubeVideoUrl(url) {
-        console.log(url);
+        //console.log(url);
         //var regExp = /^.*(youtu.be\/|youtube.com\/v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;  
         var regExp = /^.*(youtu.be\/|youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/;
         var match = url.match(regExp);
@@ -18,7 +18,6 @@ export default class MovieProxy {
         // extract end_of_token: IF (ends with "&") -> additional info provided ELSE -> ID is at end of link
         const index_end = trailer.indexOf("&") > -1 ? trailer.indexOf("&") : trailer.length;
         //console.log(trailer);
-        console.log(index_start+1, index_end);
         return trailer.substring(index_start+1, index_end);
     }
     // call YouTube API to valid YouTube video via it's ID
@@ -43,7 +42,6 @@ export default class MovieProxy {
        // console.log("(schedule) date_time: " + date_time);
         const response = await axios.get(`http://localhost:8000/api/movies/${date_time}`);
         // return size of response ?
-        console.log("retrieved data: " + "\ndata size: " + response.data.length);
         console.log(response);
         if (response.data.length > 0) {
             return 'invalidSchedule'
@@ -81,7 +79,7 @@ export default class MovieProxy {
        }
        */
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
-        console.log("after validating youtube video");
+        console.log("Youtube link validated");
         const response = await axios.post('http://localhost:8000/api/movies', movieData);
         console.log(response.data);
         return response.data;
