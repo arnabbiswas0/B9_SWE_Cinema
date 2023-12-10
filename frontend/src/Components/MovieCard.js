@@ -16,6 +16,7 @@ function MovieCard({title, poster, trailer}) {
   const [total, setTotal] = useState(0);
   const [selecter, setSelecter] = useState();
   const [shows, setShows] = useState();
+  const [showtimeID, setShowtimeID] = useState();
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
@@ -28,9 +29,15 @@ function MovieCard({title, poster, trailer}) {
   const [room, setRoom] = useState(0);
   const [validated, setValidated] = useState(false);
   const [showtimes, setShowtimes] = useState([]);
+  const [seats, setSeats] = useState([ "A1","A2","A3","A4","A5",
+  "B1","B2","B3","B4","B5",
+  "C1","C2","C3","C4","C5",
+  "D1","D2","D3","D4","D5",
+  "E1","E2","E3","E4","E5",
+  "F1","F2","F3","F4","F5",]);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
-  const handleCloseBookMovie = () => setBookMovie(false);
+  const handleCloseBookMovie = () => {setBookMovie(false)};
   const handleShowBookMovie = () => setBookMovie(true);
   const handleAgeClick = () => setAgeList(... ageList,{age: ""});
 
@@ -94,6 +101,7 @@ function MovieCard({title, poster, trailer}) {
     console.log(shows);
     setSelecter(1);
   }
+
 
   return (
     <> 
@@ -164,8 +172,25 @@ function MovieCard({title, poster, trailer}) {
             <>
             {console.log(shows)}
             {shows.map((s) => (
-                <Button style={{margin:'.25rem'}}>{s.time}</Button>            
+                <>
+                    <Button style={{margin:'.25rem'}} onClick={(e) => setShowtimeID(s.showtimeID)}>{s.time}</Button>  
+                </>      
             ))} 
+            {showtimeID ?
+            <>
+                <Row sm={1} md={2} lg={3} xl={4} className="g-4">
+                    {seats.map((seat) => (
+                        <>
+                        <Col>
+                            <Button>{seat}</Button> 
+                        </Col>
+                        </>  
+                    ))} 
+                </Row>
+            </>
+            :     
+            null
+            }
             
             </>
             :
