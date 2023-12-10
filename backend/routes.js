@@ -514,7 +514,7 @@ router.post('/getShowtimes', async (req,res) => {
 })
 
 //booking table needs userId, seatId, showtimeid
-router.get('/getUnreservedSeats', async (req, res) => {
+router.post('/getUnreservedSeats', async (req, res) => {
         let roomID = '';
         await getShowtime(req.body.showtimeID).then((data) => {
                 if(data.length > 0) {
@@ -527,6 +527,7 @@ router.get('/getUnreservedSeats', async (req, res) => {
                 sql,
                 function(err, results, fields) {
                   //console.log(results);
+                  console.log(results);
                   res.send(results);
                 }
         );
@@ -541,6 +542,7 @@ router.post('/addShowtimes', async (req, res) => {
         console.log(typeof(startDate))
         console.log(req.body.times)
         console.log('movieNAme: ' + req.body.movie)
+        let collisionPresent = false;
         let dates = [];
         await buildDateArray(startDate, endDate).then((data) => {
                 if(data.length > 0) {
@@ -553,16 +555,12 @@ router.post('/addShowtimes', async (req, res) => {
         //checking for collisions
         for(let day of dates) {
                 for(let time of times) {
-                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-                        + "\'" + day + "\', "
-                        + "\'" + time + "\', "
-                        + "\'" + req.body.movie + "\', "
-                        + "\'" + room + "\'"
-                        +")"
+                        let sql = "SELECT * FROM showtime WHERE date = \'" + day + "\' AND time = \'" + time + "\' AND roomID = \'" + room + "\'"
                         
                         await checkShowtimeCollisionHelper(sql).then((data) => {
                                 if(data.length > 0) {
-                                        res.status(400).json(false);
+                                        //res.status(400).json(false);
+                                        collisionPresent = true;
                                 }
                         });
                         
@@ -570,26 +568,30 @@ router.post('/addShowtimes', async (req, res) => {
         }
 
         //acutally adding to DB
-        for(let day of dates) {
-                for(let time of times) {
-                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-                        + "\'" + day + "\', "
-                        + "\'" + time + "\', "
-                        + "\'" + req.body.movie + "\', "
-                        + "\'" + room + "\'"
-                        +")"
-                        
-                        connection.query(
-                                sql,
-                                function(err, results, fields) {
-                                  //console.log(results);
-                                  console.log(results);
-                                }
-                        );
-                        
-                       console.log(sql);
-                        
+        if(!collisionPresent) {
+                for(let day of dates) {
+                        for(let time of times) {
+                                let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+                                + "\'" + day + "\', "
+                                + "\'" + time + "\', "
+                                + "\'" + req.body.movie + "\', "
+                                + "\'" + room + "\'"
+                                +")"
+                                
+                                connection.query(
+                                        sql,
+                                        function(err, results, fields) {
+                                        //console.log(results);
+                                        console.log(results);
+                                        }
+                                );
+                                
+                        console.log(sql);
+                                
+                        }
                 }
+        } else {
+                res.status(400).json(false)
         }
 })
 
