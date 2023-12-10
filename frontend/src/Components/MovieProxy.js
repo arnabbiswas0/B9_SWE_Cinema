@@ -4,13 +4,16 @@ export default class MovieProxy {
     // validate YouTube URL format before extracting ID
     validateYouTubeVideoUrl(url) {
         //console.log(url);
-        //var regExp = /^.*(youtu.be\/|youtube.com\/v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;  
-        var regExp = /^.*(youtu.be\/|youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/;
+        //var regExp = /^.*(youtu.be\/|youtube.com\/v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        // var regExp = /^.*(youtu.be\/|youtube.com\/|www\.youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/; 
+        // var regExp = /^.*(youtu.be\/|v=|u\/\w\/|embed\/|watch\?v=|\?v=|&v=)([^#&?]*).*/;
+        var regExp = /^.*(www\.youtube.com\/watch\?v=|youtube.com\/watch\?v=)([^#&?]*).*/;
+        //var regExp = /^.*(youtu.be\/|youtube.com\/|www\.youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/;
         var match = url.match(regExp);
-        //console.log(match);
+        console.log(match);
         //console.log(match && match[3].length === 11);     // also was [1].length
         //console.log((url !== "") && match && match[3].length === 11)
-        return ((url !== "") && match && match[3].length === 11); 
+        return ((url !== "") && match && match[2].length === 11); 
     }
     // extract the ID from the YouTube URL
     async extractVideoId(trailer) {
