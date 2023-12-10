@@ -499,7 +499,7 @@ router.post('/changePassword', async (req, res) => {
         );
 })
 
-router.get('/getShowtimes', async (req,res) => {
+router.post('/getShowtimes', async (req,res) => {
         let date = new Date(req.body.date);
         date = date.toDateString();
                 let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + date + '\''

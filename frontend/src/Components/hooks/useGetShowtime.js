@@ -4,12 +4,12 @@ export const useGetShowtime = () =>{
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
 
-    const addShowtime = async (title, date) => {
+    const getShowtime = async (title, date) => {
         setIsLoading(true)
         setError(null)
 
         const response = await fetch('http://localhost:8000/api/getShowtimes', {
-            method: 'GET',
+            method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({title, date})
         })
