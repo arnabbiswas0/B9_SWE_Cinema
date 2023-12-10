@@ -11,8 +11,6 @@ class Movie {
         this.reviews = movieData.reviews;
         this.poster = movieData.poster;
         this.trailer = movieData.trailer;
-        this.date_time = movieData.date_time;
-        this.room = movieData.room;
     }
 }
 module.exports = Movie;

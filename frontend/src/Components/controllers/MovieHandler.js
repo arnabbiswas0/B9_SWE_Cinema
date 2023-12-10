@@ -7,10 +7,10 @@ export default class MovieHandler {
         const availability = await movieProxy.createNewMovie(movieData); 
         if (availability === "unavailable") {//---------------------------debugging purposes
             console.log("unavailable from hanlder class!")
-        } else if (availability === 'invalidSchedule') {
+        } /*else if (availability === 'invalidSchedule') {
             console.log("(MovieHandler) movie schedule invalid!");
             alert("Cannot have two movies with same date and time!");
-        }
+        }*/
         return availability;
     }
 }
