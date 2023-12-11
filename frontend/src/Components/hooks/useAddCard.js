@@ -23,7 +23,26 @@ export const useAddCard = () =>{
             setIsLoading(false)
         }
     }
+    const deleteCard = async (email, cardNumber) => {
+        setIsLoading(true)
+        setError(null)
 
-    return {addCard, isLoading, error}
+        const response = await fetch('http://localhost:8000/api/deleteCard', {
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({email, cardNumber})
+        })
+        const json = await response.json(); 
+        console.log(response);
+        if(!(response.status == 200)){
+            setIsLoading(false)
+            setError(json.error)
+        }
+        else if(response.ok){
+            setIsLoading(false)
+        }
+    }
+
+    return {addCard, deleteCard, isLoading, error}
 
 }

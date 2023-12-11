@@ -52,10 +52,10 @@ function EditProfile() {
     axios.get('http://localhost:8000/api/movies')
          .then((res) => {
             setData(res.data);
-            console.log(res.data);
+           
          })
          .catch((err) =>{
-            console.log("Err");
+           
          })
   }, []);
 
@@ -63,7 +63,6 @@ function EditProfile() {
     const groupIndex = Math.floor(index / 3);
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(cur);
-    console.log(acc);
     return acc;
   };
 
@@ -81,32 +80,34 @@ function EditProfile() {
         })
           .then((res) => {
               setAccount(res.data[0]);
-              console.log(res.data[0]);
-              console.log(userData.email);
            })
            .catch((err) =>{
               console.log("Err");
            })
     }, [userData.email]);
     useEffect(()=> {
-      axios.post('http://localhost:8000/api/getCard', {
+      axios.post('http://localhost:8000/api/getPaymentCards', {
         email: userData.email
         })
           .then((res) => {
-              setAccount(res.data[0]);
-              console.log(res.data[0]);
-              console.log(userData.email);
+              setCredits(res.data);
+              console.log(res.data);
+              console.log(credits);
            })
            .catch((err) =>{
               console.log("Err");
            })
     }, [userData.email]);
 
-    const{addCard} = useAddCard();
+    const{addCard, deleteCard} = useAddCard();
     const handleAddCard = async(e) => {
       await addCard(userData.email, cardNumber, type, cvv, exp, nameOnCard);
       setAddingCard(false);
     }
+    const handleDeleteCard = async(e) => {
+      await deleteCard(userData.email, cardNumber);
+    }
+
 
 
     return (
@@ -162,20 +163,21 @@ function EditProfile() {
                     <Button onClick={handleAddCard}>Add</Button>
                   </Form.Group>
                   :
-                  <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
+                  <>
+                  {credits.slice(0,3).map((credit) => 
+                    <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
+                    <Card.Text>{credit.nameOnCard} &nbsp;&nbsp;&nbsp; {credit.cardNumber}</Card.Text>
+                    {edit &&
+                    <Button size="sm" onClick={handleDeleteCard} value={credit.cardNumber}>Delete</Button>
+                    }
                   </ListGroup.Item>
+                    )}
+                  </>
                   }
-                  
-                  <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
-                    <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
-                  </ListGroup.Item>
                   {edit &&
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
                     <Button size="lg" onClick={(e) => {setAddingCard(true)}}>Add Credit Card</Button>
-                    <Button size="lg">Delete Credit Card</Button>
                   </ListGroup.Item>
                   }
                 </ListGroup>

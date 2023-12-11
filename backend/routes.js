@@ -840,7 +840,7 @@ router.post('/getPaymentCards', async(req, res) => {
                 sql,
                 function(err, results, fields) {
                   //console.log(results);
-                  //console.log(results);
+                  console.log(results);
                   res.send(results);
                 }
         );
