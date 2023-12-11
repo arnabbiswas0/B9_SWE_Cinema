@@ -168,6 +168,32 @@ const sendEmail = (email, message) => {
               
 }
 
+const sendActivationEmail = (email, message) => {
+        var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'softwareengineeruga@gmail.com',
+                  pass: 'piambnyooengfjqy'
+                }
+              });
+              
+              var mailOptions = {
+                from: 'softwareengineeruga@gmail.com',
+                to: email,
+                subject: 'Cinema Account',
+                html: message
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
+              
+}
+
 
 
 // Get all posts
@@ -606,6 +632,25 @@ router.post('/addShowtimes', async (req, res) => {
 router.post('/bookTickets', async (req, res) => {
         //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
         //needs: user email, seat Id, showtime id
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        let sql = "INSERT INTO booking(userID, seatID, showtimeID) VALUES("
+        + id + ", "
+        + req.body.seatID + ", "
+        + req.body.showtimeID + ")"
+
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
 
 })
 
@@ -632,6 +677,45 @@ router.post('/fillSeatsAndRooms', async (req, res) => {
                 }
         }
         res.sendStatus(200);
+})
+
+router.post('/addPromotion', async (req, res) => {
+        let promotionMessage = req.body.promotion;
+        let sql = 'SELECT * FROM registereduser WHERE isSubscribed = \'true\''
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                  for(let result of results) {
+                        sendEmail(result.email, promotionMessage)
+                  }
+                }
+        );
+}) 
+
+router.post('/subscribeToPromotion', async(req, res) => {
+
+})
+
+router.post('/activateUser', async (req, res) => {
+        let user = req.query.id;
+        console.log(user);
+        console.log("email body")
+        //console.log(req);
+})
+
+router.post('/sendActivationLink', async(req, res) => {
+        let email = 'softwareengineeruga@gmail.com';
+        //let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
+        let actvationLink = '<h3>Click below to activate account: </h3><br>' 
+        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id=24321">'
+         + '<input type="hidden" name="email" value=' + email + '>'
+          +'<button type="submit" name="email" value='+ email +  'class="link-button">'
+           + 'Activate Account'
+          +'</button>'
+        +'</form>'
+        sendActivationEmail(email, actvationLink);
 })
 
 
