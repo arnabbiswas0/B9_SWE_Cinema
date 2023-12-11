@@ -725,13 +725,24 @@ router.post('/bookTickets', async (req, res) => {
         + seatId + ", "
         + req.body.showtimeID + ")"
 
-        connection.query(
-                sql,
-                function(err, results, fields) {
-                  //console.log(results);
-                  console.log(results);
+        let canBook = true;
+        await getCustomerCreditCard(id).then((data) => {
+                if(data.length < 1) {
+                        canBook = false;
                 }
-        );
+        })
+        if(canBook) {
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                        //console.log(results);
+                        console.log(results);
+                        res.sendStatus(200);
+                        }
+                );
+        } else {
+                res.sendStatus(400);
+        }
 
 })
 
