@@ -385,21 +385,25 @@ router.post("/signup", async(req, res) => {
                         
                         connection.query(
                                 sql,
-                                function(err, results) {
+                                async function(err, results) {
                                         if(err) throw err;
                                         console.log("user successfully added");
                                         console.log("new user id: " + results.insertId);
-                                        sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
-                                        connection.query(
-                                                sql,
-                                                async function(err, results, fields) {
-                                                        console.log("payment profile made for user (id is->): " + results.insertId)
-                                                        let message = "Your account has been successfully created";
-                                                        const success = await sendEmail(req.body.email, message);
-                                                        const success2 = await beginAccountActivation(req.body.email);
-                                                        res.status(200).json(req.body.email);
-                                                }
-                                        );
+                                        let message = "Your account has been successfully created";
+                                        const success = await sendEmail(req.body.email, message);
+                                        const success2 = await beginAccountActivation(req.body.email);
+                                         res.status(200).json(req.body.email);
+                                        // sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
+                                        // connection.query(
+                                        //         sql,
+                                        //         async function(err, results, fields) {
+                                        //                 console.log("payment profile made for user (id is->): " + results.insertId)
+                                        //                 let message = "Your account has been successfully created";
+                                        //                 const success = await sendEmail(req.body.email, message);
+                                        //                 const success2 = await beginAccountActivation(req.body.email);
+                                        //                 res.status(200).json(req.body.email);
+                                        //         }
+                                        // );
 
                                 }
                                 );
