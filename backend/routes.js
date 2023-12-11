@@ -254,7 +254,7 @@ router.post("/getProfile", async(req, res) => {
                 }
         });
 
-        sql = "SELECT * FROM registereduser JOIN paymentcard ON registereduser.registeredUserID = paymentcard.userId WHERE paymentcard.userId = " + id + ""
+        sql = "SELECT * FROM registereduser WHERE registeredUserID = " + id + ""
         connection.query(
                 sql,
                 function(err, results, fields) {
@@ -514,6 +514,34 @@ router.post("/updateProfile", async (req, res) => {
         );
         */
 
+})
+
+router.post("/addCard", async (req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        console.log(req.body);
+        console.log(id);
+        let sql = "INSERT INTO paymentcard(cardNumber, type, nameOnCard, expDate, userId, cvv) VALUES ("
+                                + "\'" + req.body.cardNumber + "\', "
+                                + "\'" + req.body.type + "\', "
+                                + "\'" + req.body.nameOnCard + "\', "
+                                + "\'" + req.body.expDate + "\', "
+                                + "\'" + id + "\',"
+                                + "\'" + req.body.cvv + "\'"
+                                +")"
+                                console.log(sql);
+                                connection.query(
+                                        sql,
+                                        function(err, results, fields) {
+                                        //console.log(results);
+                                        console.log(results);
+                                        res.send(results);
+                                        }
+                                );
 })
 
 router.post('/changePassword', async (req, res) => {

@@ -14,7 +14,7 @@ import axios from "axios";
 
 function MovieCard({title, poster, trailer}) {
   const [total, setTotal] = useState(0);
-  const [grab, setGrab] = useState(0)
+  const [seatNum, setSeatNum] = useState(0)
   const [selecter, setSelecter] = useState();
   const [shows, setShows] = useState();
   const [showtimeID, setShowtimeID] = useState();
@@ -127,7 +127,9 @@ function MovieCard({title, poster, trailer}) {
   const handleBookSeat = async(e) => {
     e.preventDefault();
     const seatN = e.target.value;
+    setSeatNum(seatNum+1);
     await bookTicket(userData.email, seatN, showtimeID);
+    
   }
 
   return (
@@ -223,6 +225,15 @@ function MovieCard({title, poster, trailer}) {
                         </>  
                     ))} 
                 </Row>
+                {(seatNum !== 0) &&
+                    <Row>
+                        <h3>Order Details:</h3>
+                        <h5>{seatNum}X {title}: ${seatNum*10}</h5>
+                        <h5>Which card would you like to use?</h5>
+                    </Row>
+                }
+                
+
             </>
             :     
             null
@@ -262,24 +273,6 @@ function MovieCard({title, poster, trailer}) {
         </Modal.Header>
         <Modal.Body>
               Ticket Details: <br></br>
-              <Form.Group>
-                    <Form.Control as="select" onChange={(e) => setTotal(e.target.value * 10)} required>
-                        <option value="">Select Quantity</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </Form.Control>
-                    <Form.Control.Feedback type="invalid">
-                        You must select the quantity of tickets.
-                    </Form.Control.Feedback>
-                </Form.Group>
               &emsp; {title}: $10
               <br></br>
               &emsp; total: ${total}
