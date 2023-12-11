@@ -606,6 +606,25 @@ router.post('/addShowtimes', async (req, res) => {
 router.post('/bookTickets', async (req, res) => {
         //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
         //needs: user email, seat Id, showtime id
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        let sql = "INSERT INTO booking(userID, seatID, showtimeID) VALUES("
+        + id + ", "
+        + req.body.seatID + ", "
+        + req.body.showtimeID + ")"
+        
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
 
 })
 
@@ -653,13 +672,14 @@ router.post('/subscribeToPromotion', async(req, res) => {
 
 })
 
-router.post('/activateUser', async (req, res) => {
-        let emai
+router.get('/activateUser', async (req, res) => {
+        let user = req.body.email;
+        console.log(user);
 })
 
 router.post('/sendActivationLink', async(req, res) => {
         let email = 'softwareengineeruga@gmail.com';
-        let actvationLink = 'Click <a href="https://www.google.com/">here</a> to activate account'
+        let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
         sendEmail(email, actvationLink);
 })
 
