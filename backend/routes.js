@@ -655,7 +655,7 @@ router.post('/bookTickets', async (req, res) => {
 })
 
 router.post('/fillSeatsAndRooms', async (req, res) => {
-        let rows = "ABCDF"
+        let rows = "ABCDEF"
         for(let room = 1; room < 4; room++){
                 for(let i = 0; i < rows.length; i++) {
                     for(let j = 1; j < 6; j++) {
@@ -688,13 +688,47 @@ router.post('/addPromotion', async (req, res) => {
                   //console.log(results);
                   console.log(results);
                   for(let result of results) {
-                        sendEmail(result.email, promotionMessage)
+                        if(result.isSubscribed) {
+                                sendEmail(result.email, promotionMessage);
+                        }
                   }
                 }
         );
 }) 
 
 router.post('/subscribeToPromotion', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "UPDATE registereduser SET isSubscribed = \'true\' WHERE registeredUserID = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
+
+})
+
+router.post('/unsubscribeToPromotion', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "UPDATE registereduser SET isSubscribed = \'false\' WHERE registeredUserID = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
 
 })
 
@@ -702,20 +736,38 @@ router.post('/activateUser', async (req, res) => {
         let user = req.query.id;
         console.log(user);
         console.log("email body")
+        let sql = "UPDATE registereduser SET statusId = 2 WHERE registeredUserID = " + user;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
+        res.redirect("http://localhost:3000/HomePage")
         //console.log(req);
 })
 
 router.post('/sendActivationLink', async(req, res) => {
-        let email = 'softwareengineeruga@gmail.com';
+        //let email = 'softwareengineeruga@gmail.com';
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
         //let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
+        let link = 'http://localhost:8000/api/activateUser?id=' + id;
         let actvationLink = '<h3>Click below to activate account: </h3><br>' 
-        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id=24321">'
-         + '<input type="hidden" name="email" value=' + email + '>'
-          +'<button type="submit" name="email" value='+ email +  'class="link-button">'
+        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id='
+        + id 
+        +"\">"
+         + '<input type="hidden" name="email" value=' + req.body.email + '>'
+          +'<button type="submit" name="email" value='+ req.body.email +  'class="link-button">'
            + 'Activate Account'
           +'</button>'
         +'</form>'
-        sendActivationEmail(email, actvationLink);
+        sendActivationEmail(req.body.email, actvationLink);
 })
 
 
