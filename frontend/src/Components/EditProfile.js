@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { Container, Form,} from 'react-bootstrap';
 import { useEditProfile } from './hooks/useEditProfile';
-import { useGetProfile } from './hooks/useGetProfile';
+import { useAddCard } from './hooks/useAddCard';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
@@ -28,10 +28,14 @@ function EditProfile() {
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
   const [state, setState] = useState('');
-  const [card, setCard] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [type, setType] = useState('');
+  const [nameOnCard, setNameOnCard] = useState('');
   const [exp, setExp] = useState('');
   const [cvv, setCVV] = useState('');
   const [edit, setEdit] = useState(false);
+  const [addingCard, setAddingCard] = useState(false);
+  const [credits, setCredits] = useState([]);
   const handleEdit = () => {
     if(edit) {
       setEdit(false);
@@ -84,6 +88,25 @@ function EditProfile() {
               console.log("Err");
            })
     }, [userData.email]);
+    useEffect(()=> {
+      axios.post('http://localhost:8000/api/getCard', {
+        email: userData.email
+        })
+          .then((res) => {
+              setAccount(res.data[0]);
+              console.log(res.data[0]);
+              console.log(userData.email);
+           })
+           .catch((err) =>{
+              console.log("Err");
+           })
+    }, [userData.email]);
+
+    const{addCard} = useAddCard();
+    const handleAddCard = async(e) => {
+      await addCard(userData.email, cardNumber, type, cvv, exp, nameOnCard);
+      setAddingCard(false);
+    }
 
 
     return (
@@ -126,17 +149,32 @@ function EditProfile() {
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
                     <h3>Credit Cards: </h3>
                   </ListGroup.Item>
+                  {addingCard ? 
+                  <Form.Group>
+                    <Form.Label className='light-text'>Card Number:</Form.Label>
+                    <Form.Control onChange={(e) => setCardNumber(e.target.value)} value={cardNumber}/>
+                    <Form.Label className='light-text'>Name On Card:</Form.Label>
+                    <Form.Control onChange={(e) => setNameOnCard(e.target.value)} value={nameOnCard}/>
+                    <Form.Label className='light-text'>Expiration Date:</Form.Label>
+                    <Form.Control onChange={(e) => setExp(e.target.value)} value={exp}/>
+                    <Form.Label className='light-text'>CVV:</Form.Label>
+                    <Form.Control onChange={(e) => setCVV(e.target.value)} value={cvv}/>
+                    <Button onClick={handleAddCard}>Add</Button>
+                  </Form.Group>
+                  :
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
                     <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
                   </ListGroup.Item>
+                  }
+                  
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
                     <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
                   </ListGroup.Item>
                   {edit &&
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
-                    <Button size="lg">Add Credit Card</Button>
+                    <Button size="lg" onClick={(e) => {setAddingCard(true)}}>Add Credit Card</Button>
                     <Button size="lg">Delete Credit Card</Button>
                   </ListGroup.Item>
                   }
