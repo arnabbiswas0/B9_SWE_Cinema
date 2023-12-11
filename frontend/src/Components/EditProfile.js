@@ -103,9 +103,13 @@ function EditProfile() {
     const handleAddCard = async(e) => {
       await addCard(userData.email, cardNumber, type, cvv, exp, nameOnCard);
       setAddingCard(false);
+      window.location.reload(false);
     }
     const handleDeleteCard = async(e) => {
-      await deleteCard(userData.email, cardNumber);
+      const c = e.target.value
+      console.log(c);
+      await deleteCard(userData.email, c);
+      window.location.reload(false);
     }
 
 
