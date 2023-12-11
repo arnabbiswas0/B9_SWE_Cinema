@@ -904,6 +904,18 @@ router.post('/deletePaymentCard', async(req, res) => {
         );
 })
 
+router,post('/sendBookingConfirmation', async(req, res) => {
+        // let id = '';
+        // await getId(req.body.email).then((data) => {
+        //         if(data.length > 0) {
+        //                 id = data[0].registeredUserID
+        //         }
+        // });
+
+        let message = "Booking for " + req.body.movieName + " has been processed";
+        sendEmail(req.body.email, message);
+})
+
 
 
 module.exports = router
