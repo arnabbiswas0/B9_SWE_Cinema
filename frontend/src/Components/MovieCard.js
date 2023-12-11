@@ -44,13 +44,16 @@ function MovieCard({title, poster, trailer}) {
   const handleCloseBookMovie = () => {setBookMovie(false)};
   const handleShowBookMovie = () => setBookMovie(true);
   const handleAgeClick = () => setAgeList(... ageList,{age: ""});
-
-  const handleShowCheckout = () => setCheckout(true);
   const handleCloseCheckout = () => setCheckout(false);
   const handleAddShowTime = () => setAddShowTime(true);
   const handleCloseAddShowTime = () => setAddShowTime(false);
   const user = localStorage.getItem('user');
-  const userData = JSON.parse(user);
+  let userData;
+  if(user !== null) {
+    userData = JSON.parse(user);
+  } else {
+    userData = {email: null};
+  }
   const handleTimes1 = () => {
     if (times.includes("9:00 AM")){
         setTimes( times.filter(item => item !== "9:00 AM"));
@@ -143,10 +146,21 @@ function MovieCard({title, poster, trailer}) {
     e.preventDefault();
     const seatN = e.target.value;
     setSeatNum(seatNum+1);
-    await bookTicket(userData.email, seatN, showtimeID);
-    
+    await bookTicket(userData.email, seatN, showtimeID);   
   }
-
+  const handleShowCheckout = async(e) => {
+    setCheckout(true);
+    axios.post('http://localhost:8000/api/sendBookingConfirmation', {
+      email: userData.email,  
+      movieName: title
+      })
+        .then((res) => {
+            console.log(res.data);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+  }
   return (
     <> 
     <Card 
