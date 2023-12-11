@@ -204,7 +204,7 @@ function MovieCard({title, poster, trailer}) {
                         {console.log(res_Arr)}
                         {res_Arr.includes(seat) ?
                             <Col>
-                                <Button >{seat}</Button> 
+                                <Button onClick={''}>{seat}</Button> 
                             </Col>
                         :
                             <Col>
