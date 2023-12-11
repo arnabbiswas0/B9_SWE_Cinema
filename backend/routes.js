@@ -150,6 +150,28 @@ function getCustomerCreditCard(userId) {
         })
 }
 
+async function beginAccountActivation(email) {
+        //let email = 'softwareengineeruga@gmail.com';
+        let id = '';
+        await getId(email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        //let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
+        let link = 'http://localhost:8000/api/activateUser?id=' + id;
+        let actvationLink = '<h3>Click below to activate account: </h3><br>' 
+        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id='
+        + id 
+        +"\">"
+         + '<input type="hidden" name="email" value=' + email + '>'
+          +'<button type="submit" name="email" value='+ email +  'class="link-button">'
+           + 'Activate Account'
+          +'</button>'
+        +'</form>'
+        sendActivationEmail(email, actvationLink);
+}
+
 
 /**
  * 
@@ -374,6 +396,7 @@ router.post("/signup", async(req, res) => {
                                                         console.log("payment profile made for user (id is->): " + results.insertId)
                                                         let message = "Your account has been successfully created";
                                                         const success = await sendEmail(req.body.email, message);
+                                                        const success2 = await beginAccountActivation(req.body.email);
                                                         res.status(200).json(req.body.email);
                                                 }
                                         );
@@ -845,6 +868,25 @@ router.post('/getPaymentCards', async(req, res) => {
                 }
         );
 
+})
+
+router.post('/deletePaymentCard', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        let sql = "DELETE FROM paymentcard WHERE userId = " + id + " AND cardNumber = '" + req.body.cardNumber + "'"
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
 })
 
 
