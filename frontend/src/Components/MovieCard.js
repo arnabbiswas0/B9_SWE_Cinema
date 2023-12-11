@@ -38,6 +38,7 @@ function MovieCard({title, poster, trailer}) {
   "E1","E2","E3","E4","E5",
   "F1","F2","F3","F4","F5",]);
   const[unreservedSeats, setUnreservedSeats] = useState([]);
+  const [credits, setCredits] = useState([]);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => {setBookMovie(false)};
@@ -48,6 +49,8 @@ function MovieCard({title, poster, trailer}) {
   const handleCloseCheckout = () => setCheckout(false);
   const handleAddShowTime = () => setAddShowTime(true);
   const handleCloseAddShowTime = () => setAddShowTime(false);
+  const user = localStorage.getItem('user');
+  const userData = JSON.parse(user);
   const handleTimes1 = () => {
     if (times.includes("9:00 AM")){
         setTimes( times.filter(item => item !== "9:00 AM"));
@@ -120,9 +123,21 @@ function MovieCard({title, poster, trailer}) {
         }; 
         setRes_Arr(res_array);
   },[res_array]);
+  useEffect(()=> {
+    axios.post('http://localhost:8000/api/getPaymentCards', {
+      email: userData.email
+      })
+        .then((res) => {
+            setCredits(res.data);
+            console.log(res.data);
+            console.log(credits);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+  }, [userData.email]);
 
-  const user = localStorage.getItem('user');
-  const userData = JSON.parse(user);
+ 
   const {bookTicket} = useBookTicket();
   const handleBookSeat = async(e) => {
     e.preventDefault();
@@ -143,7 +158,16 @@ function MovieCard({title, poster, trailer}) {
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>View trailer</Button>
-        <Button variant="primary" onClick={handleShowBookMovie}>Book Movie</Button>
+        {((localStorage.getItem('user'))!= null) &&
+            <>
+            {credits.length !== 0 ?
+                <Button variant="primary" onClick={handleShowBookMovie}>Book Movie</Button>
+            :
+                <Button onClick={(e)=> alert("You do not have any payment cards on file. Please add a card on the edit profile page.")}>Book Movie</Button>
+            }
+            </>
+            
+        }
         {(localStorage.getItem('user'))!= null && (JSON.parse(localStorage.getItem('user')).email === "cremley29@gmail.com") &&
             <Button variant="primary" onClick={handleAddShowTime}>Add ShowTime</Button>
         }
@@ -230,6 +254,9 @@ function MovieCard({title, poster, trailer}) {
                         <h3>Order Details:</h3>
                         <h5>{seatNum}X {title}: ${seatNum*10}</h5>
                         <h5>Which card would you like to use?</h5>
+                        {credits.slice(0,3).map((credit) => 
+                            <Button style={{margin:"0.25rem"}} onClick={handleShowCheckout}>{credit.nameOnCard} &nbsp;&nbsp;&nbsp; {credit.cardNumber}</Button>
+                    )}
                     </Row>
                 }
                 
@@ -250,9 +277,6 @@ function MovieCard({title, poster, trailer}) {
             </Form.Group>
             ))}
             </Form>
-            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleShowCheckout}>
-                Checkout
-            </Button>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseBookMovie}>
@@ -269,73 +293,12 @@ function MovieCard({title, poster, trailer}) {
         backdrop="static"
     >
         <Modal.Header closeButton>
-            <Modal.Title>Checkout Summary:</Modal.Title>
+            <Modal.Title>Checkout:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
               Ticket Details: <br></br>
-              &emsp; {title}: $10
-              <br></br>
-              &emsp; total: ${total}
-
-            <div>
-            <form className="form-horizontal">
-            <fieldset>
-            {/* Form Name */}
-            <legend>Enter Credit/Debit Details: </legend>
-            {/* Text input*/}
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="Name on Card">
-                Name on Card
-              </label>
-            <div className="col-md-4">
-            <input
-              id="Name on Card"
-              name="Name on Card"
-              type="text"
-              placeholder=""
-              className="form-control input-md"
-              required=""
-            />
-            </div>
-            </div>
-            {/* Text input*/}
-            <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="textinput">
-              Card Number
-            </label>
-            <div className="col-md-4">
-             <input
-              id="textinput"
-              name="textinput"
-              type="text"
-              placeholder=""
-              className="form-control input-md"
-              required=""
-              />
-            </div>
-            </div>
-          {/* Password input*/}
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="CVV">
-                CVV
-              </label>
-            <div className="col-md-4">
-              <input
-                id="CVV"
-                name="CVV"
-                type="password"
-                placeholder=""
-                className="form-control input-md"
-              />
-            </div>
-            </div>
-            </fieldset>
-            </form>
-            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleCloseCheckout}>
-                Submit
-            </Button>
-
-            </div>
+              Thank you for buying tickets for {title}! <br></br>
+              An email invoice will be sent to you shortly!
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseCheckout}>

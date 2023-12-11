@@ -24,10 +24,8 @@ export const useAddCard = () =>{
         }
     }
     const deleteCard = async (email, cardNumber) => {
-        setIsLoading(true)
-        setError(null)
 
-        const response = await fetch('http://localhost:8000/api/deleteCard', {
+        const response = await fetch('http://localhost:8000/api/deletePaymentCard', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify({email, cardNumber})
