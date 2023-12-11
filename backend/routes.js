@@ -904,7 +904,7 @@ router.post('/deletePaymentCard', async(req, res) => {
         );
 })
 
-router,post('/sendBookingConfirmation', async(req, res) => {
+router.post('/sendBookingConfirmation', async(req, res) => {
         // let id = '';
         // await getId(req.body.email).then((data) => {
         //         if(data.length > 0) {
