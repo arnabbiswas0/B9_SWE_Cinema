@@ -828,6 +828,25 @@ router.post('/sendActivationLink', async(req, res) => {
         sendActivationEmail(req.body.email, actvationLink);
 })
 
+router.post('/getPaymentCards', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "SELECT * FROM paymentcard WHERE userId = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
+
+})
+
 
 
 module.exports = router
