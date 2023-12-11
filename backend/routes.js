@@ -79,12 +79,27 @@ function getShowtime(showtimeID) {
                 connection.query(
                         sql,
                         function(err, results, fields) {
-                                console.log(results.roomID);
+                                //console.log(results.roomID);
                                 return resolve(results);
                         }
                 );
         })
 }
+
+function getSeatId(seatName, roomId) {
+        return new Promise((resolve, reject) => {
+                let sql = "SELECT * FROM seat WHERE seatName = '" + seatName + "' AND roomID = '" + roomId + "'";
+                console.log(sql);
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                //console.log(results.seatID);
+                                return resolve(results);
+                        }
+                );
+        })
+}
+
 function checkShowtimeCollisionHelper(showtime) {
         return new Promise((resolve, reject) => {
                 connection.query(
@@ -550,17 +565,17 @@ router.post('/getUnreservedSeats', async (req, res) => {
         await getShowtime(req.body.showtimeID).then((data) => {
                 if(data.length > 0) {
                         roomID = data[0].roomID;
-                        console.log(roomID);
+                        //console.log(roomID);
                 }
         });
-        console.log("starting query for seats");
+        //console.log("starting query for seats");
         let sql = 'SELECT * FROM seat WHERE roomID = \'' + roomID + '\' AND seatId NOT IN '
         + '(SELECT seatID FROM booking WHERE showtimeID = ' + req.body.showtimeID + ')';
         connection.query(
                 sql,
                 function(err, results, fields) {
                   //console.log(results);
-                  console.log(results);
+                  //console.log(results);
                   res.send(results);
                 }
         );
@@ -639,9 +654,24 @@ router.post('/bookTickets', async (req, res) => {
                 }
         });
 
+        let roomID = '';
+        await getShowtime(req.body.showtimeID).then((data) => {
+                if(data.length > 0) {
+                        roomID = data[0].roomID;
+                        //console.log(roomID);
+                }
+        });
+
+        let seatId = '';
+        await getSeatId(req.body.seatName, roomID).then((data) => {
+                if(data.length > 0) {
+                        seatId = data[0].seatID;
+                }
+        })
+
         let sql = "INSERT INTO booking(userID, seatID, showtimeID) VALUES("
         + id + ", "
-        + req.body.seatID + ", "
+        + seatId + ", "
         + req.body.showtimeID + ")"
 
         connection.query(
