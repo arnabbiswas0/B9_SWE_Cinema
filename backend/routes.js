@@ -821,3 +821,10 @@ The frontend handles a faux checkout.
 The frontend sends these seatIDs to the backend.
 THe backend reserves these seats. 
 */
+
+
+/*
+Sendbookingconfirmation
+
+getBookings
+*/
