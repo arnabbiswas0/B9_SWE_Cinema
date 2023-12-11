@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAddShowtime } from './hooks/useAddShowtime';
 import { useGetShowtime } from './hooks/useGetShowtime';
-import { useGetUnreservedSeats } from './hooks/useGetUnreservedSeats';
+import { useBookTicket } from './hooks/useBookTicket';
 import axios from "axios";
 
 function MovieCard({title, poster, trailer}) {
@@ -120,6 +120,15 @@ function MovieCard({title, poster, trailer}) {
         }; 
         setRes_Arr(res_array);
   },[res_array]);
+
+  const user = localStorage.getItem('user');
+  const userData = JSON.parse(user);
+  const {bookTicket} = useBookTicket();
+  const handleBookSeat = async(e) => {
+    e.preventDefault();
+    const seatN = e.target.value;
+    await bookTicket(userData.email, seatN, showtimeID);
+  }
 
   return (
     <> 
