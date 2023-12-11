@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
@@ -9,17 +9,19 @@ import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAddShowtime } from './hooks/useAddShowtime';
 import { useGetShowtime } from './hooks/useGetShowtime';
-
-  
+import { useGetUnreservedSeats } from './hooks/useGetUnreservedSeats';
+import axios from "axios";
 
 function MovieCard({title, poster, trailer}) {
   const [total, setTotal] = useState(0);
+  const [grab, setGrab] = useState(0)
   const [selecter, setSelecter] = useState();
   const [shows, setShows] = useState();
   const [showtimeID, setShowtimeID] = useState();
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
+  const [res_Arr, setRes_Arr] = useState([]);
   const [Checkout, setCheckout] = useState(false);
   const [date, setDate] = useState("");
   const [addShowTime, setAddShowTime] = useState(false);
@@ -35,6 +37,7 @@ function MovieCard({title, poster, trailer}) {
   "D1","D2","D3","D4","D5",
   "E1","E2","E3","E4","E5",
   "F1","F2","F3","F4","F5",]);
+  const[unreservedSeats, setUnreservedSeats] = useState([]);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
   const handleCloseBookMovie = () => {setBookMovie(false)};
@@ -101,7 +104,22 @@ function MovieCard({title, poster, trailer}) {
     console.log(shows);
     setSelecter(1);
   }
-
+  const res_array = []; 
+  useEffect(()=> {
+    axios.post('http://localhost:8000/api/getUnreservedSeats', {
+      showtimeID: showtimeID
+      })
+        .then((res) => {
+            setUnreservedSeats(res.data);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+        for(let i in unreservedSeats) { 
+            res_array.push(unreservedSeats[i].seatName); 
+        }; 
+        setRes_Arr(res_array);
+  },[res_array]);
 
   return (
     <> 
@@ -178,12 +196,21 @@ function MovieCard({title, poster, trailer}) {
             ))} 
             {showtimeID ?
             <>
-                <Row sm={1} md={2} lg={3} xl={4} className="g-4">
+                <h3>Select your seats</h3>
+              
+                <Row sm={5} className="g-4">
                     {seats.map((seat) => (
                         <>
-                        <Col>
-                            <Button>{seat}</Button> 
-                        </Col>
+                        {console.log(res_Arr)}
+                        {res_Arr.includes(seat) ?
+                            <Col>
+                                <Button >{seat}</Button> 
+                            </Col>
+                        :
+                            <Col>
+                                <Button disabled>{seat}</Button> 
+                            </Col>
+                        }
                         </>  
                     ))} 
                 </Row>
