@@ -661,7 +661,7 @@ router.post('/bookTickets', async (req, res) => {
                         //console.log(roomID);
                 }
         });
-
+        console.log(req.body.seatName);
         let seatId = '';
         await getSeatId(req.body.seatName, roomID).then((data) => {
                 if(data.length > 0) {
