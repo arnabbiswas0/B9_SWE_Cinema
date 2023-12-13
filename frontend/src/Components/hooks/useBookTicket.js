@@ -1,20 +1,19 @@
 import { useState } from "react";
 
-export const useAddShowtime = () =>{
+export const useBookTicket = () =>{
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
 
-    const addShowtime = async (startDate, endDate, times, roomNum, title) => {
+    const bookTicket = async (email, seatName, showtimeID) => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8000/api/addShowtimes', {
+        const response = await fetch('http://localhost:8000/api/bookTickets', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({startDate : startDate, endDate : endDate, times : times, room : roomNum, movie : title})
+            body: JSON.stringify({email, seatName, showtimeID})
         })
-        console.log("startdate: " + times)
-        const json = await response.json(startDate, endDate, times, roomNum, title) 
+        const json = await response.json() 
         console.log(response);
         if(!(response.status == 200)){
             setIsLoading(false)
@@ -25,6 +24,6 @@ export const useAddShowtime = () =>{
         }
     }
 
-    return {addShowtime, isLoading, error}
+    return {bookTicket, isLoading, error}
 
 }

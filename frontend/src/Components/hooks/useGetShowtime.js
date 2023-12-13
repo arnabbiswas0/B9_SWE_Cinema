@@ -1,20 +1,20 @@
 import { useState } from "react";
 
-export const useEditProfile = () =>{
+export const useGetShowtime = () =>{
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
 
-    const editProfile = async (email, name, phone, street, city, zip, state) => {
+    const getShowtime = async (title, date) => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:8000/api/updateProfile', {
+        const response = await fetch('http://localhost:8000/api/getShowtimes', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({email, name,  phone, street, city, zip, state})
+            body: JSON.stringify({title, date})
         })
         const json = await response.json() 
-        console.log(response);
+        //console.log(json);
         if(!(response.status == 200)){
             setIsLoading(false)
             setError(json.error)
@@ -22,8 +22,9 @@ export const useEditProfile = () =>{
         else if(response.ok){
             setIsLoading(false)
         }
+        return json;
     }
 
-    return {editProfile, isLoading, error}
+    return {getShowtime, isLoading, error}
 
 }

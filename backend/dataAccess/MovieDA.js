@@ -18,9 +18,9 @@ class MovieDA {
         });
         // sql command to insert data to "movie" database - NOTE: (?,?,....?) protects against SQL injection attacks.
         const sql = 
-        "INSERT INTO movie(title, category, rating, director, producer, cast, synopsis, reviews, poster, trailer, date_time, room) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO movie(title, category, rating, director, producer, cast, synopsis, reviews, poster, trailer) VALUES (?,?,?,?,?,?,?,?,?,?)";
         const values = [movie.title, movie.category, movie.rating, movie.director, movie.producer, 
-            movie.cast, movie.synopsis, movie.reviews, movie.poster, movie.trailer, movie.date_time, movie.room];
+            movie.cast, movie.synopsis, movie.reviews, movie.poster, movie.trailer];
         // query to the database to insert new movie record
         connection.query(sql, values, function(err, results, fields) {
                 if(err) {

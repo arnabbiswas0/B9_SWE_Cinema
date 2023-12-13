@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
@@ -8,14 +8,20 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAddShowtime } from './hooks/useAddShowtime';
-
-  
+import { useGetShowtime } from './hooks/useGetShowtime';
+import { useBookTicket } from './hooks/useBookTicket';
+import axios from "axios";
 
 function MovieCard({title, poster, trailer}) {
-
+  const [total, setTotal] = useState(0);
+  const [seatNum, setSeatNum] = useState(0)
+  const [selecter, setSelecter] = useState();
+  const [shows, setShows] = useState();
+  const [showtimeID, setShowtimeID] = useState();
   const [showTrailer, setShowTrailer] = useState(false);
   const [BookMovie, setBookMovie] = useState(false);
   const [ageList, setAgeList] = useState([]);
+  const [res_Arr, setRes_Arr] = useState([]);
   const [Checkout, setCheckout] = useState(false);
   const [date, setDate] = useState("");
   const [addShowTime, setAddShowTime] = useState(false);
@@ -24,16 +30,30 @@ function MovieCard({title, poster, trailer}) {
   const [endDate, setEndDate] = useState(Date);
   const [room, setRoom] = useState(0);
   const [validated, setValidated] = useState(false);
+  const [showtimes, setShowtimes] = useState([]);
+  const [seats, setSeats] = useState([ "A1","A2","A3","A4","A5",
+  "B1","B2","B3","B4","B5",
+  "C1","C2","C3","C4","C5",
+  "D1","D2","D3","D4","D5",
+  "E1","E2","E3","E4","E5",
+  "F1","F2","F3","F4","F5",]);
+  const[unreservedSeats, setUnreservedSeats] = useState([]);
+  const [credits, setCredits] = useState([]);
   const handleCloseTrailer = () => setShowTrailer(false);
   const handleShowTrailer = () => setShowTrailer(true);
-  const handleCloseBookMovie = () => setBookMovie(false);
+  const handleCloseBookMovie = () => {setBookMovie(false)};
   const handleShowBookMovie = () => setBookMovie(true);
   const handleAgeClick = () => setAgeList(... ageList,{age: ""});
-
-  const handleShowCheckout = () => setCheckout(true);
   const handleCloseCheckout = () => setCheckout(false);
   const handleAddShowTime = () => setAddShowTime(true);
   const handleCloseAddShowTime = () => setAddShowTime(false);
+  const user = localStorage.getItem('user');
+  let userData;
+  if(user !== null) {
+    userData = JSON.parse(user);
+  } else {
+    userData = {email: null};
+  }
   const handleTimes1 = () => {
     if (times.includes("9:00 AM")){
         setTimes( times.filter(item => item !== "9:00 AM"));
@@ -79,9 +99,68 @@ function MovieCard({title, poster, trailer}) {
     }
     
     setValidated(true);
-    await addShowTime(startDate, endDate, times, room);
+    //console.log("startdate: " + startDate)
+    await addShowtime(startDate, endDate, times, room, title);
   };
 
+  const {getShowtime} = useGetShowtime();
+  const handleSelectDate = async(e) => {
+    //const s = await getShowtime(title, date);
+    setShows(await getShowtime(title, date));
+    console.log(shows);
+    setSelecter(1);
+  }
+  const res_array = []; 
+  useEffect(()=> {
+    axios.post('http://localhost:8000/api/getUnreservedSeats', {
+      showtimeID: showtimeID
+      })
+        .then((res) => {
+            setUnreservedSeats(res.data);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+        for(let i in unreservedSeats) { 
+            res_array.push(unreservedSeats[i].seatName); 
+        }; 
+        setRes_Arr(res_array);
+  },[res_array]);
+  useEffect(()=> {
+    axios.post('http://localhost:8000/api/getPaymentCards', {
+      email: userData.email
+      })
+        .then((res) => {
+            setCredits(res.data);
+            console.log(res.data);
+            console.log(credits);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+  }, [userData.email]);
+
+ 
+  const {bookTicket} = useBookTicket();
+  const handleBookSeat = async(e) => {
+    e.preventDefault();
+    const seatN = e.target.value;
+    setSeatNum(seatNum+1);
+    await bookTicket(userData.email, seatN, showtimeID);   
+  }
+  const handleShowCheckout = async(e) => {
+    setCheckout(true);
+    axios.post('http://localhost:8000/api/sendBookingConfirmation', {
+      email: userData.email,  
+      movieName: title
+      })
+        .then((res) => {
+            console.log(res.data);
+         })
+         .catch((err) =>{
+            console.log("Err");
+         })
+  }
   return (
     <> 
     <Card 
@@ -93,7 +172,16 @@ function MovieCard({title, poster, trailer}) {
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Button style={{margin: '0.5rem'}}variant="primary" onClick={handleShowTrailer}>View trailer</Button>
-        <Button variant="primary" onClick={handleShowBookMovie}>Book Movie</Button>
+        {((localStorage.getItem('user'))!= null) &&
+            <>
+            {credits.length !== 0 ?
+                <Button variant="primary" onClick={handleShowBookMovie}>Book Movie</Button>
+            :
+                <Button onClick={(e)=> alert("You do not have any payment cards on file. Please add a card on the edit profile page.")}>Book Movie</Button>
+            }
+            </>
+            
+        }
         {(localStorage.getItem('user'))!= null && (JSON.parse(localStorage.getItem('user')).email === "cremley29@gmail.com") &&
             <Button variant="primary" onClick={handleAddShowTime}>Add ShowTime</Button>
         }
@@ -135,44 +223,67 @@ function MovieCard({title, poster, trailer}) {
         </Modal.Header>
         <Modal.Body textAlign={"center"}>
             <Form>
-            <Form.Group className="mb-3">
-                <Form.Label >Select Date and Time:</Form.Label>
-                <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value.toString())} value={date}/>
-                <p>{date}</p>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label >Select Seats:</Form.Label>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary" onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
+                <Row>
+                    <Col xs={8}>
+                        <Form.Group className="mb-3">
+                            <Form.Label >Select Date:</Form.Label>
+                            <Form.Control type="date" id="Time" name="bookingtime" onChange={(e) => setDate(e.target.value)} value={date}/>
+                        </Form.Group>
+                    </Col>
+                    <Col style={{textAlign:'center'}}>
+                        <Button style={{marginTop:'2rem'}} onClick={handleSelectDate}>Confirm Date</Button>
                     </Col>
                 </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
+            
+            {selecter ?
+            <>
+            {console.log(shows)}
+            {shows.map((s) => (
+                <>
+                    <Button style={{margin:'.25rem'}} onClick={(e) => setShowtimeID(s.showtimeID)}>{s.time}</Button>  
+                </>      
+            ))} 
+            {showtimeID ?
+            <>
+                <h3>Select your seats</h3>
+              
+                <Row sm={5} className="g-4">
+                    {seats.map((seat) => (
+                        <>
+                        {console.log(res_Arr)}
+                        {res_Arr.includes(seat) ?
+                            <Col>
+                                <Button value={seat} onClick={handleBookSeat}>{seat}</Button> 
+                            </Col>
+                        :
+                            <Col>
+                                <Button disabled>{seat}</Button> 
+                            </Col>
+                        }
+                        </>  
+                    ))} 
                 </Row>
-                <Row className="g-4" bg={"dark"}>
-                    <Col>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                        <Button variant="primary"onclick={handleAgeClick}> </Button>
-                    </Col>
-                </Row>
-            </Form.Group>
+                {(seatNum !== 0) &&
+                    <Row>
+                        <h3>Order Details:</h3>
+                        <h5>{seatNum}X {title}: ${seatNum*10}</h5>
+                        <h5>Which card would you like to use?</h5>
+                        {credits.slice(0,3).map((credit) => 
+                            <Button style={{margin:"0.25rem"}} onClick={handleShowCheckout}>{credit.nameOnCard} &nbsp;&nbsp;&nbsp; {credit.cardNumber}</Button>
+                    )}
+                    </Row>
+                }
+                
+
+            </>
+            :     
+            null
+            }
+            
+            </>
+            :
+            null
+            }
             {ageList.map((age) => (
             <Form.Group className="mb-3">
                 <Form.Label>Add age for seat:</Form.Label>
@@ -180,9 +291,6 @@ function MovieCard({title, poster, trailer}) {
             </Form.Group>
             ))}
             </Form>
-            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleShowCheckout}>
-                Checkout
-            </Button>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseBookMovie}>
@@ -199,74 +307,12 @@ function MovieCard({title, poster, trailer}) {
         backdrop="static"
     >
         <Modal.Header closeButton>
-            <Modal.Title>Checkout Summary:</Modal.Title>
+            <Modal.Title>Checkout:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
               Ticket Details: <br></br>
-              &emsp; {title}: $10
-              <Button size='sm'> Delete Ticket</Button> 
-              <br></br>
-              &emsp; total: $10
-
-            <div>
-            <form className="form-horizontal">
-            <fieldset>
-            {/* Form Name */}
-            <legend>Enter Credit/Debit Details: </legend>
-            {/* Text input*/}
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="Name on Card">
-                Name on Card
-              </label>
-            <div className="col-md-4">
-            <input
-              id="Name on Card"
-              name="Name on Card"
-              type="text"
-              placeholder=""
-              className="form-control input-md"
-              required=""
-            />
-            </div>
-            </div>
-            {/* Text input*/}
-            <div className="form-group">
-            <label className="col-md-4 control-label" htmlFor="textinput">
-              Card Number
-            </label>
-            <div className="col-md-4">
-             <input
-              id="textinput"
-              name="textinput"
-              type="text"
-              placeholder=""
-              className="form-control input-md"
-              required=""
-              />
-            </div>
-            </div>
-          {/* Password input*/}
-            <div className="form-group">
-              <label className="col-md-4 control-label" htmlFor="CVV">
-                CVV
-              </label>
-            <div className="col-md-4">
-              <input
-                id="CVV"
-                name="CVV"
-                type="password"
-                placeholder=""
-                className="form-control input-md"
-              />
-            </div>
-            </div>
-            </fieldset>
-            </form>
-            <Button style={{margin: '0.5rem'}} variant="primary" onClick={handleCloseCheckout}>
-                Submit
-            </Button>
-
-            </div>
+              Thank you for buying tickets for {title}! <br></br>
+              An email invoice will be sent to you shortly!
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" onClick={handleCloseCheckout}>

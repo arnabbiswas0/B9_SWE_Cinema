@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import { Container, Form,} from 'react-bootstrap';
 import { useEditProfile } from './hooks/useEditProfile';
-import { useGetProfile } from './hooks/useGetProfile';
+import { useAddCard } from './hooks/useAddCard';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
@@ -28,10 +28,14 @@ function EditProfile() {
   const [city, setCity] = useState('');
   const [zip, setZip] = useState('');
   const [state, setState] = useState('');
-  const [card, setCard] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [type, setType] = useState('');
+  const [nameOnCard, setNameOnCard] = useState('');
   const [exp, setExp] = useState('');
   const [cvv, setCVV] = useState('');
   const [edit, setEdit] = useState(false);
+  const [addingCard, setAddingCard] = useState(false);
+  const [credits, setCredits] = useState([]);
   const handleEdit = () => {
     if(edit) {
       setEdit(false);
@@ -48,10 +52,10 @@ function EditProfile() {
     axios.get('http://localhost:8000/api/movies')
          .then((res) => {
             setData(res.data);
-            console.log(res.data);
+           
          })
          .catch((err) =>{
-            console.log("Err");
+           
          })
   }, []);
 
@@ -59,7 +63,6 @@ function EditProfile() {
     const groupIndex = Math.floor(index / 3);
     if (!acc[groupIndex]) acc[groupIndex] = [];
     acc[groupIndex].push(cur);
-    console.log(acc);
     return acc;
   };
 
@@ -67,7 +70,7 @@ function EditProfile() {
   const handleSubmit = async(e) =>{
     e.preventDefault();
 
-    await editProfile(userData.email, name,phone, street, city, zip, state);
+    await editProfile(userData.email, name, phone, street, city, zip, state);
     setEdit(false);
     window.location.reload();
     }
@@ -77,13 +80,38 @@ function EditProfile() {
         })
           .then((res) => {
               setAccount(res.data[0]);
-              console.log(res.data[0]);
-              console.log(userData.email);
            })
            .catch((err) =>{
               console.log("Err");
            })
     }, [userData.email]);
+    useEffect(()=> {
+      axios.post('http://localhost:8000/api/getPaymentCards', {
+        email: userData.email
+        })
+          .then((res) => {
+              setCredits(res.data);
+              console.log(res.data);
+              console.log(credits);
+           })
+           .catch((err) =>{
+              console.log("Err");
+           })
+    }, [userData.email]);
+
+    const{addCard, deleteCard} = useAddCard();
+    const handleAddCard = async(e) => {
+      await addCard(userData.email, cardNumber, type, cvv, exp, nameOnCard);
+      setAddingCard(false);
+      window.location.reload(false);
+    }
+    const handleDeleteCard = async(e) => {
+      const c = e.target.value
+      console.log(c);
+      await deleteCard(userData.email, c);
+      window.location.reload(false);
+    }
+
 
 
     return (
@@ -114,7 +142,7 @@ function EditProfile() {
                   {edit ? 
                     <Button size="lg" onClick={handleSubmit}>Submit</Button>
                   :
-                    <Button size="lg" onClick={handleEdit}>Edit Profile</Button> 
+                    <Button type="submit" size="lg" onClick={handleEdit}>Edit Profile</Button> 
                   }
                 </div>
               </Card.Body>
@@ -126,18 +154,34 @@ function EditProfile() {
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
                     <h3>Credit Cards: </h3>
                   </ListGroup.Item>
-                  <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
+                  {addingCard ? 
+                  <Form.Group>
+                    <Form.Label className='light-text'>Card Number:</Form.Label>
+                    <Form.Control onChange={(e) => setCardNumber(e.target.value)} value={cardNumber}/>
+                    <Form.Label className='light-text'>Name On Card:</Form.Label>
+                    <Form.Control onChange={(e) => setNameOnCard(e.target.value)} value={nameOnCard}/>
+                    <Form.Label className='light-text'>Expiration Date:</Form.Label>
+                    <Form.Control onChange={(e) => setExp(e.target.value)} value={exp}/>
+                    <Form.Label className='light-text'>CVV:</Form.Label>
+                    <Form.Control onChange={(e) => setCVV(e.target.value)} value={cvv}/>
+                    <Button onClick={handleAddCard}>Add</Button>
+                  </Form.Group>
+                  :
+                  <>
+                  {credits.slice(0,3).map((credit) => 
+                    <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
                     <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
+                    <Card.Text>{credit.nameOnCard} &nbsp;&nbsp;&nbsp; {credit.cardNumber}</Card.Text>
+                    {edit &&
+                    <Button size="sm" onClick={handleDeleteCard} value={credit.cardNumber}>Delete</Button>
+                    }
                   </ListGroup.Item>
-                  <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center fs-5 p-3">
-                    <Image src="https://www.clipartmax.com/png/small/110-1105083_computer-icons-credit-card-bank-card-clip-art-card-icon-white-png.png" roundedCircle width={"50rem"}/>
-                    <Card.Text>{account.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **** **** **** 1111</Card.Text>
-                  </ListGroup.Item>
+                    )}
+                  </>
+                  }
                   {edit &&
                   <ListGroup.Item className="bg-secondary d-flex justify-content-between align-items-center p-3">
-                    <Button size="lg">Add Credit Card</Button>
-                    <Button size="lg">Delete Credit Card</Button>
+                    <Button size="lg" onClick={(e) => {setAddingCard(true)}}>Add Credit Card</Button>
                   </ListGroup.Item>
                   }
                 </ListGroup>
@@ -156,7 +200,8 @@ function EditProfile() {
                     {edit ? 
                     <Form.Control 
                     type="textarea" 
-                    placeholder={account.name} 
+                    placeholder={account.name}
+                    defaultValue={account.name}
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setName(e.target.value)} 
                     value={name}/>
@@ -184,6 +229,7 @@ function EditProfile() {
                     <Form.Control 
                     type="textarea" 
                     placeholder={account.phone} 
+                    defaultValue={account.phone}
                     style={{textAlign:'left',width:"15rem"}}
                     onChange={(e) => setPhone(e.target.value)} 
                     value={phone}/>
@@ -201,13 +247,13 @@ function EditProfile() {
                     {edit ? 
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                       <Form.Label className='light-text'>Street</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.streetName} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
+                      <Form.Control type="light-text" placeholder={account.streetName} defaultValue={account.streetName} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setStreet(e.target.value)} value={street}/>
                       <Form.Label className='light-text'>City</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.city} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
+                      <Form.Control type="light-text" placeholder={account.city} defaultValue={account.city} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setCity(e.target.value)} value={city}/>
                       <Form.Label className='light-text'>Zip</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.zip} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
+                      <Form.Control type="light-text" placeholder={account.zip} defaultValue={account.zip} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setZip(e.target.value)} value={zip}/>
                       <Form.Label className='light-text'>State</Form.Label>
-                      <Form.Control type="light-text" placeholder={account.state} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
+                      <Form.Control type="light-text" placeholder={account.state} defaultValue={account.state} style={{textAlign:'left',width:"15rem"}} onChange={(e) => setState(e.target.value)} value={state}/>
                   </Form.Group>
                     :
                     <Card.Text className="text-muted">{account.streetName}, {account.city}, {account.state}, {account.zip} </Card.Text>

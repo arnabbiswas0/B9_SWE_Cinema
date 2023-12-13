@@ -3,14 +3,17 @@ import axios from 'axios';
 export default class MovieProxy {
     // validate YouTube URL format before extracting ID
     validateYouTubeVideoUrl(url) {
-        console.log(url);
-        //var regExp = /^.*(youtu.be\/|youtube.com\/v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;  
-        var regExp = /^.*(youtu.be\/|youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/;
+        //console.log(url);
+        //var regExp = /^.*(youtu.be\/|youtube.com\/v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        // var regExp = /^.*(youtu.be\/|youtube.com\/|www\.youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/; 
+        // var regExp = /^.*(youtu.be\/|v=|u\/\w\/|embed\/|watch\?v=|\?v=|&v=)([^#&?]*).*/;
+        var regExp = /^.*(www\.youtube.com\/watch\?v=|youtube.com\/watch\?v=)([^#&?]*).*/;
+        //var regExp = /^.*(youtu.be\/|youtube.com\/|www\.youtube.com\/(v\/|u\/\w\/|embed\/|watch\?v=|\?v=|&v=))([^#&?]*).*/;
         var match = url.match(regExp);
-        //console.log(match);
+        console.log(match);
         //console.log(match && match[3].length === 11);     // also was [1].length
         //console.log((url !== "") && match && match[3].length === 11)
-        return ((url !== "") && match && match[3].length === 11); 
+        return ((url !== "") && match && match[2].length === 11); 
     }
     // extract the ID from the YouTube URL
     async extractVideoId(trailer) {
@@ -18,7 +21,6 @@ export default class MovieProxy {
         // extract end_of_token: IF (ends with "&") -> additional info provided ELSE -> ID is at end of link
         const index_end = trailer.indexOf("&") > -1 ? trailer.indexOf("&") : trailer.length;
         //console.log(trailer);
-        console.log(index_start+1, index_end);
         return trailer.substring(index_start+1, index_end);
     }
     // call YouTube API to valid YouTube video via it's ID
@@ -38,12 +40,11 @@ export default class MovieProxy {
             return false;                                 // YOUTUBE API returns EMPTY LIST
         }
     }
-    // validate scheduled movie (date_time): 2 movies cannot have same schedule!------------------------------------------------------------
+    // 2 movies cannot have same schedule!------------------------------------------------------------
     async validateSchedule(date_time) {
        // console.log("(schedule) date_time: " + date_time);
         const response = await axios.get(`http://localhost:8000/api/movies/${date_time}`);
         // return size of response ?
-        console.log("retrieved data: " + "\ndata size: " + response.data.length);
         console.log(response);
         if (response.data.length > 0) {
             return 'invalidSchedule'
@@ -72,15 +73,16 @@ export default class MovieProxy {
         * 3. if another record not found -> createMovie Else -> output alert
         */
        //console.log("------------------" + movieData.date_time);
+       /*
        const schedule = await this.validateSchedule(movieData.date_time);
        if (schedule === 'invalidSchedule') { // if schedule > 0? 
             console.log('Error: Invalid Movie Schedule (date&time)!');//------------------debugging purposes
             // alert("Error: Invalid Movie Schedule!");
             return schedule;//------------------------------------------------------------
        }
-
+       */
         // send POST request to back-end to create new Movie (domain class) w/ valid trailer
-        console.log("after invalid schedule");
+        console.log("Youtube link validated");
         const response = await axios.post('http://localhost:8000/api/movies', movieData);
         console.log(response.data);
         return response.data;

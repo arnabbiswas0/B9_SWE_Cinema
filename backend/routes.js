@@ -79,12 +79,27 @@ function getShowtime(showtimeID) {
                 connection.query(
                         sql,
                         function(err, results, fields) {
-                                console.log(results.roomID);
+                                //console.log(results.roomID);
                                 return resolve(results);
                         }
                 );
         })
 }
+
+function getSeatId(seatName, roomId) {
+        return new Promise((resolve, reject) => {
+                let sql = "SELECT * FROM seat WHERE seatName = '" + seatName + "' AND roomID = '" + roomId + "'";
+                console.log(sql);
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                                //console.log(results.seatID);
+                                return resolve(results);
+                        }
+                );
+        })
+}
+
 function checkShowtimeCollisionHelper(showtime) {
         return new Promise((resolve, reject) => {
                 connection.query(
@@ -100,8 +115,25 @@ function checkShowtimeCollision(showtimes) {
         //build sql Stirng using loops then pass to checkShowtimeColissionHelper method
         //if returned result.length > 0 return true (there is a collision)
         //else return false 
-
+        
         //use loop in the addshowTime route (test before using) 
+}
+
+function buildDateArray(startDates, endDates) {
+        //console.log('start date: ' + startDate.toDateString());
+        //console.log('endDate: ' + endDate.toDateString())
+        let startDate = new Date(startDates);
+        startDate.setDate(startDate.getDate()+1)
+        let endDate = new Date(endDates)
+        endDate.setDate(endDate.getDate()+1)
+        return new Promise((resolve, reject) => {
+                let arr = [];
+                for(let day = startDate; startDate <= endDate; day.setDate(day.getDate() + 1)) {
+                        arr.push(day.toDateString());
+                        console.log('current day: ' + day.toDateString())
+                }
+                return resolve(arr);
+        })
 }
 
 function getCustomerCreditCard(userId) {
@@ -116,6 +148,28 @@ function getCustomerCreditCard(userId) {
                 );
 
         })
+}
+
+async function beginAccountActivation(email) {
+        //let email = 'softwareengineeruga@gmail.com';
+        let id = '';
+        await getId(email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        //let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
+        let link = 'http://localhost:8000/api/activateUser?id=' + id;
+        let actvationLink = '<h3>Click below to activate account: </h3><br>' 
+        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id='
+        + id 
+        +"\">"
+         + '<input type="hidden" name="email" value=' + email + '>'
+          +'<button type="submit" name="email" value='+ email +  'class="link-button">'
+           + 'Activate Account'
+          +'</button>'
+        +'</form>'
+        sendActivationEmail(email, actvationLink);
 }
 
 
@@ -139,6 +193,32 @@ const sendEmail = (email, message) => {
                 to: email,
                 subject: 'Cinema Account',
                 text: message
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
+              
+}
+
+const sendActivationEmail = (email, message) => {
+        var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'softwareengineeruga@gmail.com',
+                  pass: 'piambnyooengfjqy'
+                }
+              });
+              
+              var mailOptions = {
+                from: 'softwareengineeruga@gmail.com',
+                to: email,
+                subject: 'Cinema Account',
+                html: message
               };
               
               transporter.sendMail(mailOptions, function(error, info){
@@ -196,7 +276,7 @@ router.post("/getProfile", async(req, res) => {
                 }
         });
 
-        sql = "SELECT * FROM registereduser JOIN paymentcard ON registereduser.registeredUserID = paymentcard.userId WHERE paymentcard.userId = " + id + ""
+        sql = "SELECT * FROM registereduser WHERE registeredUserID = " + id + ""
         connection.query(
                 sql,
                 function(err, results, fields) {
@@ -305,20 +385,25 @@ router.post("/signup", async(req, res) => {
                         
                         connection.query(
                                 sql,
-                                function(err, results) {
+                                async function(err, results) {
                                         if(err) throw err;
                                         console.log("user successfully added");
                                         console.log("new user id: " + results.insertId);
-                                        sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
-                                        connection.query(
-                                                sql,
-                                                async function(err, results, fields) {
-                                                        console.log("payment profile made for user (id is->): " + results.insertId)
-                                                        let message = "Your account has been successfully created";
-                                                        const success = await sendEmail(req.body.email, message);
-                                                        res.status(200).json(req.body.email);
-                                                }
-                                        );
+                                        let message = "Your account has been successfully created";
+                                        const success = await sendEmail(req.body.email, message);
+                                        const success2 = await beginAccountActivation(req.body.email);
+                                         res.status(200).json(req.body.email);
+                                        // sql = "INSERT INTO paymentcard(userID) VALUES (" + results.insertId + ")"
+                                        // connection.query(
+                                        //         sql,
+                                        //         async function(err, results, fields) {
+                                        //                 console.log("payment profile made for user (id is->): " + results.insertId)
+                                        //                 let message = "Your account has been successfully created";
+                                        //                 const success = await sendEmail(req.body.email, message);
+                                        //                 const success2 = await beginAccountActivation(req.body.email);
+                                        //                 res.status(200).json(req.body.email);
+                                        //         }
+                                        // );
 
                                 }
                                 );
@@ -399,9 +484,25 @@ router.post("/verifyAdmin", async(req, res) => {
 
 //updates user profile and payment info
 router.post("/updateProfile", async (req, res) => {
-        console.log(req.body);
-        let sql = "UPDATE registereduser SET name = '" + req.body.name + "' WHERE email = '" + req.body.email + "'"; //add where clause 
-
+        //console.log(req.body);
+        let sql = "UPDATE registereduser SET name = '" + req.body.name 
+        + "', phone = '" + req.body.phone 
+        + "', streetName = '" + req.body.street
+        + "', city = '" + req.body.city 
+        + "', state = '" + req.body.state
+        + "', zip = '" + req.body.zip
+        + "' WHERE email = '" + req.body.email + "'"; //add where clause 
+        /*
+        let sql = "UPDATE showtime(name, phone, streetName, city, state, zip) VALUES ("
+        + "\'" + req.body.name + "\', "
+        + "\'" + req.body.phone + "\', "
+        + "\'" + req.body.streetName + "\'"
+        + "\'" + req.body.city + "\'"
+        + "\'" + req.body.state + "\'"
+        + "\'" + req.body.zip + "\'"
+        +")"
+        +"' WHERE email = '" + req.body.email + "'";
+        */
         let id = '';
         await getId(req.body.email).then((data) => {
                 if(data.length > 0) {
@@ -412,12 +513,12 @@ router.post("/updateProfile", async (req, res) => {
         connection.query(
                 sql,
                 function(err, results, fields) {
-                  //console.log(results);
-                  //res.send(results);
+                  console.log(results);
+                  res.send(results);
                 }
         );
         
-
+        /*        
         console.log(id);
         let cardNumber = req.body.cardNumber;
         if(cardNumber.length > 0) {
@@ -438,7 +539,36 @@ router.post("/updateProfile", async (req, res) => {
                   res.send(results);
                 }
         );
+        */
 
+})
+
+router.post("/addCard", async (req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        console.log(req.body);
+        console.log(id);
+        let sql = "INSERT INTO paymentcard(cardNumber, type, nameOnCard, expDate, userId, cvv) VALUES ("
+                                + "\'" + req.body.cardNumber + "\', "
+                                + "\'" + req.body.type + "\', "
+                                + "\'" + req.body.nameOnCard + "\', "
+                                + "\'" + req.body.expDate + "\', "
+                                + "\'" + id + "\',"
+                                + "\'" + req.body.cvv + "\'"
+                                +")"
+                                console.log(sql);
+                                connection.query(
+                                        sql,
+                                        function(err, results, fields) {
+                                        //console.log(results);
+                                        console.log(results);
+                                        res.send(results);
+                                        }
+                                );
 })
 
 router.post('/changePassword', async (req, res) => {
@@ -467,8 +597,13 @@ router.post('/changePassword', async (req, res) => {
         );
 })
 
-router.get('/getShowtimes', async (req,res) => {
-                let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.movieName + '\' AND date = \'' + req.body.date + '\''
+router.post('/getShowtimes', async (req,res) => {
+        console.log(req.body);
+        let date = new Date(req.body.date);
+        date.setDate(date.getDate()+1);
+        date = date.toDateString();
+        console.log(date);
+                let sql = 'SELECT * FROM showtime WHERE movieName = \'' + req.body.title + '\' AND date = \'' + date + '\''
         console.log(sql);
         connection.query(
                 sql,
@@ -479,18 +614,22 @@ router.get('/getShowtimes', async (req,res) => {
         );
 })
 
-router.get('/getUnreservedSeats', async (req, res) => {
+//booking table needs userId, seatId, showtimeid
+router.post('/getUnreservedSeats', async (req, res) => {
         let roomID = '';
         await getShowtime(req.body.showtimeID).then((data) => {
                 if(data.length > 0) {
                         roomID = data[0].roomID;
+                        //console.log(roomID);
                 }
         });
+        //console.log("starting query for seats");
         let sql = 'SELECT * FROM seat WHERE roomID = \'' + roomID + '\' AND seatId NOT IN '
-        + '(SELECT * FROM showtime WHERE showtimeID = \'' + req.body.showtimeID + '\')';
+        + '(SELECT seatID FROM booking WHERE showtimeID = ' + req.body.showtimeID + ')';
         connection.query(
                 sql,
                 function(err, results, fields) {
+                  //console.log(results);
                   //console.log(results);
                   res.send(results);
                 }
@@ -498,33 +637,130 @@ router.get('/getUnreservedSeats', async (req, res) => {
 })
 
 router.post('/addShowtimes', async (req, res) => {
-        let dates = req.body.dates;
+        //let dates = req.body.dates;
+        let startDate = req.body.startDate;
+        let endDate = req.body.endDate;
+        console.log("Begginning date: " + startDate.toString());
+        console.log('times: ' + req.body.times)
+        console.log(typeof(startDate))
+        console.log(req.body.times)
+        console.log('movieNAme: ' + req.body.movie)
+        let collisionPresent = false;
+        let dates = [];
+        await buildDateArray(startDate, endDate).then((data) => {
+                if(data.length > 0) {
+                        dates = data;
+                }
+        });
         let times = req.body.times;
         let room = req.body.room;
-
+        console.log(dates);
         //checking for collisions
         for(let day of dates) {
                 for(let time of times) {
-                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-                        + "\'" + day + "\', "
-                        + "\'" + time + "\', "
-                        + "\'" + room + "\'"
-                        +")"
-                        if (checkShowtimeCollision(sql)) {
-                                res.status(400).json(false);
-                        }
+                        let sql = "SELECT * FROM showtime WHERE date = \'" + day + "\' AND time = \'" + time + "\' AND roomID = \'" + room + "\'"
+                        
+                        await checkShowtimeCollisionHelper(sql).then((data) => {
+                                if(data.length > 0) {
+                                        //res.status(400).json(false);
+                                        collisionPresent = true;
+                                }
+                        });
+                        
                 }
         }
 
         //acutally adding to DB
-        for(let day of dates) {
-                for(let time of times) {
-                        let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
-                        + "\'" + day + "\', "
-                        + "\'" + time + "\', "
-                        + "\'" + room + "\'"
-                        +")"
+        if(!collisionPresent) {
+                for(let day of dates) {
+                        for(let time of times) {
+                                let sql = "INSERT INTO showtime(date, time, movieName, roomID) VALUES ("
+                                + "\'" + day + "\', "
+                                + "\'" + time + "\', "
+                                + "\'" + req.body.movie + "\', "
+                                + "\'" + room + "\'"
+                                +")"
+                                
+                                connection.query(
+                                        sql,
+                                        function(err, results, fields) {
+                                        //console.log(results);
+                                        console.log(results);
+                                        }
+                                );
+                                
+                        console.log(sql);
+                                
+                        }
+                }
+                res.status(200).json('Showtime have been successfully added');
+        } else {
+                res.status(400).json('error: Showtime collision present');
+        }
+})
 
+router.post('/bookTickets', async (req, res) => {
+        //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
+        //needs: user email, seat Id, showtime id
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        let roomID = '';
+        await getShowtime(req.body.showtimeID).then((data) => {
+                if(data.length > 0) {
+                        roomID = data[0].roomID;
+                        //console.log(roomID);
+                }
+        });
+        console.log(req.body.seatName);
+        let seatId = '';
+        await getSeatId(req.body.seatName, roomID).then((data) => {
+                if(data.length > 0) {
+                        seatId = data[0].seatID;
+                }
+        })
+
+        let sql = "INSERT INTO booking(userID, seatID, showtimeID) VALUES("
+        + id + ", "
+        + seatId + ", "
+        + req.body.showtimeID + ")"
+
+        let canBook = true;
+        await getCustomerCreditCard(id).then((data) => {
+                if(data.length < 1) {
+                        canBook = false;
+                }
+        })
+        if(canBook) {
+                connection.query(
+                        sql,
+                        function(err, results, fields) {
+                        //console.log(results);
+                        console.log(results);
+                        res.sendStatus(200);
+                        }
+                );
+        } else {
+                res.sendStatus(400);
+        }
+
+})
+
+router.post('/fillSeatsAndRooms', async (req, res) => {
+        let rows = "ABCDEF"
+        for(let room = 1; room < 4; room++){
+                for(let i = 0; i < rows.length; i++) {
+                    for(let j = 1; j < 6; j++) {
+                        //console.log(rows.charAt(i) + j + " room: " +room);
+                        let seatName = rows.charAt(i) + j;
+                        let sql = "INSERT INTO seat(roomID, seatName) VALUES("
+                        + "\'" + room + "\'"
+                        +", \'" + seatName + "\')";
+                        console.log(sql); 
                         connection.query(
                                 sql,
                                 function(err, results, fields) {
@@ -532,18 +768,152 @@ router.post('/addShowtimes', async (req, res) => {
                                   console.log(results);
                                 }
                         );
-                        
+                    }
+                
                 }
         }
+        res.sendStatus(200);
 })
 
-router.post('/bookTickets', async (req, res) => {
-        //discuss what's actually being passed through so I know what to grab or if more helper functions are needed
-        //needs: user email, seat Id, showtime id
+router.post('/addPromotion', async (req, res) => {
+        let promotionMessage = req.body.promotion;
+        let sql = 'SELECT * FROM registereduser WHERE isSubscribed = \'true\''
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                  for(let result of results) {
+                        if(result.isSubscribed) {
+                                sendEmail(result.email, promotionMessage);
+                        }
+                  }
+                }
+        );
+}) 
+
+router.post('/subscribeToPromotion', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "UPDATE registereduser SET isSubscribed = \'true\' WHERE registeredUserID = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
+
 })
 
-router.get('/fillSeatsAndRooms', async (req, res) => {
-        
+router.post('/unsubscribeToPromotion', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "UPDATE registereduser SET isSubscribed = \'false\' WHERE registeredUserID = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
+
+})
+
+router.post('/activateUser', async (req, res) => {
+        let user = req.query.id;
+        console.log(user);
+        console.log("email body")
+        let sql = "UPDATE registereduser SET statusId = 2 WHERE registeredUserID = " + user;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                }
+        );
+        res.redirect("http://localhost:3000/HomePage")
+        //console.log(req);
+})
+
+router.post('/sendActivationLink', async(req, res) => {
+        //let email = 'softwareengineeruga@gmail.com';
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        //let actvationLink = '<html>Click <a href="http://localhost:8000/api/activateUser?email=hi">here</a> link to activate account: </html>'
+        let link = 'http://localhost:8000/api/activateUser?id=' + id;
+        let actvationLink = '<h3>Click below to activate account: </h3><br>' 
+        +'<form method="post" class="inline" action="http://localhost:8000/api/activateUser?id='
+        + id 
+        +"\">"
+         + '<input type="hidden" name="email" value=' + req.body.email + '>'
+          +'<button type="submit" name="email" value='+ req.body.email +  'class="link-button">'
+           + 'Activate Account'
+          +'</button>'
+        +'</form>'
+        sendActivationEmail(req.body.email, actvationLink);
+})
+
+router.post('/getPaymentCards', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+        let sql = "SELECT * FROM paymentcard WHERE userId = " + id;
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  console.log(results);
+                  res.send(results);
+                }
+        );
+
+})
+
+router.post('/deletePaymentCard', async(req, res) => {
+        let id = '';
+        await getId(req.body.email).then((data) => {
+                if(data.length > 0) {
+                        id = data[0].registeredUserID
+                }
+        });
+
+        let sql = "DELETE FROM paymentcard WHERE userId = " + id + " AND cardNumber = '" + req.body.cardNumber + "'"
+        connection.query(
+                sql,
+                function(err, results, fields) {
+                  //console.log(results);
+                  //console.log(results);
+                  res.send(results);
+                }
+        );
+})
+
+router.post('/sendBookingConfirmation', async(req, res) => {
+        // let id = '';
+        // await getId(req.body.email).then((data) => {
+        //         if(data.length > 0) {
+        //                 id = data[0].registeredUserID
+        //         }
+        // });
+
+        let message = "Booking for " + req.body.movieName + " has been processed";
+        sendEmail(req.body.email, message);
 })
 
 
@@ -566,4 +936,11 @@ The user selects the seats they want.
 The frontend handles a faux checkout.
 The frontend sends these seatIDs to the backend.
 THe backend reserves these seats. 
+*/
+
+
+/*
+Sendbookingconfirmation
+
+getBookings
 */

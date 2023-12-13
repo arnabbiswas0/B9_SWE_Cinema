@@ -58,12 +58,6 @@ function HomePage() {
 
     const handleNewMovie = async (event) => {
         event.preventDefault();
-
-        // debugging code:  
-        //console.log("new movie submission working");
-        //console.log("\n" + event.target.elements[0].value);
-        //console.log("\n" + event.target.elements[9].value);
-
         // create new movie object
         const newMovieData = {
             title: event.target.elements[0].value,
@@ -76,19 +70,30 @@ function HomePage() {
             reviews: event.target.elements[7].value,
             poster: event.target.elements[8].value,
             trailer: event.target.elements[9].value,
-            date_time: event.target.elements[10].value,
-            room: event.target.elements[11].value
         };
         console.log(newMovieData);
-        //console.log(event.target.elements[10].value); 
-        //console.log(event.target.elements[11].value); 
-        const movieHandler = new MovieHandler();
-        const handled = await movieHandler.createMovie(newMovieData);
-        if (handled === 'unavailable') {
-            alert("YouTube link INVALID...try again");
-        } else {
-            console.log("movie added successfully");
+        // validate for non-empty attibutes
+        let allFilled = true;
+        for (let i = 0; i < event.target.elements.length-1; i++) {
+            if (!event.target.elements[i].value) {
+                allFilled = false;
+                // console.log(`Element at index ${i} is empty`);
+            }
         }
+        // if all attributes have values continue to add movie
+        if (allFilled) {
+            console.log("All elements are filled")
+            const movieHandler = new MovieHandler();
+            const handled = await movieHandler.createMovie(newMovieData);
+            if (handled === 'unavailable') {
+                alert("YouTube link INVALID...try again");
+            } else {
+                console.log("movie added successfully");
+            }
+        } else {
+            //console.log("One or more missing values!")
+            alert("One or more missing values!")
+        } 
     };
     let Admin;
     useEffect(() => {
@@ -261,18 +266,6 @@ function HomePage() {
       <Form.Group className='mb-3'>
         <Form.Label classname='light-text'>Trailer</Form.Label>
         <Form.Control type="textarea" placeHolder="Trailer link" />
-      </Form.Group>
-      <Form.Group classname='mb-3'>
-        <Form.Label classname='light-text'>Select Data & Time</Form.Label>
-        <Form.Control type="datetime-local" />
-      </Form.Group>
-      <Form.Group classname='mb-3'>
-        <Form.Label classname='light-text'>Select Room</Form.Label>
-        <Form.Select>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-        </Form.Select>
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit
